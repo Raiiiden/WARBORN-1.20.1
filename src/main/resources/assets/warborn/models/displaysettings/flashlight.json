@@ -1,0 +1,71 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        65,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        -1.25,
+        -0.5
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        65,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        -1.25,
+        -0.5
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        0.5,
+        0,
+        -0.75
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        0.5,
+        0,
+        -0.75
+      ]
+    },
+    "gui": {
+      "rotation": [
+        -157.04,
+        -38.07,
+        83.51
+      ],
+      "translation": [
+        0.25,
+        0,
+        0
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        -87,
+        18.5,
+        -0.09
+      ],
+      "translation": [
+        0,
+        0,
+        -0.25
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/flashlight312"
+  }
+}
