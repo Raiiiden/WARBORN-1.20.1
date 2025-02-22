@@ -15,17 +15,38 @@ import com.raiiiden.warborn.item.WarbornArmorItem;
 public class ModRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
 
-    public static final RegistryObject<WarbornArmorItem> WARBORN_HELMET = ITEMS.register("warborn_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties()));
+    // Existing Rus Armor
+    public static final RegistryObject<WarbornArmorItem> RUS_HELMET = ITEMS.register("rus_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "warborn"));
 
-    public static final RegistryObject<WarbornArmorItem> WARBORN_CHESTPLATE = ITEMS.register("warborn_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<WarbornArmorItem> RUS_CHESTPLATE = ITEMS.register("rus_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "warborn"));
 
-    public static final RegistryObject<WarbornArmorItem> WARBORN_LEGGINGS = ITEMS.register("warborn_leggings",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    // New RusBron Armor
+    public static final RegistryObject<WarbornArmorItem> RUSBRON_HELMET = ITEMS.register("rusbron_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron"));
 
-    public static final RegistryObject<WarbornArmorItem> WARBORN_BOOTS = ITEMS.register("warborn_boots",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final RegistryObject<WarbornArmorItem> RUSBRON_CHESTPLATE = ITEMS.register("rusbron_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron"));
+
+    // New RusBron Rof Liko Armor
+    public static final RegistryObject<WarbornArmorItem> RUSBRON_ROF_LIKO_HELMET = ITEMS.register("rusbron_rof_liko_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_rof_liko"));
+
+    public static final RegistryObject<WarbornArmorItem> RUSBRON_ROF_LIKO_CHESTPLATE = ITEMS.register("rusbron_rof_liko_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_rof_liko"));
+
+    public static final RegistryObject<WarbornArmorItem> RUSBRON_FOR_LIKO_HELMET = ITEMS.register("rusbron_for_liko_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_for_liko"));
+
+    public static final RegistryObject<WarbornArmorItem> RUSBRON_FOR_LIKO_CHESTPLATE = ITEMS.register("rusbron_for_liko_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_for_liko"));
+
+    public static final RegistryObject<WarbornArmorItem> RUSBRON_PULEMETCHIK_HELMET = ITEMS.register("rusbron_pulemetchik_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_pulemetchik"));
+
+    public static final RegistryObject<WarbornArmorItem> RUSBRON_PULEMETCHIK_CHESTPLATE = ITEMS.register("rusbron_pulemetchik_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_pulemetchik"));
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
@@ -33,12 +54,18 @@ public class ModRegistry {
     public static final RegistryObject<CreativeModeTab> WARBORN_TAB = CREATIVE_MODE_TABS.register("warborn_tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.warborn_tab"))
-                    .icon(() -> new ItemStack(WARBORN_HELMET.get()))
+                    .icon(() -> new ItemStack(RUS_HELMET.get()))
                     .displayItems((enabledFeatures, entries) -> {
-                        entries.accept(WARBORN_HELMET.get());
-                        entries.accept(WARBORN_CHESTPLATE.get());
-                        entries.accept(WARBORN_LEGGINGS.get());
-                        entries.accept(WARBORN_BOOTS.get());
+                        entries.accept(RUS_HELMET.get());
+                        entries.accept(RUS_CHESTPLATE.get());
+                        entries.accept(RUSBRON_HELMET.get());
+                        entries.accept(RUSBRON_CHESTPLATE.get());
+                        entries.accept(RUSBRON_ROF_LIKO_HELMET.get());
+                        entries.accept(RUSBRON_ROF_LIKO_CHESTPLATE.get());
+                        entries.accept(RUSBRON_FOR_LIKO_HELMET.get());
+                        entries.accept(RUSBRON_FOR_LIKO_CHESTPLATE.get());
+                        entries.accept(RUSBRON_PULEMETCHIK_HELMET.get());
+                        entries.accept(RUSBRON_PULEMETCHIK_CHESTPLATE.get());
                     })
                     .build()
     );
