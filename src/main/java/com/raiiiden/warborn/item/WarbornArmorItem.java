@@ -1,10 +1,6 @@
 package com.raiiiden.warborn.item;
 
-import com.raiiiden.warborn.client.renderer.armor.RusBronArmorRenderer;
-import com.raiiiden.warborn.client.renderer.armor.RusBronRofLikoArmorRenderer;
-import com.raiiiden.warborn.client.renderer.armor.RusBronForLikoArmorRenderer;
-import com.raiiiden.warborn.client.renderer.armor.RusBronPulemetchikArmorRenderer;
-import com.raiiiden.warborn.client.renderer.armor.WarbornArmorRenderer;
+import com.raiiiden.warborn.client.renderer.armor.*;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -30,7 +26,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem {
 
     public WarbornArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType) {
         super(armorMaterial, type, properties);
-        this.armorType = armorType; // Store the armor type to determine the renderer later
+        this.armorType = armorType;
     }
 
     @Override
@@ -59,6 +55,24 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem {
                 return new RusBronForLikoArmorRenderer();
             case "rusbron_pulemetchik":
                 return new RusBronPulemetchikArmorRenderer();
+            case "rusbron_pulemetchik_disguise":
+                return new RusBronPulemetchikDisguiseArmorRenderer();
+            case "rusbron_pulemetchik_net_naplekhnikov":
+                return new RusBronPulemetchikNetNaplekhnikovArmorRenderer();
+            case "rusbron_shturmovik":
+                return new RusBronShturmovikArmorRenderer();
+            case "rusbron_shturmovik_disguise":
+                return new RusBronShturmovikDisguiseArmorRenderer();
+            case "rusbron_shturmovik_net_naplekhnikov":
+                return new RusBronShturmovikNetNaplekhnikovArmorRenderer();
+            case "ukrbron_pulemetchik":
+                return new UkrBronPulemetchikArmorRenderer();
+            case "ukrbron_pulemetchik_disguise":
+                return new UkrBronPulemetchikDisguiseArmorRenderer();
+            case "ukrbron_pulemetchik_net_naplekhnikov":
+                return new UkrBronArmorRenderer();
+            case "ukrbron":
+                return new UkrBronArmorRenderer();
             default:
                 return new WarbornArmorRenderer();
         }
