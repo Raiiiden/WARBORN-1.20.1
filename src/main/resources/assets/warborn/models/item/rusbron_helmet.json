@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "warborn:items/rus_bron_2"
+    "layer0": "warborn:item/rus_bron_2"
   }
 }

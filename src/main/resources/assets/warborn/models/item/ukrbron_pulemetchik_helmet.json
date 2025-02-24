@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "warborn:items/rus_bron_pulemetchik_1"
+    "layer0": "warborn:item/ukr_bron_pulemetchik_2"
   }
 }
