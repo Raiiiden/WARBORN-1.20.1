@@ -3025,17 +3025,17 @@
 					]
 				},
 				{
-					"name": "bipedLeftLeg",
+					"name": "bipedRightLeg",
 					"pivot": [2, 12, 0]
 				},
 				{
-					"name": "armorLeftLeg",
-					"parent": "bipedLeftLeg",
+					"name": "armorRightLeg",
+					"parent": "bipedRightLeg",
 					"pivot": [2, 12, 0]
 				},
 				{
 					"name": "Right_Leg_Zachita",
-					"parent": "armorLeftLeg",
+					"parent": "armorRightLeg",
 					"pivot": [-2, 8, 0],
 					"cubes": [
 						{
@@ -3134,21 +3134,21 @@
 				},
 				{
 					"name": "armorLeftBoot",
-					"parent": "bipedLeftLeg",
+					"parent": "bipedRightLeg",
 					"pivot": [2, 12, 0]
 				},
 				{
-					"name": "bipedRightLeg",
+					"name": "bipedLeftLeg",
 					"pivot": [-2, 12, 0]
 				},
 				{
-					"name": "armorRightLeg",
-					"parent": "bipedRightLeg",
+					"name": "armorLeftLeg",
+					"parent": "bipedLeftLeg",
 					"pivot": [-2, 12, 0]
 				},
 				{
 					"name": "Left_Leg_Zachita",
-					"parent": "armorRightLeg",
+					"parent": "armorLeftLeg",
 					"pivot": [2, 8, 0],
 					"cubes": [
 						{
@@ -3211,7 +3211,7 @@
 				},
 				{
 					"name": "armorRightBoot",
-					"parent": "bipedRightLeg",
+					"parent": "bipedLeftLeg",
 					"pivot": [-2, 12, 0]
 				}
 			]
