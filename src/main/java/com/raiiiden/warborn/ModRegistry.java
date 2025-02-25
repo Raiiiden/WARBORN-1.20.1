@@ -15,21 +15,18 @@ import com.raiiiden.warborn.item.WarbornArmorItem;
 public class ModRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
 
-    // Existing Rus Armor
     public static final RegistryObject<WarbornArmorItem> RUS_HELMET = ITEMS.register("rus_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "warborn"));
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rus_armor"));
 
     public static final RegistryObject<WarbornArmorItem> RUS_CHESTPLATE = ITEMS.register("rus_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "warborn"));
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rus_armor"));
 
-    // New RusBron Armor
     public static final RegistryObject<WarbornArmorItem> RUSBRON_HELMET = ITEMS.register("rusbron_helmet",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron"));
 
     public static final RegistryObject<WarbornArmorItem> RUSBRON_CHESTPLATE = ITEMS.register("rusbron_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron"));
 
-    // New RusBron Rof Liko Armor
     public static final RegistryObject<WarbornArmorItem> RUSBRON_ROF_LIKO_HELMET = ITEMS.register("rusbron_rof_liko_helmet",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_rof_liko"));
 
