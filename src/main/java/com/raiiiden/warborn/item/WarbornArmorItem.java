@@ -2,8 +2,8 @@ package com.raiiiden.warborn.item;
 
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
@@ -17,10 +17,11 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.function.Consumer;
 
-public class WarbornArmorItem extends ArmorItem implements GeoItem {
+public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final String armorType;
 

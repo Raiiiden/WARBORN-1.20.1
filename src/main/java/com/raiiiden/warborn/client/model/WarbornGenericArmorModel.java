@@ -7,11 +7,11 @@ import software.bernie.geckolib.model.DefaultedItemGeoModel;
 
 public class WarbornGenericArmorModel extends DefaultedItemGeoModel<WarbornArmorItem> {
     public WarbornGenericArmorModel(WarbornArmorItem item) {
-        super(new ResourceLocation(WARBORN.MODID, "armor/" + item.getArmorType()));
+        super(new ResourceLocation(WARBORN.MODID, "armor/" + (item != null ? item.getArmorType() : "default")));
     }
 
     @Override
     public ResourceLocation getTextureResource(WarbornArmorItem item) {
-        return new ResourceLocation(WARBORN.MODID, "textures/item/armor/" + item.getArmorType() + ".png");
+        return new ResourceLocation(WARBORN.MODID, "textures/item/armor/" + (item != null ? item.getArmorType() : "default") + ".png");
     }
 }

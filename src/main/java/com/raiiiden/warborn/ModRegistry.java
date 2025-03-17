@@ -11,90 +11,36 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import com.raiiiden.warborn.item.WarbornArmorItem;
+import net.minecraft.world.inventory.MenuType;
+
 
 public class ModRegistry {
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, "warborn");
+
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
 
-    public static final RegistryObject<WarbornArmorItem> RUS_HELMET = ITEMS.register("rus_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rus_armor"));
-
-    public static final RegistryObject<WarbornArmorItem> RUS_CHESTPLATE = ITEMS.register("rus_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rus_armor"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_HELMET = ITEMS.register("rusbron_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_CHESTPLATE = ITEMS.register("rusbron_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_ROF_LIKO_HELMET = ITEMS.register("rusbron_rof_liko_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_rof_liko"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_ROF_LIKO_CHESTPLATE = ITEMS.register("rusbron_rof_liko_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_rof_liko"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_FOR_LIKO_HELMET = ITEMS.register("rusbron_for_liko_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_for_liko"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_FOR_LIKO_CHESTPLATE = ITEMS.register("rusbron_for_liko_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_for_liko"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_PULEMETCHIK_HELMET = ITEMS.register("rusbron_pulemetchik_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_pulemetchik"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_PULEMETCHIK_CHESTPLATE = ITEMS.register("rusbron_pulemetchik_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_pulemetchik"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_PULEMETCHIK_DISGUISE_HELMET = ITEMS.register("rusbron_pulemetchik_disguise_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_pulemetchik_disguise"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_PULEMETCHIK_DISGUISE_CHESTPLATE = ITEMS.register("rusbron_pulemetchik_disguise_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_pulemetchik_disguise"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_PULEMETCHIK_NET_NAPLEKHNIKOV_CHESTPLATE = ITEMS.register("rusbron_pulemetchik_net_naplekhnikov_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_pulemetchik_net_naplekhnikov"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_SHTURMOVIK_CHESTPLATE = ITEMS.register("rusbron_shturmovik_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_shturmovik"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_SHTURMOVIK_DISGUISE_HELMET = ITEMS.register("rusbron_shturmovik_disguise_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "rusbron_shturmovik_disguise"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_SHTURMOVIK_DISGUISE_CHESTPLATE = ITEMS.register("rusbron_shturmovik_disguise_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_shturmovik_disguise"));
-
-    public static final RegistryObject<WarbornArmorItem> RUSBRON_SHTURMOVIK_NET_NAPLEKHNIKOV_CHESTPLATE = ITEMS.register("rusbron_shturmovik_net_naplekhnikov_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "rusbron_shturmovik_net_naplekhnikov"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_PULEMETCHIK_HELMET = ITEMS.register("ukrbron_pulemetchik_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "ukrbron_pulemetchik"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_PULEMETCHIK_CHESTPLATE = ITEMS.register("ukrbron_pulemetchik_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "ukrbron_pulemetchik"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_PULEMETCHIK_LEGGINGS = ITEMS.register("ukrbron_pulemetchik_leggings",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS, new Item.Properties(), "ukrbron_pulemetchik"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_PULEMETCHIK_DISGUISE_HELMET = ITEMS.register("ukrbron_pulemetchik_disguise_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "ukrbron_pulemetchik_disguise"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_PULEMETCHIK_DISGUISE_CHESTPLATE = ITEMS.register("ukrbron_pulemetchik_disguise_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "ukrbron_pulemetchik_disguise"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_PULEMETCHIK_DISGUISE_LEGGINGS = ITEMS.register("ukrbron_pulemetchik_disguise_leggings",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS, new Item.Properties(), "ukrbron_pulemetchik_disguise"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_PULEMETCHIK_NET_NAPLEKHNIKOV_CHESTPLATE = ITEMS.register("ukrbron_pulemetchik_net_naplekhnikov_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "ukrbron_pulemetchik_net_naplekhnikov"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_HELMET = ITEMS.register("ukrbron_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "ukrbron"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_CHESTPLATE = ITEMS.register("ukrbron_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "ukrbron"));
-
-    public static final RegistryObject<WarbornArmorItem> UKRBRON_LEGGINGS = ITEMS.register("ukrbron_leggings",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS, new Item.Properties(), "ukrbron"));
+    public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_HELMET = ITEMS.register("shturmovik_ru_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
+    public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_CHESTPLATE = ITEMS.register("shturmovik_ru_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "shturmovik_ru"));
+    public static final RegistryObject<WarbornArmorItem> SHTURMOVIKV2_HELMET = ITEMS.register("shturmovikv2_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "shturmovikv2"));
+    public static final RegistryObject<WarbornArmorItem> SHTURMOVIKV2_CHESTPLATE = ITEMS.register("shturmovikv2_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "shturmovikv2"));
+    public static final RegistryObject<WarbornArmorItem> RAZVETCHIK_HELMET = ITEMS.register("razvetchik_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "razvetchik"));
+    public static final RegistryObject<WarbornArmorItem> RAZVETCHIK_CHESTPLATE = ITEMS.register("razvetchik_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "razvetchik"));
+    public static final RegistryObject<WarbornArmorItem> MASHINEGUNNER_RU_HELMET = ITEMS.register("mashinegunner_ru_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "mashinegunner_ru"));
+    public static final RegistryObject<WarbornArmorItem> MASHINEGUNNER_RU_CHESTPLATE = ITEMS.register("mashinegunner_ru_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "mashinegunner_ru"));
+    public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_HELMET = ITEMS.register("squad_lider_ru_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "squad_lider_ru"));
+    public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_CHESTPLATE = ITEMS.register("squad_lider_ru_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "squad_lider_ru"));
+    public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_BACKPACK = ITEMS.register("squad_lider_ru_backpack",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "squad_lider_ru_backpack"));
 
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
@@ -103,35 +49,19 @@ public class ModRegistry {
     public static final RegistryObject<CreativeModeTab> WARBORN_TAB = CREATIVE_MODE_TABS.register("warborn_tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.warborn_tab"))
-                    .icon(() -> new ItemStack(RUS_HELMET.get()))
+                    .icon(() -> new ItemStack(SHTURMOVIK_RU_HELMET.get()))
                     .displayItems((enabledFeatures, entries) -> {
-                        entries.accept(RUS_HELMET.get());
-                        entries.accept(RUS_CHESTPLATE.get());
-                        entries.accept(RUSBRON_HELMET.get());
-                        entries.accept(RUSBRON_CHESTPLATE.get());
-                        entries.accept(RUSBRON_ROF_LIKO_HELMET.get());
-                        entries.accept(RUSBRON_ROF_LIKO_CHESTPLATE.get());
-                        entries.accept(RUSBRON_FOR_LIKO_HELMET.get());
-                        entries.accept(RUSBRON_FOR_LIKO_CHESTPLATE.get());
-                        entries.accept(RUSBRON_PULEMETCHIK_HELMET.get());
-                        entries.accept(RUSBRON_PULEMETCHIK_CHESTPLATE.get());
-                        entries.accept(RUSBRON_PULEMETCHIK_DISGUISE_HELMET.get());
-                        entries.accept(RUSBRON_PULEMETCHIK_DISGUISE_CHESTPLATE.get());
-                        entries.accept(RUSBRON_PULEMETCHIK_NET_NAPLEKHNIKOV_CHESTPLATE.get());
-                        entries.accept(RUSBRON_SHTURMOVIK_CHESTPLATE.get());
-                        entries.accept(RUSBRON_SHTURMOVIK_DISGUISE_HELMET.get());
-                        entries.accept(RUSBRON_SHTURMOVIK_DISGUISE_CHESTPLATE.get());
-                        entries.accept(RUSBRON_SHTURMOVIK_NET_NAPLEKHNIKOV_CHESTPLATE.get());
-                        entries.accept(UKRBRON_PULEMETCHIK_HELMET.get());
-                        entries.accept(UKRBRON_PULEMETCHIK_CHESTPLATE.get());
-                        entries.accept(UKRBRON_PULEMETCHIK_LEGGINGS.get());
-                        entries.accept(UKRBRON_PULEMETCHIK_DISGUISE_HELMET.get());
-                        entries.accept(UKRBRON_PULEMETCHIK_DISGUISE_CHESTPLATE.get());
-                        entries.accept(UKRBRON_PULEMETCHIK_DISGUISE_LEGGINGS.get());
-                        entries.accept(UKRBRON_PULEMETCHIK_NET_NAPLEKHNIKOV_CHESTPLATE.get());
-                        entries.accept(UKRBRON_HELMET.get());
-                        entries.accept(UKRBRON_CHESTPLATE.get());
-                        entries.accept(UKRBRON_LEGGINGS.get());
+                        entries.accept(SHTURMOVIK_RU_HELMET.get());
+                        entries.accept(SHTURMOVIK_RU_CHESTPLATE.get());
+                        entries.accept(SHTURMOVIKV2_HELMET.get());
+                        entries.accept(SHTURMOVIKV2_CHESTPLATE.get());
+                        entries.accept(RAZVETCHIK_HELMET.get());
+                        entries.accept(RAZVETCHIK_CHESTPLATE.get());
+                        entries.accept(MASHINEGUNNER_RU_HELMET.get());
+                        entries.accept(MASHINEGUNNER_RU_CHESTPLATE.get());
+                        entries.accept(SQUAD_LIDER_RU_HELMET.get());
+                        entries.accept(SQUAD_LIDER_RU_CHESTPLATE.get());
+                        entries.accept(SQUAD_LIDER_RU_BACKPACK.get());
                     })
                     .build()
     );

@@ -115,7 +115,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-  flatDir { dir 'libs' } 
+  flatDir { dir 'libs' }
   maven {
     // location of the maven that hosts JEI files
     name = "Progwml6 maven"
@@ -125,13 +125,14 @@ repositories {
   	name = "curios"
     url = 'https://maven.theillusivec4.top/'
   }
-  maven { url = 'https://maven.blamejared.com' }    
+  maven { url = 'https://maven.blamejared.com' }
   maven { url = 'https://www.cursemaven.com'  }
 }
 
 dependencies {
     minecraft "net.neoforged:forge:${mc_version}-${neo_version}"
     implementation fg.deobf("curse.maven:geckolib-388172:6027567")
+    implementation fg.deobf("curse.maven:curios-309927:6238756")
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
@@ -145,7 +146,7 @@ tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             mc_version: mc_version,
             loader_version_range: loader_version_range,
-            neo_version_range: neo_version_range, neo_version: neo_version, 
+            neo_version_range: neo_version_range, neo_version: neo_version,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description
     ]
@@ -194,9 +195,9 @@ publishing {
 }
 task signJar(type: SignJar, dependsOn: jar) {
 
-    // findProperty allows us to reference the property without it existing. 
-    // Using project.propName would cause the script to fail validation if 
-    // the property did not exist. 
+    // findProperty allows us to reference the property without it existing.
+    // Using project.propName would cause the script to fail validation if
+    // the property did not exist.
     keyStore = project.findProperty('keyStore')
     alias = project.findProperty('keyStoreAlias')
     storePass = project.findProperty('keyStorePass')
