@@ -6,7 +6,7 @@
 				"identifier": "geometry.nato_pidr_sqad_leader",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 2,
+				"visible_bounds_width": 3,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -1501,7 +1501,7 @@
 						},
 						{
 							"origin": [-6.62521, 17.86925, -1.86859],
-							"size": [1, 0, 1],
+							"size": [1, 0.025, 1],
 							"pivot": [-6.1572, 15.57505, -1.73757],
 							"rotation": [-44.78074, -11.60168, 30.73904],
 							"uv": {
@@ -1551,7 +1551,7 @@
 						},
 						{
 							"origin": [-6.62521, 17.86925, 1.13141],
-							"size": [1, 0, 1],
+							"size": [1, 0.025, 1],
 							"pivot": [-6.1572, 15.57505, 1.26243],
 							"rotation": [-44.78074, -11.60168, 30.73904],
 							"uv": {
@@ -1571,7 +1571,7 @@
 					"pivot": [-4.35924, 22.14848, -4.00448]
 				},
 				{
-					"name": "!2",
+					"name": "2",
 					"parent": "Body",
 					"pivot": [-3.5, 15.325, -3.75],
 					"cubes": [
