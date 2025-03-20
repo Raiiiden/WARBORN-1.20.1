@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "warborn:squad_lider_ru_backpack"
+    "warborn:squad_lider_ru_backpack",
+    "warborn:nato_pidr_mg_backpack",
+    "warborn:nato_pidr_sqad_leader_backpack",
+    "warborn:nato_pidr_ukr_backpack",
+    "warborn:shturmovik_ru_backpack"
   ]
 }
