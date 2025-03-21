@@ -12,32 +12,34 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BackpackCapabilityProvider implements ICapabilitySerializable<CompoundTag> {
-    private BackpackItemStackHandler handler;
-    private final LazyOptional<IItemHandler> optional = LazyOptional.of(this::getCachedInventory);
+    private final BackpackItemStackHandler handler;
+    private final LazyOptional<IItemHandler> optional;
+    private final ItemStack stack;
 
-    public BackpackCapabilityProvider(ItemStack backpack) {
-    }
+    public BackpackCapabilityProvider(ItemStack stack) {
+        this.stack = stack;
+        this.handler = new BackpackItemStackHandler();
 
-    private BackpackItemStackHandler getCachedInventory() {
-        if (handler == null) {
-            handler = new BackpackItemStackHandler();
+        CompoundTag tag = stack.getOrCreateTag();
+        if (tag.contains("BackpackCap")) {
+            this.handler.deserializeNBT(tag.getCompound("BackpackCap"));
         }
-        return handler;
+
+        this.optional = LazyOptional.of(() -> this.handler);
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER) return optional.cast();
-        return LazyOptional.empty();
+        return cap == ForgeCapabilities.ITEM_HANDLER ? optional.cast() : LazyOptional.empty();
     }
 
     @Override
     public CompoundTag serializeNBT() {
-        return this.getCachedInventory().serializeNBT();
+        return this.handler.serializeNBT();
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        this.getCachedInventory().deserializeNBT(nbt);
+        this.handler.deserializeNBT(nbt);
     }
 }

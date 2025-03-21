@@ -30,5 +30,6 @@
   "item.warborn.nato_pidr_mg_chestplate": "NATO Machine Gunner Chestplate",
   "item.warborn.nato_pidr_mg_shoulderpads": "NATO Machine Gunner Shoulderpads",
   "item.warborn.nato_pidr_mg_backpack": "NATO Machine Gunner Backpack",
-  "menu.warborn.backpack": "Backpack"
+  "menu.warborn.backpack": "Backpack",
+  "key.warborn.open_backpack": "Open Backpack"
 }
