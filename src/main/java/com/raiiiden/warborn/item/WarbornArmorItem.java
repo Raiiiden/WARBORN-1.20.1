@@ -1,15 +1,24 @@
 package com.raiiiden.warborn.item;
 
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
+import com.raiiiden.warborn.common.network.ModNetworking;
+import com.raiiiden.warborn.common.network.OpenBackpackPacket;
+import com.raiiiden.warborn.common.object.capability.BackpackCapabilityProvider;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -58,5 +67,24 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+
+        if (!level.isClientSide) {
+            ModNetworking.sendToServer(new OpenBackpackPacket(itemStack));
+        }
+
+        return InteractionResultHolder.success(itemStack);
+    }
+
+    @Override
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable net.minecraft.nbt.CompoundTag nbt) {
+        if (stack.is(this)) {
+            return new BackpackCapabilityProvider(stack);
+        }
+        return super.initCapabilities(stack, nbt);
     }
 }

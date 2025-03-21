@@ -1,5 +1,6 @@
 package com.raiiiden.warborn;
 
+import com.raiiiden.warborn.common.object.BackpackMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
@@ -7,6 +8,7 @@ import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -19,6 +21,11 @@ public class ModRegistry {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
 
+    //backpack menu
+    public static final RegistryObject<MenuType<BackpackMenu>> BACKPACK_MENU =
+            MENU_TYPES.register("backpack", () -> IForgeMenuType.create(BackpackMenu::new));
+
+//RU Armor
     public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_HELMET = ITEMS.register("shturmovik_ru_helmet",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
     public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_CHESTPLATE = ITEMS.register("shturmovik_ru_chestplate",

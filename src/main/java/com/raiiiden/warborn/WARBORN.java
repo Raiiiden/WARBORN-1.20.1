@@ -1,23 +1,33 @@
 package com.raiiiden.warborn;
 
-import com.raiiiden.warborn.client.WarbornClientEventSubscriber;
+import com.raiiiden.warborn.common.init.MenuTypeInit;
+import com.raiiiden.warborn.common.network.ModNetworking;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent; // ✅ Added
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import software.bernie.geckolib.GeckoLib;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(WARBORN.MODID)
 public class WARBORN {
   public static final String MODID = "warborn";
+  private static final Logger LOGGER = LogManager.getLogger();
 
   public WARBORN() {
+    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-    var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-    // Register mod items and creative tabs
     ModRegistry.ITEMS.register(modEventBus);
     ModRegistry.CREATIVE_MODE_TABS.register(modEventBus);
 
+    modEventBus.addListener(this::setup);
+    MenuTypeInit.register(modEventBus);
+
     MinecraftForge.EVENT_BUS.register(this);
+  }
+
+  private void setup(final FMLCommonSetupEvent event) {
+    ModNetworking.registerPackets();
   }
 }
