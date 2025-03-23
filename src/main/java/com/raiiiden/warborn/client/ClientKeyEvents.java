@@ -1,0 +1,62 @@
+package com.raiiiden.warborn.client;
+
+import com.raiiiden.warborn.common.network.ModNetworking;
+import com.raiiiden.warborn.common.util.HelmetVisionHandler;
+import com.raiiiden.warborn.item.WarbornArmorItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosApi;
+
+@Mod.EventBusSubscriber(modid = "warborn", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+public class ClientKeyEvents {
+
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.Key event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.level == null) return;
+
+        Player player = mc.player;
+
+        // OPEN BACKPACK
+        if (ModKeybindings.OPEN_BACKPACK.consumeClick()) {
+            ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+            if (WarbornArmorItem.isBackpackItem(chest)) {
+                ModNetworking.openBackpack(chest);
+                return;
+            }
+
+            CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
+                inv.getCurios().forEach((slotId, handler) -> {
+                    for (int i = 0; i < handler.getStacks().getSlots(); i++) {
+                        ItemStack stack = handler.getStacks().getStackInSlot(i);
+                        if (WarbornArmorItem.isBackpackItem(stack)) {
+                            ModNetworking.openBackpack(stack);
+                            return;
+                        }
+                    }
+                });
+            });
+        }
+
+        // TOGGLE NIGHT VISION
+        if (ModKeybindings.TOGGLE_NIGHT_VISION.consumeClick()) {
+            ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+            if (HelmetVisionHandler.isAllowedHelmet(helmet)) {
+                boolean hasEffect = player.hasEffect(MobEffects.NIGHT_VISION);
+                if (hasEffect) {
+                    player.removeEffect(MobEffects.NIGHT_VISION);
+                } else {
+                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
+                }
+            }
+        }
+    }
+}
