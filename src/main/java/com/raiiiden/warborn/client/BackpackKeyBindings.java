@@ -4,7 +4,7 @@ import com.raiiiden.warborn.item.WarbornArmorItem;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,8 +28,6 @@ public class BackpackKeyBindings {
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(OPEN_BACKPACK);
-
-        // Register client-side event handler
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);
     }
 
@@ -48,7 +46,7 @@ public class BackpackKeyBindings {
                     return;
                 }
 
-                // Then check Curios slots
+                // Then check Curios
                 CuriosApi.getCuriosInventory(mc.player).ifPresent(inv -> {
                     inv.getCurios().forEach((slotId, handler) -> {
                         for (int i = 0; i < handler.getStacks().getSlots(); i++) {

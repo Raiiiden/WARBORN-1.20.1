@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +21,7 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -80,6 +82,19 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
             ModNetworking.openBackpack(itemStack);
         }
         return InteractionResultHolder.success(itemStack);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if (!level.isClientSide && isBackpackItem(stack) && !stack.getOrCreateTag().contains("BackpackCap")) {
+            stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(cap -> {
+                if (cap instanceof INBTSerializable<?> serializable) {
+                    CompoundTag tag = stack.getOrCreateTag();
+                    tag.put("BackpackCap", (CompoundTag) serializable.serializeNBT());
+                    stack.setTag(tag);
+                }
+            });
+        }
     }
 
     @Override
