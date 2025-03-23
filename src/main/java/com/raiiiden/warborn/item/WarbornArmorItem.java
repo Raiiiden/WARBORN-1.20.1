@@ -6,7 +6,9 @@ import com.raiiiden.warborn.common.network.OpenBackpackPacket;
 import com.raiiiden.warborn.common.object.capability.BackpackCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.BackpackItemStackHandler;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -74,17 +76,18 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-
-        if (!level.isClientSide) {
-            ModNetworking.sendToServer(new OpenBackpackPacket(itemStack));
+        if (!level.isClientSide && isBackpackItem(itemStack)) {
+            ModNetworking.openBackpack(itemStack);
         }
-
         return InteractionResultHolder.success(itemStack);
     }
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new BackpackCapabilityProvider(stack);
+        if (isBackpackItem(stack)) {
+            return new BackpackCapabilityProvider(stack);
+        }
+        return super.initCapabilities(stack, nbt);
     }
 
     @Override
@@ -92,12 +95,14 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         CompoundTag tag = super.getShareTag(stack);
         final CompoundTag finalTag = tag != null ? tag : new CompoundTag();
 
-        LazyOptional<IItemHandler> optional = stack.getCapability(ForgeCapabilities.ITEM_HANDLER);
-        optional.ifPresent(cap -> {
-            if (cap instanceof BackpackItemStackHandler handler) {
-                finalTag.put("BackpackCap", handler.serializeNBT());
-            }
-        });
+        if (isBackpackItem(stack)) {
+            LazyOptional<IItemHandler> optional = stack.getCapability(ForgeCapabilities.ITEM_HANDLER);
+            optional.ifPresent(cap -> {
+                if (cap instanceof BackpackItemStackHandler handler) {
+                    finalTag.put("BackpackCap", handler.serializeNBT());
+                }
+            });
+        }
 
         return finalTag;
     }
@@ -105,12 +110,18 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundTag tag) {
         super.readShareTag(stack, tag);
-        if (tag != null && tag.contains("BackpackCap")) {
+        if (isBackpackItem(stack) && tag != null && tag.contains("BackpackCap")) {
             stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(cap -> {
                 if (cap instanceof BackpackItemStackHandler handler) {
                     handler.deserializeNBT(tag.getCompound("BackpackCap"));
                 }
             });
         }
+    }
+
+    public static boolean isBackpackItem(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return id != null && id.getPath().toLowerCase().contains("backpack");
     }
 }

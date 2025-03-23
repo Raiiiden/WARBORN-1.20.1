@@ -11,8 +11,7 @@ public class BackpackItemStackHandler extends ItemStackHandler {
 
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        // Prevent nesting backpacks if desired
-        return false;
+        return !com.raiiiden.warborn.item.WarbornArmorItem.isBackpackItem(stack);
     }
 
     public boolean isUninitialized() {
