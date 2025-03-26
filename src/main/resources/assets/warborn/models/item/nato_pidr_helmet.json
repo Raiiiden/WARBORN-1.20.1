@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "warborn:item/shturmovik_ru_helmet"
+    "layer0": "warborn:item/nato_pidr_helmet"
   }
 }

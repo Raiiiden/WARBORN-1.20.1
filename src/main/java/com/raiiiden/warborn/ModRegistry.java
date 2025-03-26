@@ -26,26 +26,18 @@ public class ModRegistry {
             MENU_TYPES.register("backpack", () -> IForgeMenuType.create(BackpackMenu::new));
 
 //RU Armor
-    public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_HELMET = ITEMS.register("shturmovik_ru_helmet",
+    public static final RegistryObject<WarbornArmorItem> RU_HELMET = ITEMS.register("ru_helmet",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
     public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_CHESTPLATE = ITEMS.register("shturmovik_ru_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "shturmovik_ru"));
-    public static final RegistryObject<WarbornArmorItem> SHTURMOVIKV2_HELMET = ITEMS.register("shturmovikv2_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "shturmovikv2"));
     public static final RegistryObject<WarbornArmorItem> SHTURMOVIKV2_CHESTPLATE = ITEMS.register("shturmovikv2_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "shturmovikv2"));
-    public static final RegistryObject<WarbornArmorItem> RAZVETCHIK_HELMET = ITEMS.register("razvetchik_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "razvetchik"));
     public static final RegistryObject<WarbornArmorItem> RAZVETCHIK_CHESTPLATE = ITEMS.register("razvetchik_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "razvetchik"));
-    public static final RegistryObject<WarbornArmorItem> MASHINEGUNNER_RU_HELMET = ITEMS.register("mashinegunner_ru_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "mashinegunner_ru"));
     public static final RegistryObject<WarbornArmorItem> MASHINEGUNNER_RU_CHESTPLATE = ITEMS.register("mashinegunner_ru_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "mashinegunner_ru"));
     public static final RegistryObject<WarbornArmorItem> MASHINEGUNNER_RU_SHOULDERPADS = ITEMS.register("mashinegunner_ru_shoulderpads",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "mashinegunner_ru_shoulderpads"));
-    public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_HELMET = ITEMS.register("squad_lider_ru_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "squad_lider_ru"));
     public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_CHESTPLATE = ITEMS.register("squad_lider_ru_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "squad_lider_ru"));
     public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_BACKPACK = ITEMS.register("squad_lider_ru_backpack",
@@ -67,20 +59,16 @@ public class ModRegistry {
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_pidr_ukr"));
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_UKR_BACKPACK = ITEMS.register("nato_pidr_ukr_backpack",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_pidr_ukr_backpack"));
-    public static final RegistryObject<WarbornArmorItem> NATO_PIDR_SHTURMOVIK2_HELMET = ITEMS.register("nato_pidr_shturmovik2_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_pidr_shturmovik2"));
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_SHTURMOVIK2_CHESTPLATE = ITEMS.register("nato_pidr_shturmovik2_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_pidr_shturmovik2"));
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_SHTURMOVIK2_SHOULDERPADS = ITEMS.register("nato_pidr_shturmovik2_shoulderpads",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_pidr_shturmovik2_shoulderpads"));
-    public static final RegistryObject<WarbornArmorItem> NATO_PIDR_SHTURMOVIK_HELMET = ITEMS.register("nato_pidr_shturmovik_helmet",
+    public static final RegistryObject<WarbornArmorItem> NATO_PIDR_HELMET = ITEMS.register("nato_pidr_helmet",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_pidr_shturmovik"));
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_SHTURMOVIK_CHESTPLATE = ITEMS.register("nato_pidr_shturmovik_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_pidr_shturmovik"));
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_SHTURMOVIK_SHOULDERPADS = ITEMS.register("nato_pidr_shturmovik_shoulderpads",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_pidr_shturmovik_shoulderpads"));
-    public static final RegistryObject<WarbornArmorItem> NATO_PIDR_MG_HELMET = ITEMS.register("nato_pidr_mg_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_pidr_mg"));
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_MG_CHESTPLATE = ITEMS.register("nato_pidr_mg_chestplate",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_pidr_mg"));
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_MG_SHOULDERPADS = ITEMS.register("nato_pidr_mg_shoulderpads",
@@ -94,19 +82,15 @@ public class ModRegistry {
     public static final RegistryObject<CreativeModeTab> WARBORN_TAB = CREATIVE_MODE_TABS.register("warborn_tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.warborn_tab"))
-                    .icon(() -> new ItemStack(SHTURMOVIK_RU_HELMET.get()))
+                    .icon(() -> new ItemStack(RU_HELMET.get()))
                     .displayItems((enabledFeatures, entries) -> {
-                        entries.accept(SHTURMOVIK_RU_HELMET.get());
+                        entries.accept(RU_HELMET.get());
                         entries.accept(SHTURMOVIK_RU_CHESTPLATE.get());
                         entries.accept(SHTURMOVIK_RU_BACKPACK.get());
-                        entries.accept(SHTURMOVIKV2_HELMET.get());
                         entries.accept(SHTURMOVIKV2_CHESTPLATE.get());
-                        entries.accept(RAZVETCHIK_HELMET.get());
                         entries.accept(RAZVETCHIK_CHESTPLATE.get());
-                        entries.accept(MASHINEGUNNER_RU_HELMET.get());
                         entries.accept(MASHINEGUNNER_RU_CHESTPLATE.get());
                         entries.accept(MASHINEGUNNER_RU_SHOULDERPADS.get());
-                        entries.accept(SQUAD_LIDER_RU_HELMET.get());
                         entries.accept(SQUAD_LIDER_RU_CHESTPLATE.get());
                         entries.accept(SQUAD_LIDER_RU_BACKPACK.get());
                         //nato
@@ -117,13 +101,11 @@ public class ModRegistry {
                         entries.accept(NATO_PIDR_UKR_HELMET.get());
                         entries.accept(NATO_PIDR_UKR_CHESTPLATE.get());
                         entries.accept(NATO_PIDR_UKR_BACKPACK.get());
-                        entries.accept(NATO_PIDR_SHTURMOVIK2_HELMET.get());
                         entries.accept(NATO_PIDR_SHTURMOVIK2_CHESTPLATE.get());
                         entries.accept(NATO_PIDR_SHTURMOVIK2_SHOULDERPADS.get());
-                        entries.accept(NATO_PIDR_SHTURMOVIK_HELMET.get());
+                        entries.accept(NATO_PIDR_HELMET.get());
                         entries.accept(NATO_PIDR_SHTURMOVIK_CHESTPLATE.get());
                         entries.accept(NATO_PIDR_SHTURMOVIK_SHOULDERPADS.get());
-                        entries.accept(NATO_PIDR_MG_HELMET.get());
                         entries.accept(NATO_PIDR_MG_CHESTPLATE.get());
                         entries.accept(NATO_PIDR_MG_SHOULDERPADS.get());
                         entries.accept(NATO_PIDR_MG_BACKPACK.get());
