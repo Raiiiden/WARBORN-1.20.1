@@ -78,10 +78,21 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
+
+        // Backpack opening logic (client-only)
         if (level.isClientSide && isBackpackItem(itemStack)) {
             ModNetworking.openBackpack(itemStack);
         }
-        return InteractionResultHolder.success(itemStack);
+
+        EquipmentSlot slot = this.getEquipmentSlot();
+        ItemStack currentlyEquipped = player.getItemBySlot(slot);
+        if (currentlyEquipped.isEmpty()) {
+            player.setItemSlot(slot, itemStack.copy());
+            itemStack.setCount(0);
+            return InteractionResultHolder.success(itemStack);
+        }
+
+        return InteractionResultHolder.pass(itemStack);
     }
 
     @Override
