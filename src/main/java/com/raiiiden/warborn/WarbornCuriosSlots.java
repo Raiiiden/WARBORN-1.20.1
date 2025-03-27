@@ -13,5 +13,8 @@ public class WarbornCuriosSlots {
         InterModComms.sendTo("curios", "register_type", () ->
                 SlotTypePreset.BACK.getMessageBuilder().size(1).build()
         );
+        InterModComms.sendTo("curios", "register_type", () ->
+                SlotTypePreset.BODY.getMessageBuilder().size(1).build()
+        );
     }
 }
