@@ -150,4 +150,10 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         return id != null && id.getPath().toLowerCase().contains("backpack");
     }
+
+    public static boolean isShoulderpadsItem(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return id != null && id.getPath().toLowerCase().contains("shoulderpads");
+    }
 }

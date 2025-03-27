@@ -1,6 +1,7 @@
 package com.raiiiden.warborn.client;
 
 import com.raiiiden.warborn.client.renderer.layer.WarbornBackpackLayer;
+import com.raiiiden.warborn.client.renderer.layer.WarbornShoulderpadsLayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,6 +21,7 @@ public class WarbornClientEventSubscriber {
             LivingEntityRenderer<?, ?> renderer = event.getSkin(skin);
             if (renderer instanceof PlayerRenderer playerRenderer) {
                 playerRenderer.addLayer(new WarbornBackpackLayer<>(playerRenderer));
+                playerRenderer.addLayer(new WarbornShoulderpadsLayer<>(playerRenderer));
             }
         }
     }
