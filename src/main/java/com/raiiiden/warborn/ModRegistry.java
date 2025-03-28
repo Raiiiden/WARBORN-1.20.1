@@ -69,7 +69,9 @@ public class ModRegistry {
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_pidr_mg"));
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_MG_BACKPACK = ITEMS.register("nato_pidr_mg_backpack",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_pidr_mg_backpack"));
-
+//nato green
+    public static final RegistryObject<WarbornArmorItem> NATO_PIDR_GREEN_HELMET = ITEMS.register("nato_pidr_green_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_pidr_green_shturmovik"));
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
 
@@ -101,6 +103,8 @@ public class ModRegistry {
                         entries.accept(NATO_PIDR_SHTURMOVIK_CHESTPLATE.get());
                         entries.accept(NATO_PIDR_MG_CHESTPLATE.get());
                         entries.accept(NATO_PIDR_MG_BACKPACK.get());
+                        //nato green
+                        entries.accept(NATO_PIDR_GREEN_HELMET.get());
                         //beta7
                     })
                     .build()
