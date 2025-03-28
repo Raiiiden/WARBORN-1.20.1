@@ -21,6 +21,11 @@
   "item.warborn.nato_pidr_shturmovik_chestplate": "NATO Shturmovik Chestplate",
   "item.warborn.nato_pidr_mg_chestplate": "NATO Machine Gunner Chestplate",
   "item.warborn.nato_pidr_mg_backpack": "NATO Machine Gunner Backpack",
+  "item.warborn.nato_sqad_leader_helmet_woodland": "NATO Squad Leader Helmet (Woodland)",
+  "item.warborn.nato_sqad_leader_chestplate_woodland": "NATO Squad Leader Chestplate (Woodland)",
+  "item.warborn.nato_sqad_leader_backpack_woodland": "NATO Squad Leader Backpack (Woodland)",
+  "item.warborn.nato_shoulderpads_woodland": "NATO Shoulderpads (Woodland)",
+  "item.warborn.nato_ukr_chestplate_woodland": "NATO Ukrainian Chestplate (Woodland)",
   "menu.warborn.backpack": "Backpack",
   "key.warborn.open_backpack": "Open Backpack",
   "key.warborn.toggle_night_vision": "Toggle Night Vision"

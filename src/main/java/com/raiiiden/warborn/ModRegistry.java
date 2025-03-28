@@ -70,8 +70,27 @@ public class ModRegistry {
     public static final RegistryObject<WarbornArmorItem> NATO_PIDR_MG_BACKPACK = ITEMS.register("nato_pidr_mg_backpack",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_pidr_mg_backpack"));
 //nato green
-    public static final RegistryObject<WarbornArmorItem> NATO_PIDR_GREEN_HELMET = ITEMS.register("nato_pidr_green_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_pidr_green_shturmovik"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_HELMET_WOODLAND = ITEMS.register("nato_sqad_leader_helmet_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_sqad_leader_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_CHESTPLATE_WOODLAND = ITEMS.register("nato_sqad_leader_chestplate_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_sqad_leader_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_BACKPACK_WOODLAND = ITEMS.register("nato_sqad_leader_backpack_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_backpack_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHOULDERPADS_WOODLAND = ITEMS.register("nato_shoulderpads_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads_woodland"));
+
+    public static final RegistryObject<WarbornArmorItem> NATO_UKR_HELMET_WOODLAND = ITEMS.register("nato_ukr_helmet_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_ukr_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_UKR_CHESTPLATE_WOODLAND = ITEMS.register("nato_ukr_chestplate_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_ukr_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK2_CHESTPLATE_WOODLAND = ITEMS.register("nato_shturmovik2_chestplate_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik2_woodland"));
+
+    public static final RegistryObject<WarbornArmorItem> NATO_HELMET_WOODLAND = ITEMS.register("nato_helmet_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_shturmovik_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK_CHESTPLATE_WOODLAND = ITEMS.register("nato_shturmovik_chestplate_woodland",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik_woodland"));
+//creative tab
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
 
@@ -103,8 +122,16 @@ public class ModRegistry {
                         entries.accept(NATO_PIDR_SHTURMOVIK_CHESTPLATE.get());
                         entries.accept(NATO_PIDR_MG_CHESTPLATE.get());
                         entries.accept(NATO_PIDR_MG_BACKPACK.get());
-                        //nato green
-                        entries.accept(NATO_PIDR_GREEN_HELMET.get());
+                        //nato woodland
+                        entries.accept(NATO_SQAD_LEADER_HELMET_WOODLAND.get());
+                        entries.accept(NATO_SQAD_LEADER_CHESTPLATE_WOODLAND.get());
+                        entries.accept(NATO_SQAD_LEADER_BACKPACK_WOODLAND.get());
+                        entries.accept(NATO_SHOULDERPADS_WOODLAND.get());
+                        entries.accept(NATO_UKR_HELMET_WOODLAND.get());
+                        entries.accept(NATO_UKR_CHESTPLATE_WOODLAND.get());
+                        entries.accept(NATO_SHTURMOVIK2_CHESTPLATE_WOODLAND.get());
+                        entries.accept(NATO_HELMET_WOODLAND.get());
+                        entries.accept(NATO_SHTURMOVIK_CHESTPLATE_WOODLAND.get());
                         //beta7
                     })
                     .build()
