@@ -95,6 +95,19 @@ public class ModRegistry {
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7"));
     public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS = ITEMS.register("beta7_shoulderpads",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
+
+//killa
+    public static final RegistryObject<Item> KILLA_HELMET = ITEMS.register("killa_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "killa"));
+    public static final RegistryObject<Item> KILLA_CHESTPLATE = ITEMS.register("killa_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "killa"));
+//tagila
+    public static final RegistryObject<Item> TAGILLA_HELMET = ITEMS.register("tagilla_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "tagilla"));
+    public static final RegistryObject<Item> TAGILLA_CHESTPLATE = ITEMS.register("tagilla_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "tagilla"));
+    public static final RegistryObject<Item> TAGILLA_LEGGINGS = ITEMS.register("tagilla_leggings",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS, new Item.Properties(), "tagilla"));
 //creative tab
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
@@ -141,6 +154,15 @@ public class ModRegistry {
                         entries.accept(BETA7_HELMET.get());
                         entries.accept(BETA7_CHESTPLATE.get());
                         entries.accept(BETA7_SHOULDERPADS.get());
+
+                        //killa
+                        entries.accept(KILLA_HELMET.get());
+                        entries.accept(KILLA_CHESTPLATE.get());
+
+                        //tagila
+                        entries.accept(TAGILLA_HELMET.get());
+                        entries.accept(TAGILLA_CHESTPLATE.get());
+                        entries.accept(TAGILLA_LEGGINGS.get());
                     })
                     .build()
     );
