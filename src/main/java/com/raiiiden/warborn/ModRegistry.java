@@ -95,6 +95,22 @@ public class ModRegistry {
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7"));
     public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS = ITEMS.register("beta7_shoulderpads",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET_SLATE = ITEMS.register("beta7_nvg_helmet_slate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET_SLATE = ITEMS.register("beta7_helmet_slate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE_SLATE = ITEMS.register("beta7_chestplate_slate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS_SLATE = ITEMS.register("beta7_shoulderpads_slate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET_ASH = ITEMS.register("beta7_nvg_helmet_ash",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg_ash"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET_ASH = ITEMS.register("beta7_helmet_ash",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_ash"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE_ASH = ITEMS.register("beta7_chestplate_ash",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_ash"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS_ASH = ITEMS.register("beta7_shoulderpads_ash",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_ash"));
 
 //killa
     public static final RegistryObject<Item> KILLA_HELMET = ITEMS.register("killa_helmet",
@@ -157,6 +173,14 @@ public class ModRegistry {
                         entries.accept(BETA7_HELMET.get());
                         entries.accept(BETA7_CHESTPLATE.get());
                         entries.accept(BETA7_SHOULDERPADS.get());
+                        entries.accept(BETA7_NVG_HELMET_SLATE.get());
+                        entries.accept(BETA7_HELMET_SLATE.get());
+                        entries.accept(BETA7_CHESTPLATE_SLATE.get());
+                        entries.accept(BETA7_SHOULDERPADS_SLATE.get());
+                        entries.accept(BETA7_NVG_HELMET_ASH.get());
+                        entries.accept(BETA7_HELMET_ASH.get());
+                        entries.accept(BETA7_CHESTPLATE_ASH.get());
+                        entries.accept(BETA7_SHOULDERPADS_ASH.get());
 
                         //killa
                         entries.accept(KILLA_HELMET.get());
