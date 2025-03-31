@@ -127,6 +127,7 @@ public class ModRegistry {
                         entries.accept(MASHINEGUNNER_RU_CHESTPLATE.get());
                         entries.accept(SQUAD_LIDER_RU_CHESTPLATE.get());
                         entries.accept(SQUAD_LIDER_RU_BACKPACK.get());
+
                         //nato
                         entries.accept(NATO_SQAD_LEADER_HELMET.get());
                         entries.accept(NATO_SQAD_LEADER_CHESTPLATE.get());
@@ -138,6 +139,7 @@ public class ModRegistry {
                         entries.accept(NATO_HELMET.get());
                         entries.accept(NATO_SHTURMOVIK_CHESTPLATE.get());
                         entries.accept(NATO_MG_CHESTPLATE.get());
+
                         //nato woodland
                         entries.accept(NATO_SQAD_LEADER_HELMET_WOODLAND.get());
                         entries.accept(NATO_SQAD_LEADER_CHESTPLATE_WOODLAND.get());
@@ -149,6 +151,7 @@ public class ModRegistry {
                         entries.accept(NATO_HELMET_WOODLAND.get());
                         entries.accept(NATO_SHTURMOVIK_CHESTPLATE_WOODLAND.get());
                         entries.accept(NATO_MG_CHESTPLATE_WOODLAND.get());
+
                         //beta7
                         entries.accept(BETA7_NVG_HELMET.get());
                         entries.accept(BETA7_HELMET.get());
