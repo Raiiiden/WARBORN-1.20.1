@@ -9,8 +9,10 @@ import java.util.Set;
 public class HelmetVisionHandler {
 
     public static final Set<ResourceLocation> ALLOWED_HELMETS = Set.of(
-            new ResourceLocation("warborn", "nato_pidr_sqad_leader_helmet"),
-            new ResourceLocation("warborn", "nato_pidr_ukr_helmet")
+            new ResourceLocation("warborn", "nato_sqad_leader_helmet"),
+            new ResourceLocation("warborn", "nato_ukr_helmet"),
+            new ResourceLocation("warborn", "nato_sqad_leader_helmet_woodland"),
+            new ResourceLocation("warborn", "nato_ukr_helmet_woodland")
     );
 
     public static boolean isAllowedHelmet(ItemStack stack) {
