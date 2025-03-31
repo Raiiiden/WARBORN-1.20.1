@@ -12,7 +12,8 @@ public class HelmetVisionHandler {
             new ResourceLocation("warborn", "nato_sqad_leader_helmet"),
             new ResourceLocation("warborn", "nato_ukr_helmet"),
             new ResourceLocation("warborn", "nato_sqad_leader_helmet_woodland"),
-            new ResourceLocation("warborn", "nato_ukr_helmet_woodland")
+            new ResourceLocation("warborn", "nato_ukr_helmet_woodland"),
+            new ResourceLocation("warborn", "beta7_nvg_helmet")
     );
 
     public static boolean isAllowedHelmet(ItemStack stack) {

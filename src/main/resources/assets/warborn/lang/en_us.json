@@ -31,6 +31,10 @@
   "item.warborn.nato_helmet_woodland": "NATO Helmet (Woodland)",
   "item.warborn.nato_shturmovik_chestplate_woodland": "NATO Shturmovik Chestplate (Woodland)",
   "item.warborn.nato_mg_chestplate_woodland": "NATO Machine Gunner Chestplate (Woodland)",
+  "item.warborn.beta7_nvg_helmet": "Beta 7 NVG Helmet",
+  "item.warborn.beta7_helmet": "Beta 7 Helmet",
+  "item.warborn.beta7_chestplate": "Beta 7 Chestplate",
+  "item.warborn.beta7_shoulderpads": "Beta 7 Shoulderpads",
   "menu.warborn.backpack": "Backpack",
   "key.warborn.open_backpack": "Open Backpack",
   "key.warborn.toggle_night_vision": "Toggle Night Vision"

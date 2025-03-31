@@ -86,6 +86,15 @@ public class ModRegistry {
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik_woodland"));
     public static final RegistryObject<WarbornArmorItem> NATO_MG_CHESTPLATE_WOODLAND = ITEMS.register("nato_mg_chestplate_woodland",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_mg_woodland"));
+//beta7
+    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET = ITEMS.register("beta7_nvg_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET = ITEMS.register("beta7_helmet",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE = ITEMS.register("beta7_chestplate",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS = ITEMS.register("beta7_shoulderpads",
+            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
 //creative tab
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
@@ -128,6 +137,10 @@ public class ModRegistry {
                         entries.accept(NATO_SHTURMOVIK_CHESTPLATE_WOODLAND.get());
                         entries.accept(NATO_MG_CHESTPLATE_WOODLAND.get());
                         //beta7
+                        entries.accept(BETA7_NVG_HELMET.get());
+                        entries.accept(BETA7_HELMET.get());
+                        entries.accept(BETA7_CHESTPLATE.get());
+                        entries.accept(BETA7_SHOULDERPADS.get());
                     })
                     .build()
     );
