@@ -1,0 +1,104 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    64,
+    64
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        -5.5,
+        2
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        -5.5,
+        2
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        10,
+        0
+      ],
+      "translation": [
+        2.75,
+        -7,
+        -5.75
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        3.25,
+        -7,
+        -5.75
+      ]
+    },
+    "ground": {
+      "translation": [
+        -0.5,
+        -2.5,
+        0
+      ]
+    },
+    "gui": {
+      "rotation": [
+        -90,
+        -44,
+        -90
+      ],
+      "translation": [
+        -7.25,
+        -7,
+        0
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ]
+    },
+    "head": {
+      "rotation": [
+        -90,
+        -55,
+        -90
+      ],
+      "translation": [
+        -7.75,
+        -26.25,
+        5
+      ],
+      "scale": [
+        1.58,
+        1.58,
+        1.58
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "translation": [
+        0,
+        -15.5,
+        -0.75
+      ],
+      "scale": [
+        1.6,
+        1.6,
+        1.6
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/tagilla_molot"
+  }
+}

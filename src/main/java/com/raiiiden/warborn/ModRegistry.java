@@ -1,6 +1,7 @@
 package com.raiiiden.warborn;
 
 import com.raiiiden.warborn.common.object.BackpackMenu;
+import com.raiiiden.warborn.item.WarbornWeaponItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
@@ -124,7 +125,15 @@ public class ModRegistry {
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "tagilla"));
     public static final RegistryObject<Item> TAGILLA_LEGGINGS = ITEMS.register("tagilla_leggings",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS, new Item.Properties(), "tagilla"));
-//creative tab
+
+// ---------------
+// Weapons Start Here
+// ---------------
+    public static final RegistryObject<Item> TAGILLA_MOLOT = ITEMS.register("tagilla_molot",
+            () -> new WarbornWeaponItem(new Item.Properties().stacksTo(1).durability(500)));
+
+
+    //creative tab
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
 
@@ -190,6 +199,12 @@ public class ModRegistry {
                         entries.accept(TAGILLA_HELMET.get());
                         entries.accept(TAGILLA_CHESTPLATE.get());
                         entries.accept(TAGILLA_LEGGINGS.get());
+
+                        // ---------------
+                        // Weapons Start Here
+                        // ---------------
+
+                        entries.accept(TAGILLA_MOLOT.get());
                     })
                     .build()
     );

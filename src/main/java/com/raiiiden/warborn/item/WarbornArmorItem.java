@@ -69,7 +69,8 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     @Override
     public boolean overrideStackedOnOther(ItemStack chestplate, Slot slot, ClickAction action, Player player) {
-        if (!(chestplate.getItem() instanceof WarbornArmorItem) || action != ClickAction.SECONDARY) return false;
+        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !isChestplateItem(chestplate)) return false;
+        if (action != ClickAction.SECONDARY) return false;
 
         ItemStack slotStack = slot.getItem();
 
@@ -83,7 +84,6 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                     return true;
                 }
             } else {
-                // No shift: do nothing on empty slot
                 return false;
             }
         } else {
@@ -106,11 +106,11 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack chestplate, ItemStack itemBeingMoved, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        if (!(chestplate.getItem() instanceof WarbornArmorItem)) return false;
+        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !isChestplateItem(chestplate)) return false;
         if (action != ClickAction.SECONDARY || !slot.allowModification(player)) return false;
 
         if (itemBeingMoved.isEmpty()) {
-            WarbornArmorItem.removeItem(chestplate).ifPresent(removed -> {
+            removeItem(chestplate).ifPresent(removed -> {
                 access.set(removed);
                 playRemoveOneSound(player);
             });
@@ -119,11 +119,11 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
         if (!itemBeingMoved.getItem().canFitInsideContainerItems()) return false;
 
-        int canAdd = WarbornArmorItem.getAvailableSpace(chestplate, itemBeingMoved);
+        int canAdd = getAvailableSpace(chestplate, itemBeingMoved);
         if (canAdd <= 0) return false;
 
         ItemStack toAdd = itemBeingMoved.copyWithCount(Math.min(canAdd, itemBeingMoved.getCount()));
-        int added = WarbornArmorItem.addItems(chestplate, toAdd);
+        int added = addItems(chestplate, toAdd);
 
         if (added > 0) {
             itemBeingMoved.shrink(added);
@@ -162,6 +162,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     public static int getAvailableSpace(ItemStack chestplate, ItemStack stackToAdd) {
+        if (isArmor(stackToAdd)) return 0;
         CompoundTag tag = chestplate.getOrCreateTag();
         ListTag items = tag.getList("Items", 10);
         int totalStored = 0;
@@ -186,9 +187,8 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     public static int addItems(ItemStack chestplate, ItemStack stackToAdd) {
-        if (stackToAdd.isEmpty() || !stackToAdd.getItem().canFitInsideContainerItems()) {
-            return 0;
-        }
+        if (stackToAdd.isEmpty() || !stackToAdd.getItem().canFitInsideContainerItems()) return 0;
+        if (isArmor(stackToAdd)) return 0;
 
         CompoundTag tag = chestplate.getOrCreateTag();
         ListTag items = tag.getList("Items", 10);
@@ -252,6 +252,8 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     public static Optional<ItemStack> removeItem(ItemStack chestplate) {
+        if (!isChestplateItem(chestplate)) return Optional.empty();
+
         CompoundTag tag = chestplate.getOrCreateTag();
         if (!tag.contains("Items")) return Optional.empty();
 
@@ -281,6 +283,10 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                 .filter(CompoundTag.class::isInstance)
                 .map(CompoundTag.class::cast)
                 .map(ItemStack::of);
+    }
+
+    private static boolean isArmor(ItemStack stack) {
+        return stack.getItem() instanceof ArmorItem;
     }
 
     @Override
