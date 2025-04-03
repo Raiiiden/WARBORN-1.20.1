@@ -1,5 +1,6 @@
 package com.raiiiden.warborn.item;
 
+import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.SlotAccess;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return true;
     }
 
-    private static boolean isChestplateItem(ItemStack stack) {
+    public static boolean isChestplateItem(ItemStack stack) {
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         return id != null && id.getPath().toLowerCase().contains("chestplate");
     }
@@ -285,7 +286,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                 .map(ItemStack::of);
     }
 
-    private static boolean isArmor(ItemStack stack) {
+    public static boolean isArmor(ItemStack stack) {
         return stack.getItem() instanceof ArmorItem;
     }
 
@@ -381,7 +382,12 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return isBackpackItem(stack) ? new BackpackCapabilityProvider(stack) : super.initCapabilities(stack, nbt);
+        if (isBackpackItem(stack)) {
+            return new BackpackCapabilityProvider(stack);
+        } else if (isChestplateItem(stack)) {
+            return new ChestplateBundleCapabilityProvider(stack);
+        }
+        return super.initCapabilities(stack, nbt);
     }
 
     public static boolean isBackpackItem(ItemStack stack) {

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.raiiiden.warborn.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.warborn.refmap.json",
+  "mixins": [
+    "ChestplateGunMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
