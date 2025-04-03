@@ -6,7 +6,10 @@
   "mixins": [
     "ChestplateGunMixin"
   ],
-  "client": [],
+  "client": [
+    "client.GunHudOverlayAccessor",
+    "client.GunHudOverlayMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },
