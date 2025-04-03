@@ -41,7 +41,6 @@ public class ChestplateGunMixin {
 
     @Inject(method = "canReload", at = @At("RETURN"), cancellable = true, remap = false)
     private void checkChestplateForAmmo(LivingEntity shooter, ItemStack gunItem, CallbackInfoReturnable<Boolean> cir) {
-
         if (cir.getReturnValue()) {
             LOGGER.info("Reload already allowed, skipping chestplate check");
             return;
@@ -51,12 +50,6 @@ public class ChestplateGunMixin {
 
         ItemStack chestplate = player.getInventory().getArmor(2);
         if (!(chestplate.getItem() instanceof WarbornArmorItem) || !WarbornArmorItem.isChestplateItem(chestplate)) return;
-
-        chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            if (handler instanceof ChestplateBundleHandler chestHandler) {
-                chestHandler.loadFromItem(chestplate);
-            }
-        });
 
         boolean hasAmmo = chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
             for (int i = 0; i < handler.getSlots(); i++) {
@@ -96,9 +89,7 @@ public class ChestplateGunMixin {
         Player player = RELOADING_PLAYER.get();
         RELOADING_PLAYER.remove();
 
-        if (player == null) {
-            return;
-        }
+        if (player == null) return;
 
         ItemStack chestplate = player.getInventory().getArmor(2);
         if (!(chestplate.getItem() instanceof WarbornArmorItem armor) || !WarbornArmorItem.isChestplateItem(chestplate)) {
@@ -106,21 +97,10 @@ public class ChestplateGunMixin {
             return;
         }
 
-        chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            if (handler instanceof ChestplateBundleHandler chestHandler) {
-                chestHandler.loadFromItem(chestplate);
-            }
-        });
-
         MutableInt remaining = new MutableInt(remainingToFind);
         int foundInChestplate = chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
-            if (handler instanceof ChestplateBundleHandler chestHandler) {
-                chestHandler.loadFromItem(chestplate);
-            }
-
             int found = 0;
 
-            // Iterate through slots? (maybe bugged)
             for (int i = 0; i < handler.getSlots() && remaining.value > 0; i++) {
                 ItemStack stack = handler.getStackInSlot(i);
                 LOGGER.info("Slot {}: {}", i, stack);
@@ -148,8 +128,8 @@ public class ChestplateGunMixin {
                 }
             }
 
-            if (handler instanceof ChestplateBundleHandler chestHandler) {
-                chestHandler.saveToItem(chestplate);
+            if (handler instanceof ChestplateBundleHandler cbh) {
+                cbh.saveToItem(chestplate);
             }
 
             return found;
@@ -160,5 +140,4 @@ public class ChestplateGunMixin {
 
         cir.setReturnValue(alreadyFound + foundInChestplate);
     }
-
 }

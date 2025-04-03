@@ -18,8 +18,7 @@ public class ChestplateBundleCapabilityProvider implements ICapabilitySerializab
 
     public ChestplateBundleCapabilityProvider(ItemStack stack) {
         this.stack = stack;
-        this.handler = new ChestplateBundleHandler();
-        this.handler.loadFromItem(stack);  // Load the initial state of ammo
+        this.handler = new ChestplateBundleHandler(stack);
         this.optional = LazyOptional.of(() -> handler);
     }
 
@@ -38,7 +37,6 @@ public class ChestplateBundleCapabilityProvider implements ICapabilitySerializab
         this.handler.deserializeNBT(nbt);
     }
 
-    // Sync the handler data back to the chestplate’s NBT
     public void saveToChestplate() {
         handler.saveToItem(stack);
     }

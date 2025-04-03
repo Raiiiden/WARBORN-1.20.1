@@ -9,18 +9,47 @@ public class ChestplateBundleHandler extends ItemStackHandler {
     public static final int MAX_SLOTS = 4;
     public static final int MAX_STACK_SIZE = 100;
 
-    public ChestplateBundleHandler() {
+    private final ItemStack chestplate;
+
+    public ChestplateBundleHandler(ItemStack chestplate) {
         super(MAX_SLOTS);
+        this.chestplate = chestplate;
+        loadFromItem(chestplate);
     }
 
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return stack.getItem().canFitInsideContainerItems() && !com.raiiiden.warborn.item.WarbornArmorItem.isArmor(stack);
+        return stack.getItem().canFitInsideContainerItems()
+                && !com.raiiiden.warborn.item.WarbornArmorItem.isArmor(stack);
     }
 
     @Override
     public int getStackLimit(int slot, @NotNull ItemStack stack) {
         return MAX_STACK_SIZE;
+    }
+
+    @Override
+    public @NotNull ItemStack getStackInSlot(int slot) {
+        loadFromItem(chestplate);
+        return super.getStackInSlot(slot);
+    }
+
+    @Override
+    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+        ItemStack result = super.extractItem(slot, amount, simulate);
+        if (!simulate && !result.isEmpty()) {
+            saveToItem(chestplate);
+        }
+        return result;
+    }
+
+    @Override
+    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+        ItemStack result = super.insertItem(slot, stack, simulate);
+        if (!simulate && !ItemStack.matches(result, stack)) {
+            saveToItem(chestplate);
+        }
+        return result;
     }
 
     public void loadFromItem(ItemStack chestplate) {
@@ -45,5 +74,6 @@ public class ChestplateBundleHandler extends ItemStackHandler {
                 this.setStackInSlot(i, ItemStack.EMPTY);
             }
         }
+        saveToItem(chestplate);
     }
 }

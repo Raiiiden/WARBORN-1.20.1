@@ -1,8 +1,10 @@
 package com.raiiiden.warborn.item;
 
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
+import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,6 +45,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
@@ -84,27 +87,35 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                     playRemoveOneSound(player);
                     return true;
                 }
-            } else {
-                return false;
             }
         } else {
-            if (!slotStack.getItem().canFitInsideContainerItems()) return false;
+            if (!isValidInsert(slotStack)) return false;
 
-            int canAdd = getAvailableSpace(chestplate, slotStack);
-            if (canAdd > 0) {
-                ItemStack toAdd = slotStack.copyWithCount(Math.min(canAdd, slotStack.getCount()));
-                int actuallyAdded = addItems(chestplate, toAdd);
-                if (actuallyAdded > 0) {
-                    slotStack.shrink(actuallyAdded);
-                    if (slotStack.isEmpty()) slot.set(ItemStack.EMPTY);
-                    playInsertSound(player);
-                    return true;
+            chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+                ItemStack remaining = slotStack.copy();
+
+                for (int i = 0; i < handler.getSlots(); i++) {
+                    if (remaining.isEmpty()) break;
+
+                    ItemStack leftover = handler.insertItem(i, remaining.copy(), false);
+                    int inserted = remaining.getCount() - leftover.getCount();
+                    remaining.shrink(inserted);
+
+                    if (inserted > 0) {
+                        playInsertSound(player);
+                        if (handler instanceof ChestplateBundleHandler cbh) cbh.saveToItem(chestplate);
+                    }
                 }
-            }
+
+                slot.set(remaining.isEmpty() ? ItemStack.EMPTY : remaining);
+            });
+
+            return true;
         }
 
         return false;
     }
+
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack chestplate, ItemStack itemBeingMoved, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (!(chestplate.getItem() instanceof WarbornArmorItem) || !isChestplateItem(chestplate)) return false;
@@ -118,22 +129,28 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
             return true;
         }
 
-        if (!itemBeingMoved.getItem().canFitInsideContainerItems()) return false;
+        if (!isValidInsert(itemBeingMoved)) return false;
 
-        int canAdd = getAvailableSpace(chestplate, itemBeingMoved);
-        if (canAdd <= 0) return false;
+        chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+            ItemStack remaining = itemBeingMoved.copy();
 
-        ItemStack toAdd = itemBeingMoved.copyWithCount(Math.min(canAdd, itemBeingMoved.getCount()));
-        int added = addItems(chestplate, toAdd);
+            for (int i = 0; i < handler.getSlots(); i++) {
+                if (remaining.isEmpty()) break;
 
-        if (added > 0) {
-            itemBeingMoved.shrink(added);
-            access.set(itemBeingMoved.isEmpty() ? ItemStack.EMPTY : itemBeingMoved);
-            playInsertSound(player);
-            return true;
-        }
+                ItemStack leftover = handler.insertItem(i, remaining.copy(), false);
+                int inserted = remaining.getCount() - leftover.getCount();
+                remaining.shrink(inserted);
 
-        return false;
+                if (inserted > 0) {
+                    playInsertSound(player);
+                    if (handler instanceof ChestplateBundleHandler cbh) cbh.saveToItem(chestplate);
+                }
+            }
+
+            access.set(remaining.isEmpty() ? ItemStack.EMPTY : remaining);
+        });
+
+        return true;
     }
 
     @Override
@@ -148,142 +165,46 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return Optional.of(new BundleTooltip(result, totalWeight));
     }
 
-
-
-    private static int getTotalStoredItems(ItemStack chestplate) {
-        CompoundTag tag = chestplate.getTag();
-        if (tag == null || !tag.contains("Items")) return 0;
-
-        int total = 0;
-        ListTag items = tag.getList("Items", 10);
-        for (int i = 0; i < items.size(); i++) {
-            total += ItemStack.of(items.getCompound(i)).getCount();
-        }
-        return total;
+    public static int getTotalStoredItems(ItemStack chestplate) {
+        return chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
+            int total = 0;
+            for (int i = 0; i < handler.getSlots(); i++) {
+                total += handler.getStackInSlot(i).getCount();
+            }
+            return total;
+        }).orElse(0);
     }
 
-    public static int getAvailableSpace(ItemStack chestplate, ItemStack stackToAdd) {
-        if (isArmor(stackToAdd)) return 0;
-        CompoundTag tag = chestplate.getOrCreateTag();
-        ListTag items = tag.getList("Items", 10);
-        int totalStored = 0;
-        int matchingStackSpace = 0;
-
-        for (int i = 0; i < items.size(); i++) {
-            ItemStack existing = ItemStack.of(items.getCompound(i));
-            totalStored += existing.getCount();
-            if (ItemStack.isSameItemSameTags(existing, stackToAdd)) {
-                matchingStackSpace += MAX_STACK_SIZE - existing.getCount();
-            }
-        }
-
-        int totalSpace = MAX_SLOTS * MAX_STACK_SIZE;
-        int remainingSpace = totalSpace - totalStored;
-
-        if (items.size() < MAX_SLOTS) {
-            remainingSpace = Math.max(remainingSpace, MAX_STACK_SIZE);
-        }
-
-        return Math.min(remainingSpace, stackToAdd.getCount());
-    }
-
-    public static int addItems(ItemStack chestplate, ItemStack stackToAdd) {
-        if (stackToAdd.isEmpty() || !stackToAdd.getItem().canFitInsideContainerItems()) return 0;
-        if (isArmor(stackToAdd)) return 0;
-
-        CompoundTag tag = chestplate.getOrCreateTag();
-        ListTag items = tag.getList("Items", 10);
-
-        if (items.size() >= MAX_SLOTS &&
-                !items.stream()
-                        .map(CompoundTag.class::cast)
-                        .map(ItemStack::of)
-                        .anyMatch(s -> ItemStack.isSameItemSameTags(s, stackToAdd))) {
-            return 0;
-        }
-
-        int remaining = stackToAdd.getCount();
-        int added = 0;
-
-        for (int i = 0; i < items.size() && remaining > 0; i++) {
-            CompoundTag itemTag = items.getCompound(i);
-            ItemStack existing = ItemStack.of(itemTag);
-
-            if (ItemStack.isSameItemSameTags(existing, stackToAdd)) {
-                int spaceInStack = MAX_STACK_SIZE - existing.getCount();
-                int toAdd = Math.min(remaining, spaceInStack);
-
-                if (toAdd > 0) {
-                    existing.grow(toAdd);
-                    // Update NBT
-                    CompoundTag updatedTag = new CompoundTag();
-                    updatedTag.putString("id", BuiltInRegistries.ITEM.getKey(existing.getItem()).toString());
-                    updatedTag.putInt("Count", existing.getCount());
-                    if (existing.hasTag()) {
-                        updatedTag.put("tag", existing.getTag());
-                    }
-                    items.set(i, updatedTag);
-                    added += toAdd;
-                    remaining -= toAdd;
-                }
-            }
-        }
-
-        while (remaining > 0 && items.size() < MAX_SLOTS) {
-            int toAdd = Math.min(remaining, MAX_STACK_SIZE);
-            ItemStack newStack = stackToAdd.copyWithCount(toAdd);
-
-            CompoundTag newTag = new CompoundTag();
-            newTag.putString("id", BuiltInRegistries.ITEM.getKey(newStack.getItem()).toString());
-            newTag.putInt("Count", newStack.getCount());
-            if (newStack.hasTag()) {
-                newTag.put("tag", newStack.getTag());
-            }
-
-            items.add(newTag);
-            added += toAdd;
-            remaining -= toAdd;
-        }
-
-        if (added > 0) {
-            tag.put("Items", items);
-        }
-
-        return added;
+    public static boolean isValidInsert(ItemStack stack) {
+        return stack.getItem().canFitInsideContainerItems() && !isArmor(stack);
     }
 
     public static Optional<ItemStack> removeItem(ItemStack chestplate) {
         if (!isChestplateItem(chestplate)) return Optional.empty();
 
-        CompoundTag tag = chestplate.getOrCreateTag();
-        if (!tag.contains("Items")) return Optional.empty();
+        return chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
+            for (int i = handler.getSlots() - 1; i >= 0; i--) {
+                ItemStack inSlot = handler.getStackInSlot(i);
+                if (!inSlot.isEmpty()) {
+                    ItemStack removed = handler.extractItem(i, inSlot.getCount(), false);
 
-        ListTag items = tag.getList("Items", 10);
-        if (items.isEmpty()) return Optional.empty();
+                    if (handler instanceof ChestplateBundleHandler cbh) {
+                        cbh.saveToItem(chestplate);
+                    }
 
-        CompoundTag itemTag = items.getCompound(items.size() - 1);
-        ItemStack removed = ItemStack.of(itemTag);
-        items.remove(items.size() - 1);
-
-        if (items.isEmpty()) {
-            chestplate.removeTagKey("Items");
-        } else {
-            tag.put("Items", items);
-        }
-
-        return Optional.of(removed);
+                    return removed;
+                }
+            }
+            return ItemStack.EMPTY;
+        }).filter(stack -> !stack.isEmpty()).map(Optional::of).orElse(Optional.empty());
     }
 
     private static Stream<ItemStack> getContents(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains("Items")) {
-            return Stream.empty();
-        }
-        ListTag items = tag.getList("Items", 10);
-        return items.stream()
-                .filter(CompoundTag.class::isInstance)
-                .map(CompoundTag.class::cast)
-                .map(ItemStack::of);
+        return stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
+                .map(handler -> IntStream.range(0, handler.getSlots())
+                        .mapToObj(handler::getStackInSlot)
+                        .filter(s -> !s.isEmpty()))
+                .orElse(Stream.empty());
     }
 
     public static boolean isArmor(ItemStack stack) {
@@ -298,8 +219,11 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     @Override
     public int getBarWidth(ItemStack stack) {
         if (!isChestplateItem(stack)) return super.getBarWidth(stack);
-        long count = getContents(stack).count();
-        return Math.min(13, 1 + (int)(12 * ((double)count / MAX_SLOTS)));
+
+        int total = getContents(stack).mapToInt(ItemStack::getCount).sum();
+        int max = MAX_SLOTS * MAX_STACK_SIZE;
+
+        return Math.min(13, 1 + (int)(12 * ((double) total / max)));
     }
 
     @Override
