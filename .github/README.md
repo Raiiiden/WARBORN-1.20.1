@@ -5,6 +5,8 @@ A mod developed by Zarra Studios
 
 Please report bugs to the discord or github
 
+**Assets are ARR/Not free to use, Code is open source/Apache 2.0**
+
 
 ---
 
