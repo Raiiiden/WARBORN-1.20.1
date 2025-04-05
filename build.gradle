@@ -140,8 +140,7 @@ dependencies {
     minecraft "net.neoforged:forge:${mc_version}-${neo_version}"
     implementation fg.deobf("curse.maven:geckolib-388172:6027567")
     implementation fg.deobf("curse.maven:curios-309927:6238756")
-    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6069384")
-
+    compileOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6069384")
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
