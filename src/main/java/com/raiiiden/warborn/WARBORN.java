@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(WARBORN.MODID)
 public class WARBORN {
   public static final String MODID = "warborn";
-  private static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger();
 
   public WARBORN() {
     IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

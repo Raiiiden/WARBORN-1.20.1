@@ -62,6 +62,9 @@ public class ClientKeyEvents {
             String msg = enabled ? "Night Vision OFF" : "Night Vision ON";
             player.displayClientMessage(Component.literal(msg), true);
         }
+        if (ModKeybindings.REMOVE_PLATE_MENU.consumeClick()) {
+            Minecraft.getInstance().setScreen(new RemovePlateScreen());
+        }
     }
 
 

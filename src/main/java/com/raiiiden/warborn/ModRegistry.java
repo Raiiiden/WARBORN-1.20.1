@@ -1,6 +1,7 @@
 package com.raiiiden.warborn;
 
 import com.raiiiden.warborn.common.object.BackpackMenu;
+import com.raiiiden.warborn.item.ArmorPlateItem;
 import com.raiiiden.warborn.item.WarbornWeaponItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -26,7 +27,12 @@ public class ModRegistry {
     public static final RegistryObject<MenuType<BackpackMenu>> BACKPACK_MENU =
             MENU_TYPES.register("backpack", () -> IForgeMenuType.create(BackpackMenu::new));
 
-//RU Armor
+//Armor Plates
+
+    public static final RegistryObject<Item> ARMOR_PLATE = ITEMS.register("armor_plate",
+            () -> new ArmorPlateItem(new Item.Properties().durability(10)));
+
+    //RU Armor
     public static final RegistryObject<WarbornArmorItem> RU_HELMET = ITEMS.register("ru_helmet",
             () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
     public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_CHESTPLATE = ITEMS.register("shturmovik_ru_chestplate",
@@ -205,6 +211,12 @@ public class ModRegistry {
                         // ---------------
 
                         entries.accept(TAGILLA_MOLOT.get());
+
+                        // ----------------
+                        // Armor Plates Start Here
+                        // ----------------
+
+                        entries.accept(ARMOR_PLATE.get());
                     })
                     .build()
     );

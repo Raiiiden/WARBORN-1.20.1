@@ -22,6 +22,12 @@ public class ModKeybindings {
             "key.categories.inventory"
     );
 
+    public static final KeyMapping REMOVE_PLATE_MENU = new KeyMapping(
+            "key.warborn.remove_plate_menu",
+            GLFW.GLFW_KEY_U,
+            "key.categories.inventory"
+    );
+
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(OPEN_BACKPACK);
