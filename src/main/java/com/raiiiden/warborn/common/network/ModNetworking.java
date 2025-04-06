@@ -19,9 +19,14 @@ public class ModNetworking {
         sendToServer(new OpenBackpackPacket(backpackItem));
     }
 
+    public static void sendRemovePlatePacket(boolean front) {
+        sendToServer(new RemovePlatePacket(front));
+    }
+
     public static void registerPackets() {
         var id = 0;
         PACKET_CHANNEL.registerMessage(id++, OpenBackpackPacket.class, OpenBackpackPacket::encode, OpenBackpackPacket::new, OpenBackpackPacket::handle);
+        PACKET_CHANNEL.registerMessage(id++, RemovePlatePacket.class, RemovePlatePacket::encode, RemovePlatePacket::new, RemovePlatePacket::handle);
     }
 
     public static <MSG> void sendToServer(MSG message) {

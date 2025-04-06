@@ -1,8 +1,8 @@
 package com.raiiiden.warborn.client;
 
-import com.raiiiden.warborn.common.object.capability.PlateHolderImpl;
+import com.raiiiden.warborn.common.network.ModNetworking;
+import com.raiiiden.warborn.common.object.capability.PlateHolderCapability;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
-import com.raiiiden.warborn.item.ArmorPlateItem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -10,8 +10,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RemovePlateScreen extends Screen {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     public RemovePlateScreen() {
         super(Component.literal("Remove Plates"));
     }
@@ -35,27 +39,34 @@ public class RemovePlateScreen extends Screen {
         if (player == null) return;
 
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chest.isEmpty()) return;
+        if (chest.isEmpty()) {
+            player.displayClientMessage(Component.literal("You must wear a chestplate."), true);
+            return;
+        }
 
-        chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
-            if (cap instanceof PlateHolderImpl impl) {
-                if (front && impl.hasFrontPlate()) {
-                    int hits = impl.getFrontDurability();
-                    impl.removeFrontPlate();
-                    player.getInventory().placeItemBackInInventory(ArmorPlateItem.createPlateWithHitsRemaining(hits));
-                    player.displayClientMessage(Component.literal("Removed front plate."), true);
-                } else if (!front && impl.hasBackPlate()) {
-                    int hits = impl.getBackDurability();
-                    impl.removeBackPlate();
-                    player.getInventory().placeItemBackInInventory(ArmorPlateItem.createPlateWithHitsRemaining(hits));
-                    player.displayClientMessage(Component.literal("Removed back plate."), true);
+        // Check if the action is valid before sending packet
+        boolean canRemove = false;
+        var capOpt = chest.getCapability(PlateHolderProvider.CAP);
+        if (capOpt.isPresent()) {
+            PlateHolderCapability cap = capOpt.orElse(null);
+            if (cap != null) {
+                if (front && cap.hasFrontPlate()) {
+                    canRemove = true;
+                } else if (!front && cap.hasBackPlate()) {
+                    canRemove = true;
                 }
-
-                // Force chestplate NBT to update and sync
-                chest.setTag(chest.getOrCreateTag());
-                player.setItemSlot(EquipmentSlot.CHEST, chest);
             }
-        });
+        }
+
+        if (canRemove) {
+            // Send packet to server to handle the plate removal
+            LOGGER.info("Sending remove plate packet to server: {}", front ? "front" : "back");
+            ModNetworking.sendRemovePlatePacket(front);
+        } else {
+            // Display message locally if can't remove
+            String plateType = front ? "front" : "back";
+            player.displayClientMessage(Component.literal("No " + plateType + " plate to remove."), true);
+        }
     }
 
     @Override
