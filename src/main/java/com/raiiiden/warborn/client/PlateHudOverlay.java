@@ -29,23 +29,41 @@ public class PlateHudOverlay {
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
             GuiGraphics gui = event.getGuiGraphics();
             int x = mc.getWindow().getGuiScaledWidth() / 2 - 91;
-            int y = mc.getWindow().getGuiScaledHeight() - 50;
+            int yOffset = -20; // Shift the bar upward
+            int y = mc.getWindow().getGuiScaledHeight() - 50 + yOffset;
 
             if (cap.hasFrontPlate()) {
-                drawDurabilityBar(gui, x, y, cap.getFrontDurability(), MAX_DURABILITY);
+                drawDurabilityBar(gui, x, y, cap.getFrontDurability(), MAX_DURABILITY, "Front");
             }
 
             if (cap.hasBackPlate()) {
-                drawDurabilityBar(gui, x, y + 6, cap.getBackDurability(), MAX_DURABILITY);
+                drawDurabilityBar(gui, x, y + 8, cap.getBackDurability(), MAX_DURABILITY, "Back");
             }
         });
     }
 
-    private static void drawDurabilityBar(GuiGraphics gui, int x, int y, int durability, int maxDurability) {
+    private static void drawDurabilityBar(GuiGraphics gui, int x, int y, int durability, int maxDurability, String label) {
+        float ratio = durability / (float) maxDurability;
         int width = 60;
-        int filled = (int)((durability / (float) maxDurability) * width);
+        int filled = (int)(ratio * width);
+        int color = getDurabilityColor(ratio);
 
-        gui.fill(x, y, x + width, y + 5, 0xFF222222); // background bar
-        gui.fill(x, y, x + filled, y + 5, 0xFF00FF00); // filled portion
+        // Blink when critically low
+        if (durability <= 2 && ((System.currentTimeMillis() / 300) % 2 == 0)) {
+            return;
+        }
+
+        // Background
+        gui.fill(x, y, x + width, y + 6, 0xFF222222);
+        // Foreground
+        gui.fill(x, y, x + filled, y + 6, color);
+        // Text
+        gui.drawString(Minecraft.getInstance().font, label + ": " + durability + "/" + maxDurability, x + width + 5, y, 0xFFFFFF);
+    }
+
+    private static int getDurabilityColor(float ratio) {
+        if (ratio > 0.5f) return 0xFF00FF00;     // Green
+        else if (ratio > 0.25f) return 0xFFFFA500; // Orange
+        else return 0xFFFF0000;                  // Red
     }
 }
