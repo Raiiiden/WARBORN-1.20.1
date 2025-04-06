@@ -48,23 +48,22 @@ public class ClientKeyEvents {
             });
         }
 
-        // TOGGLE NIGHT VISION
+        // TOGGLE NIGHT VISION (shader-based)
         if (ModKeybindings.TOGGLE_NIGHT_VISION.consumeClick()) {
             ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-
             if (!HelmetVisionHandler.isAllowedHelmet(helmet)) {
                 player.displayClientMessage(Component.literal("You must be wearing a valid helmet."), true);
                 return;
             }
 
-            boolean hasEffect = player.hasEffect(MobEffects.NIGHT_VISION);
-            if (hasEffect) {
-                player.removeEffect(MobEffects.NIGHT_VISION);
-            } else {
-                player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
-            }
+            var tag = helmet.getOrCreateTag();
+            boolean enabled = tag.getBoolean("NvgCheck");
+            tag.putBoolean("NvgCheck", !enabled);
+            String msg = enabled ? "Night Vision OFF" : "Night Vision ON";
+            player.displayClientMessage(Component.literal(msg), true);
         }
     }
+
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent event) {
