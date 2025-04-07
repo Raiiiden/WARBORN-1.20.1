@@ -24,7 +24,9 @@ public class DamageHandler {
         if (event.getSource().getEntity() == null) return;
 
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
-            float original = event.getAmount();
+            float originalDamage = event.getAmount();
+            float reducedDamage = originalDamage * 0.6f;
+            int plateDamage = Math.max(1, Math.round(originalDamage / 3f));
 
             var sourcePos = event.getSource().getEntity().position();
             var playerPos = player.position();
@@ -33,14 +35,36 @@ public class DamageHandler {
 
             double dot = lookVec.dot(attackVec); // front vs back
 
-            if (dot > 0 && cap.hasFrontPlate() && cap.getFrontDurability() > 0) { // Added durability check
-                cap.damageFront(1);
-                event.setAmount(original * 0.6f);
-                LOGGER.info("Hit front plate. Reduced damage.");
-            } else if (dot < 0 && cap.hasBackPlate() && cap.getBackDurability() > 0) { // Added durability check
-                cap.damageBack(1);
-                event.setAmount(original * 0.6f);
-                LOGGER.info("Hit back plate. Reduced damage.");
+            if (dot > 0 && cap.hasFrontPlate() && cap.getFrontDurability() > 0) {
+                int durability = cap.getFrontDurability();
+
+                if (durability >= plateDamage) {
+                    cap.damageFront(plateDamage);
+                    event.setAmount(reducedDamage);
+                    LOGGER.info("Front plate absorbed {}. Remaining: {}", plateDamage, cap.getFrontDurability());
+                } else {
+                    cap.damageFront(durability); // break it
+                    float overflowRatio = (plateDamage - durability) / (float) plateDamage;
+                    float overflowDamage = originalDamage * overflowRatio;
+                    event.setAmount(reducedDamage + overflowDamage);
+                    LOGGER.info("Front plate broke. Overflow damage: {}", overflowDamage);
+                }
+
+            } else if (dot < 0 && cap.hasBackPlate() && cap.getBackDurability() > 0) {
+                int durability = cap.getBackDurability();
+
+                if (durability >= plateDamage) {
+                    cap.damageBack(plateDamage);
+                    event.setAmount(reducedDamage);
+                    LOGGER.info("Back plate absorbed {}. Remaining: {}", plateDamage, cap.getBackDurability());
+                } else {
+                    cap.damageBack(durability); // break it
+                    float overflowRatio = (plateDamage - durability) / (float) plateDamage;
+                    float overflowDamage = originalDamage * overflowRatio;
+                    event.setAmount(reducedDamage + overflowDamage);
+                    LOGGER.info("Back plate broke. Overflow damage: {}", overflowDamage);
+                }
+
             } else {
                 LOGGER.info("No plate in direction of hit or plate broken. Full damage.");
             }
