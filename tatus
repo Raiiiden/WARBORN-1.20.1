@@ -1,0 +1,10 @@
+[33md41c4e5[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m add vision shaders and refactor related classes
+[33m95d30dc[m add vision shaders and refactor related classes
+[33m3f5acbb[m[33m ([m[1;31mupstream/master[m[33m, [m[1;31mupstream/HEAD[m[33m)[m - Updated the UI to move it up - Updated the UI, blinking, color changes, etc
+[33mca7d526[m - Fixed Armor Plates
+[33mc6ab003[m - Cooked capabilities (AI might've made it worse) - Removal issues with plates
+[33m0381f64[m NBT based NVG
+[33mb565036[m Initial shader based NVG
+[33m8eaf83c[m - Temp fix for tacz compat mixin loading
+[33mee263e1[m Update README.md
+[33mc1d5d42[m - Working ammo display in vests
