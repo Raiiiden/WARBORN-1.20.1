@@ -35,7 +35,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
     /**
      * Completely override the render method for maximum control
      */
-    @Redirect(method = "render", at = @At(value = "INVOKE", 
+    @Redirect(method = "render*", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
     private void redirectRender(M model, PoseStack poseStack, VertexConsumer buffer, 
                                int packedLight, int packedOverlay, 

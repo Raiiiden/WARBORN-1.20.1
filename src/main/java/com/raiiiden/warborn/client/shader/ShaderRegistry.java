@@ -106,7 +106,7 @@ public class ShaderRegistry {
     public int removeShadersByPrefix(String prefix) {
         List<String> toRemove = shaders.keySet().stream()
             .filter(id -> id.startsWith(prefix))
-            .collect(Collectors.toList());
+            .toList();
             
         for (String id : toRemove) {
             unregisterShader(id);

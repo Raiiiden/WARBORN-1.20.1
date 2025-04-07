@@ -86,7 +86,7 @@ public class ShaderCommand {
     /**
      * Enables a specific shader
      */
-    private static int enableShader(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private static int enableShader(CommandContext<CommandSourceStack> ctx) {
         String shaderId = StringArgumentType.getString(ctx, "shaderId");
         CommandSourceStack source = ctx.getSource();
 
@@ -102,7 +102,7 @@ public class ShaderCommand {
     /**
      * Disables a specific shader
      */
-    private static int disableShader(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private static int disableShader(CommandContext<CommandSourceStack> ctx) {
         String shaderId = StringArgumentType.getString(ctx, "shaderId");
         CommandSourceStack source = ctx.getSource();
 
@@ -118,7 +118,7 @@ public class ShaderCommand {
     /**
      * Tests a night vision shader with specified parameters
      */
-    private static int testNightVision(CommandContext<CommandSourceStack> ctx, String preset) throws CommandSyntaxException {
+    private static int testNightVision(CommandContext<CommandSourceStack> ctx, String preset) {
         float intensity = FloatArgumentType.getFloat(ctx, "intensity");
         CommandSourceStack source = ctx.getSource();
 
@@ -150,7 +150,7 @@ public class ShaderCommand {
     /**
      * Tests an arbitrary shader file
      */
-    private static int testShader(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private static int testShader(CommandContext<CommandSourceStack> ctx) {
         ResourceLocation shaderLocation = ResourceLocationArgument.getId(ctx, "shaderLocation");
         CommandSourceStack source = ctx.getSource();
 

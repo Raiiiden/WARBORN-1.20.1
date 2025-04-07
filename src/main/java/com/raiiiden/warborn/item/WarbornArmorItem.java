@@ -13,7 +13,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -60,12 +59,11 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final String armorType;
 
-    // Vision-related tags
-    public static final String TAG_GOGGLE = "goggle";         // Base tag for all vision-capable helmets
-    public static final String TAG_NVG = "nvg";               // Night vision
-    public static final String TAG_SIMPLE_NVG = "simple_nvg"; // Simple night vision
-    public static final String TAG_THERMAL = "thermal";       // Thermal vision
-    public static final String TAG_DIGITAL = "digital";       // Digital vision
+    public static final String TAG_GOGGLE = "goggle";
+    public static final String TAG_NVG = "nvg";
+    public static final String TAG_SIMPLE_NVG = "simple_nvg";
+    public static final String TAG_THERMAL = "thermal";
+    public static final String TAG_DIGITAL = "digital";
 
     public WarbornArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType) {
         super(armorMaterial, type, properties.stacksTo(1));
@@ -79,7 +77,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     public static boolean isChestplateItem(ItemStack stack) {
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        return id != null && id.getPath().toLowerCase().contains("chestplate");
+        return id.getPath().toLowerCase().contains("chestplate");
     }
 
     @Override
@@ -207,7 +205,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                 }
             }
             return ItemStack.EMPTY;
-        }).filter(stack -> !stack.isEmpty()).map(Optional::of).orElse(Optional.empty());
+        }).filter(stack -> !stack.isEmpty());
     }
 
     private static Stream<ItemStack> getContents(ItemStack stack) {
@@ -328,7 +326,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public static boolean isBackpackItem(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        return id != null && id.getPath().toLowerCase().contains("backpack");
+        return id.getPath().toLowerCase().contains("backpack");
     }
 
     // Apply tags depending on the helmet type when an item is created
@@ -403,14 +401,12 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
      */
     public static boolean hasVisionMode(ItemStack stack, String visionTag) {
         if (!hasVisionCapability(stack)) return false;
-        
-        // First check NBT tags (for backwards compatibility)
+
         CompoundTag tag = stack.getTag();
         if (tag != null && tag.contains(visionTag)) {
             return true;
         }
-        
-        // Then check data-defined item tags
+
         if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
         
         ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionTag);

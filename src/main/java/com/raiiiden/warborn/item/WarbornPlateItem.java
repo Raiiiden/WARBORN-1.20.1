@@ -79,9 +79,7 @@ public class WarbornPlateItem extends Item implements GeoItem {
     
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, MAIN_CONTROLLER, 0, (event) -> {
-            return shouldPlayAnimation() ? PlayState.CONTINUE : PlayState.STOP;
-        }).triggerableAnim("insert", INSERT_ANIMATION).triggerableAnim("idle", IDLE_ANIMATION));
+        controllerRegistrar.add(new AnimationController<>(this, MAIN_CONTROLLER, 0, (event) -> shouldPlayAnimation() ? PlayState.CONTINUE : PlayState.STOP).triggerableAnim("insert", INSERT_ANIMATION).triggerableAnim("idle", IDLE_ANIMATION));
     }
     
     private boolean shouldPlayAnimation() {

@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import net.minecraft.network.chat.Component;
 import java.util.Set;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -21,14 +20,12 @@ import net.minecraft.world.item.ArmorItem;
  */
 public class HelmetVisionHandler {
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    // Shader IDs corresponding to each vision type
+
     private static final String NVG_SHADER_ID = "warborn_nvg";
     private static final String SIMPLE_NVG_SHADER_ID = "warborn_simple_nvg";
     private static final String THERMAL_SHADER_ID = "tvg";
     private static final String DIGITAL_SHADER_ID = "warborn_dvg";
-    
-    // Debug flag
+
     private static final boolean DEBUG_MODE = false;
 
     /**
@@ -76,8 +73,7 @@ public class HelmetVisionHandler {
             }
             return false;
         }
-        
-        // First check NBT tags (for backwards compatibility)
+
         CompoundTag tag = helmet.getTag();
         if (tag != null && tag.contains(visionType)) {
             if (DEBUG_MODE) {
@@ -85,8 +81,7 @@ public class HelmetVisionHandler {
             }
             return true;
         }
-        
-        // Then check data-defined item tags
+
         if (helmet.isEmpty() || !(helmet.getItem() instanceof ArmorItem)) return false;
         
         ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionType);
@@ -114,14 +109,11 @@ public class HelmetVisionHandler {
             LOGGER.info("Is allowed helmet: {}", isAllowedHelmet(helmet));
             if (!helmet.isEmpty()) {
                 LOGGER.info("Item tags for {}: {}", helmet.getDisplayName().getString(), helmet.getTags().toString());
-                
-                // Check if helmet has each vision type
                 LOGGER.info("  Has NVG: {}", hasVisionType(helmet, WarbornArmorItem.TAG_NVG));
                 LOGGER.info("  Has Simple NVG: {}", hasVisionType(helmet, WarbornArmorItem.TAG_SIMPLE_NVG));
                 LOGGER.info("  Has Thermal: {}", hasVisionType(helmet, WarbornArmorItem.TAG_THERMAL));
                 LOGGER.info("  Has Digital: {}", hasVisionType(helmet, WarbornArmorItem.TAG_DIGITAL));
-                
-                // Check NBT data
+
                 CompoundTag tag = helmet.getTag();
                 if (tag != null) {
                     LOGGER.info("  NBT: {}", tag.toString());
@@ -139,16 +131,14 @@ public class HelmetVisionHandler {
         if (DEBUG_MODE) {
             LOGGER.info("Current active vision type: {}", currentType.isEmpty() ? "NONE" : currentType);
         }
-        
-        // If a vision is active, disable it
+
         if (!currentType.isEmpty()) {
             LOGGER.info("Disabling vision mode: {}", currentType);
             disableVisionShader(currentType);
             setActiveVisionType(helmet, "");
             return true;
         }
-        
-        // Get the primary vision type for this helmet (each helmet should have only one)
+
         String primaryVisionType = getPrimaryVisionType(helmet);
         
         if (DEBUG_MODE) {
@@ -160,8 +150,7 @@ public class HelmetVisionHandler {
             enableVisionShader(primaryVisionType);
             setActiveVisionType(helmet, primaryVisionType);
             LOGGER.info("Enabled vision mode: {}", primaryVisionType);
-            
-            // Check if the shader was actually enabled
+
             String shaderId = visionTypeToShaderId(primaryVisionType);
             boolean enabled = ShaderRegistry.getInstance().isShaderForceEnabled(shaderId);
             LOGGER.info("Shader {} force enabled: {}", shaderId, enabled);
@@ -177,18 +166,13 @@ public class HelmetVisionHandler {
      * Converts a vision type to its corresponding shader ID
      */
     private static String visionTypeToShaderId(String visionType) {
-        switch (visionType) {
-            case WarbornArmorItem.TAG_NVG:
-                return NVG_SHADER_ID;
-            case WarbornArmorItem.TAG_SIMPLE_NVG:
-                return SIMPLE_NVG_SHADER_ID;
-            case WarbornArmorItem.TAG_THERMAL:
-                return THERMAL_SHADER_ID;
-            case WarbornArmorItem.TAG_DIGITAL:
-                return DIGITAL_SHADER_ID;
-            default:
-                return "";
-        }
+        return switch (visionType) {
+            case WarbornArmorItem.TAG_NVG -> NVG_SHADER_ID;
+            case WarbornArmorItem.TAG_SIMPLE_NVG -> SIMPLE_NVG_SHADER_ID;
+            case WarbornArmorItem.TAG_THERMAL -> THERMAL_SHADER_ID;
+            case WarbornArmorItem.TAG_DIGITAL -> DIGITAL_SHADER_ID;
+            default -> "";
+        };
     }
     
     /**
@@ -196,28 +180,21 @@ public class HelmetVisionHandler {
      * Each helmet should have exactly one vision type
      */
     private static String getPrimaryVisionType(ItemStack helmet) {
-        // We need to ensure each helmet only has ONE vision type
-        // Check for vision types in priority order (most advanced first)
-        
-        // 1. Check for Digital Vision (highest priority)
         if (hasVisionType(helmet, WarbornArmorItem.TAG_DIGITAL)) {
             LOGGER.info("Helmet has digital vision capability");
             return WarbornArmorItem.TAG_DIGITAL;
         }
-        
-        // 2. Check for Thermal Vision
+
         if (hasVisionType(helmet, WarbornArmorItem.TAG_THERMAL)) {
             LOGGER.info("Helmet has thermal vision capability");
             return WarbornArmorItem.TAG_THERMAL;
         }
-        
-        // 3. Check for Standard NVG
+
         if (hasVisionType(helmet, WarbornArmorItem.TAG_NVG)) {
             LOGGER.info("Helmet has standard NVG capability");
             return WarbornArmorItem.TAG_NVG;
         }
-        
-        // 4. Check for Simple NVG (lowest priority)
+
         if (hasVisionType(helmet, WarbornArmorItem.TAG_SIMPLE_NVG)) {
             LOGGER.info("Helmet has simple NVG capability");
             return WarbornArmorItem.TAG_SIMPLE_NVG;
@@ -231,14 +208,12 @@ public class HelmetVisionHandler {
      * Enables the correct shader for a vision type
      */
     private static void enableVisionShader(String visionType) {
-        // First disable all shaders
         disableAllShaders();
         
         if (DEBUG_MODE) {
             LOGGER.info("Enabling shader for vision type: {}", visionType);
         }
-        
-        // Then enable the appropriate one
+
         String shaderId = "";
         switch (visionType) {
             case WarbornArmorItem.TAG_NVG:
@@ -261,22 +236,23 @@ public class HelmetVisionHandler {
                 LOGGER.warn("Unknown vision type: {}", visionType);
                 return;
         }
-        
-        if (!shaderId.isEmpty()) {
+
+        if (DEBUG_MODE) {
             LOGGER.info("Setting shader {} to be force enabled", shaderId);
-            boolean result = ShaderRegistry.getInstance().setShaderEnabled(shaderId, true);
-            LOGGER.info("Shader enable result: {}", result);
-            
-            // Check if the shader activation actually worked
-            Set<String> allShaders = ShaderRegistry.getInstance().getRegisteredShaderIds();
-            if (allShaders.contains(shaderId)) {
-                boolean shaderActive = ShaderRegistry.getInstance().isShaderForceEnabled(shaderId);
-                LOGGER.info("After enabling: shader {} is force enabled: {}", shaderId, shaderActive);
-            } else {
-                LOGGER.error("SHADER NOT FOUND: {} is not registered!", shaderId);
-            }
         }
-        
+        boolean result = ShaderRegistry.getInstance().setShaderEnabled(shaderId, true);
+        if (DEBUG_MODE) {
+            LOGGER.info("Shader enable result: {}", result);
+        }
+
+        Set<String> allShaders = ShaderRegistry.getInstance().getRegisteredShaderIds();
+        if (allShaders.contains(shaderId)) {
+            boolean shaderActive = ShaderRegistry.getInstance().isShaderForceEnabled(shaderId);
+            LOGGER.info("After enabling: shader {} is force enabled: {}", shaderId, shaderActive);
+        } else {
+            LOGGER.error("SHADER NOT FOUND: {} is not registered!", shaderId);
+        }
+
         if (DEBUG_MODE) {
             LOGGER.info("Shader activation complete");
         }
@@ -363,16 +339,5 @@ public class HelmetVisionHandler {
         }
         
         return info.toString();
-    }
-    
-    // Debug command
-    public static void debugCommand(Player player) {
-        if (player.level().isClientSide) {
-            String info = getDebugInfo(player);
-            // Log to console instead of chat
-            for (String line : info.split("\n")) {
-                LOGGER.info(line);
-            }
-        }
     }
 }

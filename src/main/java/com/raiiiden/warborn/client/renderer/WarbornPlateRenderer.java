@@ -108,7 +108,7 @@ public class WarbornPlateRenderer extends GeoItemRenderer<WarbornPlateItem> {
         if (isLeftArm) {
             poseStack.translate(-1.0f * SCALE_RECIPROCAL, 2.0f * SCALE_RECIPROCAL, 0.0f);
         } else {
-            poseStack.translate(1.0f * SCALE_RECIPROCAL, 2.0f * SCALE_RECIPROCAL, 0.0f);
+            poseStack.translate(SCALE_RECIPROCAL, 2.0f * SCALE_RECIPROCAL, 0.0f);
         }
 
         setupModelPart(armPart, bone);

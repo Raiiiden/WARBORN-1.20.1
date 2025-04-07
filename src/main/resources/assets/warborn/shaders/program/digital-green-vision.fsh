@@ -95,7 +95,7 @@ vec4 greenNightVision(sampler2D tex, vec2 uv, vec2 fragCoord) {
     float brightnessFactor = smoothstep(0.0, 0.5, brightness);
     mul = mix(pow(max(0.1, brightness), -1.0), mul, brightnessFactor);
     fragResult *= mul * Brightness;
-e
+
     float grey = dot(fragResult.rgb, lum);
     fragResult.rgb = vec3(grey);
 
