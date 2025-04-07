@@ -1,24 +1,20 @@
 {
-  "targets": [
-    "swap"
-  ],
+  "targets": ["swap"],
   "passes": [
     {
-      "name": "night-vision",
+      "name": "warborn:digital-white-vision",
       "intarget": "minecraft:main",
       "outtarget": "swap",
       "auxtargets": [
         {
           "name": "NoiseSampler",
-          "id": "noise",
+          "id": "warborn:noise",
           "width": 512,
           "height": 512,
           "bilinear": false
         }
       ],
-      "uniforms": [
-
-      ]
+      "uniforms": []
     },
     {
       "name": "blit",

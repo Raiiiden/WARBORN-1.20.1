@@ -1,5 +1,7 @@
 #version 120
 
+// not mine from viks, trust that you will be chill.
+
 uniform float NightVisionEnabled;
 uniform float VignetteEnabled;
 uniform float VignetteRadius;

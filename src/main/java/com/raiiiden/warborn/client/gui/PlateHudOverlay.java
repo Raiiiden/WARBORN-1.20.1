@@ -1,4 +1,4 @@
-package com.raiiiden.warborn.client;
+package com.raiiiden.warborn.client.gui;
 
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;

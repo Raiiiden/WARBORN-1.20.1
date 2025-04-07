@@ -8,6 +8,7 @@ public class WarbornCommonConfig {
 
     public static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> HELMETS_WITH_NVG;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_FACEPLATE_OVERLAY;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -27,6 +28,10 @@ public class WarbornCommonConfig {
                         ),
                         obj -> obj instanceof String
                 );
+                
+        ENABLE_FACEPLATE_OVERLAY = builder
+                .comment("Enable faceplate overlay cutout for helmets with the faceplate tag")
+                .define("enable_faceplate_overlay", true);
 
         SPEC = builder.build();
     }

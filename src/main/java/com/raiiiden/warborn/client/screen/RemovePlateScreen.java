@@ -1,4 +1,4 @@
-package com.raiiiden.warborn.client;
+package com.raiiiden.warborn.client.screen;
 
 import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.object.capability.PlateHolderCapability;

@@ -1,38 +1,42 @@
 package com.raiiiden.warborn.item;
 
-import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
-import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
-import net.minecraft.ChatFormatting;
-import net.minecraft.world.entity.SlotAccess;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.object.capability.BackpackCapabilityProvider;
+import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
+import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.*;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -55,6 +59,13 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final String armorType;
+
+    // Vision-related tags
+    public static final String TAG_GOGGLE = "goggle";         // Base tag for all vision-capable helmets
+    public static final String TAG_NVG = "nvg";               // Night vision
+    public static final String TAG_SIMPLE_NVG = "simple_nvg"; // Simple night vision
+    public static final String TAG_THERMAL = "thermal";       // Thermal vision
+    public static final String TAG_DIGITAL = "digital";       // Digital vision
 
     public WarbornArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType) {
         super(armorMaterial, type, properties.stacksTo(1));
@@ -318,5 +329,103 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         if (stack == null || stack.isEmpty()) return false;
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         return id != null && id.getPath().toLowerCase().contains("backpack");
+    }
+
+    // Apply tags depending on the helmet type when an item is created
+    @Override
+    public void onCraftedBy(ItemStack stack, Level level, Player player) {
+        super.onCraftedBy(stack, level, player);
+        
+        // NOTE: This method is kept for backward compatibility.
+        // Vision capabilities are now primarily defined through item tags in the data folder:
+        // - data/warborn/tags/items/has_goggle.json
+        // - data/warborn/tags/items/has_nvg.json
+        // - data/warborn/tags/items/has_simple_nvg.json
+        // - data/warborn/tags/items/has_thermal.json
+        // - data/warborn/tags/items/has_digital.json
+        
+        // Only applies to helmet items
+        if (this.getType() != Type.HELMET) return;
+        
+        CompoundTag tag = stack.getOrCreateTag();
+        
+        // Set basic vision capabilities based on the armor type
+        if (this.armorType.contains("tactical") || this.armorType.contains("operator")) {
+            // Tactical/Operator helmets have all vision types
+            tag.putBoolean(TAG_GOGGLE, true);
+            tag.putBoolean(TAG_NVG, true);
+            tag.putBoolean(TAG_SIMPLE_NVG, true);
+            tag.putBoolean(TAG_THERMAL, true);
+            tag.putBoolean(TAG_DIGITAL, true);
+        } else if (this.armorType.contains("combat")) {
+            // Combat helmets have basic night vision
+            tag.putBoolean(TAG_GOGGLE, true);
+            tag.putBoolean(TAG_NVG, true);
+            tag.putBoolean(TAG_SIMPLE_NVG, true);
+        } else if (this.armorType.contains("scout")) {
+            // Scout helmets have thermal vision
+            tag.putBoolean(TAG_GOGGLE, true);
+            tag.putBoolean(TAG_THERMAL, true);
+        }
+    }
+    
+    /**
+     * Checks if a helmet has vision capabilities (has the goggle tag)
+     */
+    public static boolean hasVisionCapability(ItemStack stack) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
+        if (((ArmorItem)stack.getItem()).getType() != Type.HELMET) return false;
+        
+        // First check NBT tags (for backwards compatibility)
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains(TAG_GOGGLE)) {
+            return true;
+        }
+        
+        // Then check data-defined item tags
+        ResourceLocation goggleTagId = new ResourceLocation("warborn", "has_" + TAG_GOGGLE);
+        
+        // Also check if the helmet has any specific vision tag
+        ResourceLocation nvgTagId = new ResourceLocation("warborn", "has_" + TAG_NVG);
+        ResourceLocation simpleNvgTagId = new ResourceLocation("warborn", "has_" + TAG_SIMPLE_NVG);
+        ResourceLocation thermalTagId = new ResourceLocation("warborn", "has_" + TAG_THERMAL);
+        ResourceLocation digitalTagId = new ResourceLocation("warborn", "has_" + TAG_DIGITAL);
+        
+        return stack.is(TagKey.create(Registries.ITEM, goggleTagId)) ||
+               stack.is(TagKey.create(Registries.ITEM, nvgTagId)) ||
+               stack.is(TagKey.create(Registries.ITEM, simpleNvgTagId)) ||
+               stack.is(TagKey.create(Registries.ITEM, thermalTagId)) ||
+               stack.is(TagKey.create(Registries.ITEM, digitalTagId));
+    }
+    
+    /**
+     * Checks if the helmet has a specific vision mode
+     */
+    public static boolean hasVisionMode(ItemStack stack, String visionTag) {
+        if (!hasVisionCapability(stack)) return false;
+        
+        // First check NBT tags (for backwards compatibility)
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains(visionTag)) {
+            return true;
+        }
+        
+        // Then check data-defined item tags
+        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
+        
+        ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionTag);
+        return stack.is(TagKey.create(Registries.ITEM, tagId));
+    }
+    
+    /**
+     * Add a specific vision capability to a helmet
+     */
+    public static void addVisionCapability(ItemStack stack, String visionTag) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return;
+        if (((ArmorItem)stack.getItem()).getType() != Type.HELMET) return;
+        
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putBoolean(TAG_GOGGLE, true); // Base tag
+        tag.putBoolean(visionTag, true);  // Specific vision type
     }
 }
