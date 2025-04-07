@@ -56,27 +56,29 @@ public class PlateHudOverlay {
             int leftBarX = centerX - barWidth - spacing - 50;
             int rightBarX = centerX + spacing - 50;
 
+            long time = System.currentTimeMillis();
+
             if (cap.hasFrontPlate()) {
-                drawPlateBar(gui, leftBarX, barY, cap.getFrontDurability(), BAR_COLOR);
+                drawPlateBar(gui, leftBarX, barY, cap.getFrontDurability(), BAR_COLOR, time);
             }
 
             if (cap.hasBackPlate()) {
-                drawPlateBar(gui, rightBarX, barY, cap.getBackDurability(), BAR_COLOR);
+                drawPlateBar(gui, rightBarX, barY, cap.getBackDurability(), BAR_COLOR, time);
             }
         });
     }
 
-    private static void drawPlateBar(GuiGraphics gui, int x, int y, int durability, int fillColor) {
-        // Blink if critically low
-        if (durability <= 2 && ((System.currentTimeMillis() / 300) % 2 == 0)) {
-            return;
-        }
-
+    private static void drawPlateBar(GuiGraphics gui, int x, int y, int durability, int fillColor, long timeMillis) {
         int width = 36;
         int height = 2;
-        int filled = (int) ((durability / (float) MAX_DURABILITY) * width);
+        float ratio = durability / (float) MAX_DURABILITY;
+        int filled = (int) (ratio * width);
 
-        gui.fill(x, y, x + width, y + height, BAR_BACKGROUND);  // background
-        gui.fill(x, y, x + filled, y + height, fillColor);      // fill
+        gui.fill(x, y, x + width, y + height, BAR_BACKGROUND); // always draw background
+
+        boolean shouldBlink = durability <= 2 && (timeMillis / 300) % 2 == 0;
+        if (!shouldBlink) {
+            gui.fill(x, y, x + filled, y + height, fillColor); // draw fill only if not blinking
+        }
     }
 }
