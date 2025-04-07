@@ -1,6 +1,5 @@
 package com.raiiiden.warborn.mixin;
 
-import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
 import com.raiiiden.warborn.common.util.MutableInt;
 import com.raiiiden.warborn.item.WarbornArmorItem;

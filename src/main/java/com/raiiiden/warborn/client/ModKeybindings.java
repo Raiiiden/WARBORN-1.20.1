@@ -16,8 +16,8 @@ public class ModKeybindings {
             "key.categories.inventory"
     );
 
-    public static final KeyMapping TOGGLE_NIGHT_VISION = new KeyMapping(
-            "key.warborn.toggle_night_vision",
+    public static final KeyMapping TOGGLE_SPECIAL_VISION = new KeyMapping(
+            "key.warborn.toggle_special_vision",
             GLFW.GLFW_KEY_N,
             "key.categories.inventory"
     );
@@ -31,6 +31,6 @@ public class ModKeybindings {
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(OPEN_BACKPACK);
-        event.register(TOGGLE_NIGHT_VISION);
+        event.register(TOGGLE_SPECIAL_VISION);
     }
 }

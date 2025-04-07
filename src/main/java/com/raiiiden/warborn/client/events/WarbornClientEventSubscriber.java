@@ -1,4 +1,4 @@
-package com.raiiiden.warborn.client;
+package com.raiiiden.warborn.client.events;
 
 import com.raiiiden.warborn.client.renderer.layer.WarbornBackpackLayer;
 import com.raiiiden.warborn.client.renderer.layer.WarbornShoulderpadsLayer;
@@ -25,4 +25,5 @@ public class WarbornClientEventSubscriber {
             }
         }
     }
+
 }
