@@ -16,7 +16,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 
 /**
- * Handles helmet vision effects based on item tags
+ * Handles helmet vision effects based on item tags for now
  */
 public class HelmetVisionHandler {
     private static final Logger LOGGER = LogManager.getLogger();
