@@ -33,31 +33,30 @@ import java.util.Set;
 public class PlateInsertRenderer<T extends Item & GeoAnimatable> extends GeoItemRenderer<T> {
     private static final float SCALE_RECIPROCAL = 1.0f / 16.0f;
     private static final ResourceLocation PLATE_MODEL = new ResourceLocation(WARBORN.MODID, "geo/item/armor/plate_insert.geo.json");
-    
-    protected MultiBufferSource currentBuffer;
-    protected RenderType renderType;
+    private final Set<String> hiddenBones = new HashSet<>();
     public ItemDisplayContext transformType;
     public boolean renderArms = false;
-    private final Set<String> hiddenBones = new HashSet<>();
+    protected MultiBufferSource currentBuffer;
+    protected RenderType renderType;
 
     public PlateInsertRenderer(GeoModel<T> model) {
         super(model);
     }
-    
+
     /**
      * Enables arm rendering for the next render pass
      */
     public void enableArmRendering() {
         this.renderArms = true;
     }
-    
+
     /**
      * Hides a specific bone by name
      */
     public void hideBone(String name) {
         this.hiddenBones.add(name);
     }
-    
+
     /**
      * Shows a previously hidden bone
      */
@@ -66,19 +65,19 @@ public class PlateInsertRenderer<T extends Item & GeoAnimatable> extends GeoItem
     }
 
     @Override
-    public void actuallyRender(PoseStack matrixStack, T animatable, BakedGeoModel model, RenderType type, 
-                              MultiBufferSource buffer, VertexConsumer builder, boolean isRenderer, 
-                              float partialTick, int packedLight, int packedOverlay, 
-                              float red, float green, float blue, float alpha) {
+    public void actuallyRender(PoseStack matrixStack, T animatable, BakedGeoModel model, RenderType type,
+                               MultiBufferSource buffer, VertexConsumer builder, boolean isRenderer,
+                               float partialTick, int packedLight, int packedOverlay,
+                               float red, float green, float blue, float alpha) {
         this.currentBuffer = buffer;
         this.renderType = type;
-        
+
         matrixStack.pushPose();
 
-        
-        super.actuallyRender(matrixStack, animatable, model, type, buffer, builder, isRenderer, 
-                            partialTick, packedLight, packedOverlay, red, green, blue, alpha);
-        
+
+        super.actuallyRender(matrixStack, animatable, model, type, buffer, builder, isRenderer,
+                partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+
         matrixStack.popPose();
         if (this.renderArms) {
             this.renderArms = false;
@@ -86,22 +85,22 @@ public class PlateInsertRenderer<T extends Item & GeoAnimatable> extends GeoItem
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack matrixStack, 
-                            MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack matrixStack,
+                             MultiBufferSource buffer, int packedLight, int packedOverlay) {
         this.transformType = transformType;
         super.renderByItem(stack, transformType, matrixStack, buffer, packedLight, packedOverlay);
     }
 
     @Override
-    public void renderRecursively(PoseStack stack, T animatable, GeoBone bone, RenderType type, 
-                                 MultiBufferSource buffer, VertexConsumer builder, boolean isReRender, 
-                                 float partialTick, int packedLight, int packedOverlay, 
-                                 float red, float green, float blue, float alpha) {
+    public void renderRecursively(PoseStack stack, T animatable, GeoBone bone, RenderType type,
+                                  MultiBufferSource buffer, VertexConsumer builder, boolean isReRender,
+                                  float partialTick, int packedLight, int packedOverlay,
+                                  float red, float green, float blue, float alpha) {
         Minecraft mc = Minecraft.getInstance();
         String boneName = bone.getName();
 
         boolean isArmBone = boneName.equals("left_arm") || boneName.equals("right_arm");
-        
+
         if (isArmBone) {
             bone.setHidden(true);
         } else {
@@ -111,15 +110,15 @@ public class PlateInsertRenderer<T extends Item & GeoAnimatable> extends GeoItem
         if (this.transformType.firstPerson() && isArmBone && this.renderArms) {
             AbstractClientPlayer player = mc.player;
             if (player == null) {
-                super.renderRecursively(stack, animatable, bone, type, buffer, builder, isReRender, 
-                                      partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+                super.renderRecursively(stack, animatable, bone, type, buffer, builder, isReRender,
+                        partialTick, packedLight, packedOverlay, red, green, blue, alpha);
                 return;
             }
-            
+
             float armsAlpha = player.isInvisible() ? 0.15f : 1.0f;
             PlayerRenderer playerRenderer = (PlayerRenderer) mc.getEntityRenderDispatcher().getRenderer(player);
             PlayerModel<AbstractClientPlayer> model = playerRenderer.getModel();
-            
+
             stack.pushPose();
 
             RenderUtils.translateMatrixToBone(stack, bone);
@@ -137,30 +136,30 @@ public class PlateInsertRenderer<T extends Item & GeoAnimatable> extends GeoItem
                 renderPlayerArm(model.leftArm, bone, stack, armBuilder, packedLight, OverlayTexture.NO_OVERLAY, armsAlpha);
                 renderPlayerArm(model.leftSleeve, bone, stack, sleeveBuilder, packedLight, OverlayTexture.NO_OVERLAY, armsAlpha);
             } else if (boneName.equals("right_arm")) {
-                stack.translate(1.0f * SCALE_RECIPROCAL, 2.0f * SCALE_RECIPROCAL, 0.0f);
+                stack.translate(SCALE_RECIPROCAL, 2.0f * SCALE_RECIPROCAL, 0.0f);
                 renderPlayerArm(model.rightArm, bone, stack, armBuilder, packedLight, OverlayTexture.NO_OVERLAY, armsAlpha);
                 renderPlayerArm(model.rightSleeve, bone, stack, sleeveBuilder, packedLight, OverlayTexture.NO_OVERLAY, armsAlpha);
             }
-            
+
             stack.popPose();
         }
-        super.renderRecursively(stack, animatable, bone, type, buffer, builder, isReRender, 
-                              partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+        super.renderRecursively(stack, animatable, bone, type, buffer, builder, isReRender,
+                partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
-    
+
     /**
      * Renders a player model part over a bone
      */
-    private void renderPlayerArm(ModelPart model, GeoBone bone, PoseStack stack, VertexConsumer buffer, 
-                                int packedLight, int packedOverlay, float alpha) {
+    private void renderPlayerArm(ModelPart model, GeoBone bone, PoseStack stack, VertexConsumer buffer,
+                                 int packedLight, int packedOverlay, float alpha) {
         renderPlayerArm(model, bone, stack, buffer, packedLight, packedOverlay, 1.0f, 1.0f, 1.0f, alpha);
     }
 
     /**
      * Renders a player model part over a bone with custom coloring
      */
-    private void renderPlayerArm(ModelPart model, GeoBone bone, PoseStack stack, VertexConsumer buffer, 
-                                int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    private void renderPlayerArm(ModelPart model, GeoBone bone, PoseStack stack, VertexConsumer buffer,
+                                 int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         setupModelFromBone(model, bone);
         stack.pushPose();
         stack.translate(0, -0.62, 0);

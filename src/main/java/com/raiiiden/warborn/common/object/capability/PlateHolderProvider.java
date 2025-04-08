@@ -12,7 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlateHolderProvider implements ICapabilitySerializable<CompoundTag> {
-    public static final Capability<PlateHolderCapability> CAP = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<PlateHolderCapability> CAP = CapabilityManager.get(new CapabilityToken<>() {
+    });
     private final PlateHolderImpl backend;
     private final LazyOptional<PlateHolderCapability> optional;
 

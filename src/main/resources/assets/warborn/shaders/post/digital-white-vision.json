@@ -1,5 +1,7 @@
 {
-  "targets": ["swap"],
+  "targets": [
+    "swap"
+  ],
   "passes": [
     {
       "name": "warborn:digital-white-vision",

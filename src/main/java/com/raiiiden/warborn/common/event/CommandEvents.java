@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommandEvents {
-    
+
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         ShaderCommand.register(event.getDispatcher());

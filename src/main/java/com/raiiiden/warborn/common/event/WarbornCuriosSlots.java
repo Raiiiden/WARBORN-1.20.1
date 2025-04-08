@@ -1,4 +1,4 @@
-package com.raiiiden.warborn;
+package com.raiiiden.warborn.common.event;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;

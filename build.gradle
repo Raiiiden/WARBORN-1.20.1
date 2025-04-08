@@ -143,6 +143,7 @@ dependencies {
     implementation fg.deobf("curse.maven:curios-309927:6238756")
     compileOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6069384")
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.4.1"))
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html

@@ -28,7 +28,7 @@ public class WarbornCommonConfig {
                         ),
                         obj -> obj instanceof String
                 );
-                
+
         ENABLE_FACEPLATE_OVERLAY = builder
                 .comment("Enable faceplate overlay cutout for helmets with the faceplate tag")
                 .define("enable_faceplate_overlay", true);

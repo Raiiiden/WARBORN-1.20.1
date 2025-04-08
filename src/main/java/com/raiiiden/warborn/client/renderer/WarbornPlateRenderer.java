@@ -31,11 +31,11 @@ public class WarbornPlateRenderer extends GeoItemRenderer<WarbornPlateItem> {
 
     private boolean renderArms = false;
     private ItemDisplayContext currentTransform;
-    
+
     public WarbornPlateRenderer() {
         super(new WarbornPlateModel());
     }
-    
+
     /**
      * Enable arm rendering for the next render pass
      */
@@ -44,25 +44,25 @@ public class WarbornPlateRenderer extends GeoItemRenderer<WarbornPlateItem> {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack poseStack, 
-                            MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack poseStack,
+                             MultiBufferSource buffer, int packedLight, int packedOverlay) {
         this.currentTransform = transformType;
 
         if (transformType.firstPerson() && stack.getOrCreateTag().getBoolean("inserting")) {
             this.renderArms = true;
         }
-        
+
         super.renderByItem(stack, transformType, poseStack, buffer, packedLight, packedOverlay);
         this.renderArms = false;
     }
-    
+
     @Override
-    public void renderRecursively(PoseStack poseStack, WarbornPlateItem animatable, GeoBone bone, 
-                                 RenderType renderType, MultiBufferSource bufferSource, 
-                                 VertexConsumer buffer, boolean isReRender, float partialTick, 
-                                 int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderRecursively(PoseStack poseStack, WarbornPlateItem animatable, GeoBone bone,
+                                  RenderType renderType, MultiBufferSource bufferSource,
+                                  VertexConsumer buffer, boolean isReRender, float partialTick,
+                                  int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         boolean isArmBone = bone.getName().equals(LEFT_ARM_BONE) || bone.getName().equals(RIGHT_ARM_BONE);
-        
+
         if (isArmBone) {
             bone.setHidden(true);
             if (this.currentTransform.firstPerson() && this.renderArms) {
@@ -70,17 +70,17 @@ public class WarbornPlateRenderer extends GeoItemRenderer<WarbornPlateItem> {
             }
         }
 
-        super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, 
-                               isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+        super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer,
+                isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
-    
+
     /**
      * Renders the player's arm at the position of a bone
      */
     private void renderPlayerArm(GeoBone bone, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         Minecraft mc = Minecraft.getInstance();
         AbstractClientPlayer player = mc.player;
-        
+
         if (player == null) return;
 
         PlayerRenderer playerRenderer = (PlayerRenderer) mc.getEntityRenderDispatcher().getRenderer(player);
@@ -94,9 +94,9 @@ public class WarbornPlateRenderer extends GeoItemRenderer<WarbornPlateItem> {
         ResourceLocation skinTexture = player.getSkinTextureLocation();
         VertexConsumer armBuilder = bufferSource.getBuffer(RenderType.entitySolid(skinTexture));
         VertexConsumer sleeveBuilder = bufferSource.getBuffer(RenderType.entityTranslucent(skinTexture));
-        
+
         float armAlpha = player.isInvisible() ? 0.15f : 1.0f;
-        
+
         poseStack.pushPose();
 
         RenderUtils.translateMatrixToBone(poseStack, bone);
@@ -117,10 +117,10 @@ public class WarbornPlateRenderer extends GeoItemRenderer<WarbornPlateItem> {
         armPart.render(poseStack, armBuilder, packedLight, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, armAlpha);
         sleevePart.render(poseStack, sleeveBuilder, packedLight, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, armAlpha);
         poseStack.popPose();
-        
+
         poseStack.popPose();
     }
-    
+
     /**
      * Sets up a model part using a bone's position
      */

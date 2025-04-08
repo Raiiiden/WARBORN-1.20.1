@@ -29,20 +29,19 @@ public class WarbornPlateItem extends Item implements GeoItem {
     public static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
 
     private static final String MAIN_CONTROLLER = "controller";
+    private static final int ANIMATION_DURATION = 40;
     public final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    private static final int ANIMATION_DURATION = 40;
-    
     public WarbornPlateItem(Properties properties) {
         super(properties);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
-    
+
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private WarbornPlateRenderer renderer;
-            
+
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if (this.renderer == null) {
@@ -52,46 +51,46 @@ public class WarbornPlateItem extends Item implements GeoItem {
             }
         });
     }
-    
+
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.NONE;
     }
-    
+
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return false;
     }
-    
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        
+
         if (level instanceof ServerLevel serverLevel) {
             this.triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel),
                     MAIN_CONTROLLER, "insert");
         }
-        
+
         stack.getOrCreateTag().putBoolean("inserting", true);
-        
+
         return InteractionResultHolder.success(stack);
     }
-    
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(new AnimationController<>(this, MAIN_CONTROLLER, 0, (event) -> shouldPlayAnimation() ? PlayState.CONTINUE : PlayState.STOP).triggerableAnim("insert", INSERT_ANIMATION).triggerableAnim("idle", IDLE_ANIMATION));
     }
-    
+
     private boolean shouldPlayAnimation() {
         Minecraft minecraft = Minecraft.getInstance();
         return minecraft.options.getCameraType().isFirstPerson();
     }
-    
+
     @Nullable
     private Player getClientPlayer() {
         return Minecraft.getInstance().player;
     }
-    
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;

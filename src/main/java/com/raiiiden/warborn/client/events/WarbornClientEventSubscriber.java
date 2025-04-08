@@ -1,5 +1,6 @@
 package com.raiiiden.warborn.client.events;
 
+import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.renderer.layer.WarbornBackpackLayer;
 import com.raiiiden.warborn.client.renderer.layer.WarbornShoulderpadsLayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -9,7 +10,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = "warborn", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class WarbornClientEventSubscriber {
 
     @SubscribeEvent

@@ -1,6 +1,7 @@
 package com.raiiiden.warborn.item;
 
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
+import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.object.capability.BackpackCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
@@ -12,6 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -52,32 +54,136 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
-    private static final int MAX_STACK_SIZE = 100;
-    private static final int MAX_SLOTS = 4;
-    private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
-
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private final String armorType;
-
     public static final String TAG_GOGGLE = "goggle";
     public static final String TAG_NVG = "nvg";
     public static final String TAG_SIMPLE_NVG = "simple_nvg";
     public static final String TAG_THERMAL = "thermal";
     public static final String TAG_DIGITAL = "digital";
+    private static final int MAX_STACK_SIZE = 100;
+    private static final int MAX_SLOTS = 4;
+    private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private final String armorType;
 
     public WarbornArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType) {
         super(armorMaterial, type, properties.stacksTo(1));
         this.armorType = armorType;
     }
 
-    @Override
-    public boolean canFitInsideContainerItems() {
-        return true;
-    }
-
     public static boolean isChestplateItem(ItemStack stack) {
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         return id.getPath().toLowerCase().contains("chestplate");
+    }
+
+    public static int getTotalStoredItems(ItemStack chestplate) {
+        return chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
+            int total = 0;
+            for (int i = 0; i < handler.getSlots(); i++) {
+                total += handler.getStackInSlot(i).getCount();
+            }
+            return total;
+        }).orElse(0);
+    }
+
+    public static boolean isValidInsert(ItemStack stack) {
+        return stack.getItem().canFitInsideContainerItems() && !isArmor(stack);
+    }
+
+    public static Optional<ItemStack> removeItem(ItemStack chestplate) {
+        if (!isChestplateItem(chestplate)) return Optional.empty();
+
+        return chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
+            for (int i = handler.getSlots() - 1; i >= 0; i--) {
+                ItemStack inSlot = handler.getStackInSlot(i);
+                if (!inSlot.isEmpty()) {
+                    ItemStack removed = handler.extractItem(i, inSlot.getCount(), false);
+
+                    if (handler instanceof ChestplateBundleHandler cbh) {
+                        cbh.saveToItem(chestplate);
+                    }
+
+                    return removed;
+                }
+            }
+            return ItemStack.EMPTY;
+        }).filter(stack -> !stack.isEmpty());
+    }
+
+    private static Stream<ItemStack> getContents(ItemStack stack) {
+        return stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
+                .map(handler -> IntStream.range(0, handler.getSlots())
+                        .mapToObj(handler::getStackInSlot)
+                        .filter(s -> !s.isEmpty()))
+                .orElse(Stream.empty());
+    }
+
+    public static boolean isArmor(ItemStack stack) {
+        return stack.getItem() instanceof ArmorItem;
+    }
+
+    public static boolean isBackpackItem(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return id.getPath().toLowerCase().contains("backpack");
+    }
+
+    /**
+     * Checks if a helmet has vision capabilities (has the goggle tag)
+     */
+    public static boolean hasVisionCapability(ItemStack stack) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
+        if (((ArmorItem) stack.getItem()).getType() != Type.HELMET) return false;
+
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains(TAG_GOGGLE)) {
+            return true;
+        }
+
+        ResourceLocation goggleTagId = new ResourceLocation("warborn", "has_" + TAG_GOGGLE);
+        ResourceLocation nvgTagId = new ResourceLocation("warborn", "has_" + TAG_NVG);
+        ResourceLocation simpleNvgTagId = new ResourceLocation("warborn", "has_" + TAG_SIMPLE_NVG);
+        ResourceLocation thermalTagId = new ResourceLocation("warborn", "has_" + TAG_THERMAL);
+        ResourceLocation digitalTagId = new ResourceLocation("warborn", "has_" + TAG_DIGITAL);
+
+        return stack.is(TagKey.create(Registries.ITEM, goggleTagId)) ||
+                stack.is(TagKey.create(Registries.ITEM, nvgTagId)) ||
+                stack.is(TagKey.create(Registries.ITEM, simpleNvgTagId)) ||
+                stack.is(TagKey.create(Registries.ITEM, thermalTagId)) ||
+                stack.is(TagKey.create(Registries.ITEM, digitalTagId));
+    }
+
+    /**
+     * Checks if the helmet has a specific vision mode
+     */
+    public static boolean hasVisionMode(ItemStack stack, String visionTag) {
+        if (!hasVisionCapability(stack)) return false;
+
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains(visionTag)) {
+            return true;
+        }
+
+        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
+
+        ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionTag);
+        return stack.is(TagKey.create(Registries.ITEM, tagId));
+    }
+
+    /**
+     * Add a specific vision capability to a helmet
+     */
+    public static void addVisionCapability(ItemStack stack, String visionTag) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return;
+        if (((ArmorItem) stack.getItem()).getType() != Type.HELMET) return;
+
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putBoolean(TAG_GOGGLE, true); // Base tag
+        tag.putBoolean(visionTag, true);  // Specific vision type
+    }
+
+    @Override
+    public boolean canFitInsideContainerItems() {
+        return true;
     }
 
     @Override
@@ -174,52 +280,6 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return Optional.of(new BundleTooltip(result, totalWeight));
     }
 
-    public static int getTotalStoredItems(ItemStack chestplate) {
-        return chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
-            int total = 0;
-            for (int i = 0; i < handler.getSlots(); i++) {
-                total += handler.getStackInSlot(i).getCount();
-            }
-            return total;
-        }).orElse(0);
-    }
-
-    public static boolean isValidInsert(ItemStack stack) {
-        return stack.getItem().canFitInsideContainerItems() && !isArmor(stack);
-    }
-
-    public static Optional<ItemStack> removeItem(ItemStack chestplate) {
-        if (!isChestplateItem(chestplate)) return Optional.empty();
-
-        return chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
-            for (int i = handler.getSlots() - 1; i >= 0; i--) {
-                ItemStack inSlot = handler.getStackInSlot(i);
-                if (!inSlot.isEmpty()) {
-                    ItemStack removed = handler.extractItem(i, inSlot.getCount(), false);
-
-                    if (handler instanceof ChestplateBundleHandler cbh) {
-                        cbh.saveToItem(chestplate);
-                    }
-
-                    return removed;
-                }
-            }
-            return ItemStack.EMPTY;
-        }).filter(stack -> !stack.isEmpty());
-    }
-
-    private static Stream<ItemStack> getContents(ItemStack stack) {
-        return stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
-                .map(handler -> IntStream.range(0, handler.getSlots())
-                        .mapToObj(handler::getStackInSlot)
-                        .filter(s -> !s.isEmpty()))
-                .orElse(Stream.empty());
-    }
-
-    public static boolean isArmor(ItemStack stack) {
-        return stack.getItem() instanceof ArmorItem;
-    }
-
     @Override
     public boolean isBarVisible(ItemStack stack) {
         return isChestplateItem(stack) && getContents(stack).findAny().isPresent();
@@ -232,7 +292,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         int total = getContents(stack).mapToInt(ItemStack::getCount).sum();
         int max = MAX_SLOTS * MAX_STACK_SIZE;
 
-        return Math.min(13, 1 + (int)(12 * ((double) total / max)));
+        return Math.min(13, 1 + (int) (12 * ((double) total / max)));
     }
 
     @Override
@@ -323,105 +383,14 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return super.initCapabilities(stack, nbt);
     }
 
-    public static boolean isBackpackItem(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        return id.getPath().toLowerCase().contains("backpack");
-    }
-
-    // Apply tags depending on the helmet type when an item is created
-    @Override
-    public void onCraftedBy(ItemStack stack, Level level, Player player) {
-        super.onCraftedBy(stack, level, player);
-        
-        // NOTE: This method is kept for backward compatibility.
-        // Vision capabilities are now primarily defined through item tags in the data folder:
-        // - data/warborn/tags/items/has_goggle.json
-        // - data/warborn/tags/items/has_nvg.json
-        // - data/warborn/tags/items/has_simple_nvg.json
-        // - data/warborn/tags/items/has_thermal.json
-        // - data/warborn/tags/items/has_digital.json
-        
-        // Only applies to helmet items
-        if (this.getType() != Type.HELMET) return;
-        
-        CompoundTag tag = stack.getOrCreateTag();
-        
-        // Set basic vision capabilities based on the armor type
-        if (this.armorType.contains("tactical") || this.armorType.contains("operator")) {
-            // Tactical/Operator helmets have all vision types
-            tag.putBoolean(TAG_GOGGLE, true);
-            tag.putBoolean(TAG_NVG, true);
-            tag.putBoolean(TAG_SIMPLE_NVG, true);
-            tag.putBoolean(TAG_THERMAL, true);
-            tag.putBoolean(TAG_DIGITAL, true);
-        } else if (this.armorType.contains("combat")) {
-            // Combat helmets have basic night vision
-            tag.putBoolean(TAG_GOGGLE, true);
-            tag.putBoolean(TAG_NVG, true);
-            tag.putBoolean(TAG_SIMPLE_NVG, true);
-        } else if (this.armorType.contains("scout")) {
-            // Scout helmets have thermal vision
-            tag.putBoolean(TAG_GOGGLE, true);
-            tag.putBoolean(TAG_THERMAL, true);
-        }
-    }
-    
-    /**
-     * Checks if a helmet has vision capabilities (has the goggle tag)
-     */
-    public static boolean hasVisionCapability(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
-        if (((ArmorItem)stack.getItem()).getType() != Type.HELMET) return false;
-        
-        // First check NBT tags (for backwards compatibility)
-        CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(TAG_GOGGLE)) {
-            return true;
-        }
-        
-        // Then check data-defined item tags
-        ResourceLocation goggleTagId = new ResourceLocation("warborn", "has_" + TAG_GOGGLE);
-        
-        // Also check if the helmet has any specific vision tag
-        ResourceLocation nvgTagId = new ResourceLocation("warborn", "has_" + TAG_NVG);
-        ResourceLocation simpleNvgTagId = new ResourceLocation("warborn", "has_" + TAG_SIMPLE_NVG);
-        ResourceLocation thermalTagId = new ResourceLocation("warborn", "has_" + TAG_THERMAL);
-        ResourceLocation digitalTagId = new ResourceLocation("warborn", "has_" + TAG_DIGITAL);
-        
-        return stack.is(TagKey.create(Registries.ITEM, goggleTagId)) ||
-               stack.is(TagKey.create(Registries.ITEM, nvgTagId)) ||
-               stack.is(TagKey.create(Registries.ITEM, simpleNvgTagId)) ||
-               stack.is(TagKey.create(Registries.ITEM, thermalTagId)) ||
-               stack.is(TagKey.create(Registries.ITEM, digitalTagId));
-    }
-    
-    /**
-     * Checks if the helmet has a specific vision mode
-     */
-    public static boolean hasVisionMode(ItemStack stack, String visionTag) {
-        if (!hasVisionCapability(stack)) return false;
-
-        CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(visionTag)) {
-            return true;
-        }
-
-        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
-        
-        ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionTag);
-        return stack.is(TagKey.create(Registries.ITEM, tagId));
-    }
-    
-    /**
-     * Add a specific vision capability to a helmet
-     */
-    public static void addVisionCapability(ItemStack stack, String visionTag) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return;
-        if (((ArmorItem)stack.getItem()).getType() != Type.HELMET) return;
-        
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putBoolean(TAG_GOGGLE, true); // Base tag
-        tag.putBoolean(visionTag, true);  // Specific vision type
-    }
+//    @Override
+//    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+//
+//        //TODO: Maybe adjust it so that it plays a little earlier and or if we add durability
+//        if (stack.getDamageValue() + amount >= stack.getMaxDamage() &&
+//            getMaterial() instanceof WarbornMaterials.WarbornArmorMaterial warbornMaterial) {
+//            entity.playSound(warbornMaterial.getBreakSound(), 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
+//        }
+//        return super.damageItem(stack, amount, entity, onBroken);
+//    }
 }

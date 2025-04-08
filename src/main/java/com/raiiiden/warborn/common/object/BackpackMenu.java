@@ -1,8 +1,8 @@
 package com.raiiiden.warborn.common.object;
 
 import com.raiiiden.warborn.common.init.MenuTypeInit;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -57,7 +57,7 @@ public class BackpackMenu extends AbstractContainerMenu {
             itemStack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(cap -> {
                 if (cap instanceof INBTSerializable<?> serializable) {
                     CompoundTag tag = itemStack.getOrCreateTag();
-                    tag.put("BackpackCap", (CompoundTag) serializable.serializeNBT());
+                    tag.put("BackpackCap", serializable.serializeNBT());
                     itemStack.setTag(tag);
                 }
             });

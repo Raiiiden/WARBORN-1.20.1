@@ -48,7 +48,8 @@ public class ChestplateGunMixin {
         if (!(shooter instanceof Player player)) return;
 
         ItemStack chestplate = player.getInventory().getArmor(2);
-        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !WarbornArmorItem.isChestplateItem(chestplate)) return;
+        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !WarbornArmorItem.isChestplateItem(chestplate))
+            return;
 
         boolean hasAmmo = chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
             for (int i = 0; i < handler.getSlots(); i++) {

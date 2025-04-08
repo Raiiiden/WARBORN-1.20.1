@@ -2,6 +2,8 @@ package com.raiiiden.warborn;
 
 import com.raiiiden.warborn.common.config.WarbornCommonConfig;
 import com.raiiiden.warborn.common.init.MenuTypeInit;
+import com.raiiiden.warborn.common.init.ModRegistry;
+import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -15,23 +17,24 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(WARBORN.MODID)
 public class WARBORN {
-  public static final String MODID = "warborn";
-  public static final Logger LOGGER = LogManager.getLogger();
+    public static final String MODID = "warborn";
+    public static final Logger LOGGER = LogManager.getLogger();
 
-  public WARBORN() {
-    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public WARBORN() {
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-    ModRegistry.ITEMS.register(modEventBus);
-    ModRegistry.CREATIVE_MODE_TABS.register(modEventBus);
+        ModRegistry.ITEMS.register(modEventBus);
+        ModRegistry.CREATIVE_MODE_TABS.register(modEventBus);
+        MenuTypeInit.register(modEventBus);
+        ModSoundEvents.register(modEventBus);
 
-    modEventBus.addListener(this::setup);
-    MenuTypeInit.register(modEventBus);
-    ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WarbornCommonConfig.SPEC);
+        modEventBus.addListener(this::setup);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WarbornCommonConfig.SPEC);
 
-    MinecraftForge.EVENT_BUS.register(this);
-  }
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
-  private void setup(final FMLCommonSetupEvent event) {
-    ModNetworking.registerPackets();
-  }
+    private void setup(final FMLCommonSetupEvent event) {
+        ModNetworking.registerPackets();
+    }
 }
