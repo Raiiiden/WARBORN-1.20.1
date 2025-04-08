@@ -20,7 +20,7 @@
 //import java.util.HashMap;
 //import java.util.Map;
 //
-///**
+/// **
 // * Handles emissive rendering for entities during thermal vision
 // */
 //@Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)

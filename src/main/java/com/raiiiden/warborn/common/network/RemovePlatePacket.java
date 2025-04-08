@@ -26,10 +26,6 @@ public class RemovePlatePacket {
         this.front = buf.readBoolean();
     }
 
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.front);
-    }
-
     public static void handle(RemovePlatePacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
@@ -61,5 +57,9 @@ public class RemovePlatePacket {
         });
 
         ctx.get().setPacketHandled(true);
+    }
+
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeBoolean(this.front);
     }
 }

@@ -26,6 +26,64 @@ public class WarbornShaders {
     private static final boolean DEBUG = false;
 
     /**
+     * Check if NVG should be active for the current player
+     */
+    private static boolean isNvgEnabled(Minecraft mc) {
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_NVG);
+        if (active && DEBUG) {
+            LOGGER.info("NVG shader activation requested");
+        }
+        return active;
+    }
+
+    /**
+     * Check if simple NVG should be active
+     */
+    private static boolean isSimpleNvgEnabled(Minecraft mc) {
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_SIMPLE_NVG);
+        if (active && DEBUG) {
+            LOGGER.info("Simple NVG shader activation requested");
+        }
+        return active;
+    }
+
+    /**
+     * Check if thermal vision should be active
+     */
+    private static boolean isThermalEnabled(Minecraft mc) {
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_THERMAL);
+        if (active && DEBUG) {
+            LOGGER.info("Thermal shader activation requested");
+        }
+        return active;
+    }
+
+    /**
+     * Check if digital vision should be active
+     */
+    private static boolean isDigitalEnabled(Minecraft mc) {
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_DIGITAL);
+        if (active && DEBUG) {
+            LOGGER.info("Digital shader activation requested");
+        }
+        return active;
+    }
+
+    /**
+     * Used for shaders that are never automatically enabled
+     */
+    private static boolean isNever(Minecraft minecraft) {
+        return false;
+    }
+
+    @SubscribeEvent
+    public static void renderNVG(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
+
+        ShaderRegistry.getInstance().processShaders();
+    }
+
+    /**
      * Initialize and register the NVG shader
      */
     @Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -43,21 +101,22 @@ public class WarbornShaders {
                 LOGGER.info("  GDVG_SHADER_ID: {}", GDVG_SHADER_ID);
 
                 boolean nvgRegistered = ShaderRegistry.getInstance().registerShader(
-                    NVG_SHADER_ID,
-                    ShaderPresets.NIGHT_VISION,
-                    WarbornShaders::isNvgEnabled,
-                    ShaderPresets.greenNightVision(1.0f)
+                        NVG_SHADER_ID,
+                        ShaderPresets.NIGHT_VISION,
+                        WarbornShaders::isNvgEnabled,
+                        ShaderPresets.greenNightVision(1.0f)
                 );
                 LOGGER.info("NVG shader registered: {}", nvgRegistered);
-                
+
                 boolean simpleNvgRegistered = ShaderRegistry.getInstance().registerShader(
                         SIMPLE_NVG_SHADER_ID,
                         ShaderPresets.SIMPLE_NIGHT_VISION,
                         WarbornShaders::isSimpleNvgEnabled,
-                        postChain -> {  }
+                        postChain -> {
+                        }
                 );
                 LOGGER.info("Simple NVG shader registered: {}", simpleNvgRegistered);
-                
+
                 boolean dvgRegistered = ShaderRegistry.getInstance().registerShader(
                         DVG_SHADER_ID,
                         ShaderPresets.DIGITAL_WHITE_VISION,
@@ -65,7 +124,7 @@ public class WarbornShaders {
                         ShaderPresets.whitePhosphorVision(0.7f)
                 );
                 LOGGER.info("Digital shader registered: {}", dvgRegistered);
-                
+
                 boolean dvgGRegistered = ShaderRegistry.getInstance().registerShader(
                         GDVG_SHADER_ID,
                         ShaderPresets.DIGITAL_GREEN_VISION,
@@ -73,7 +132,7 @@ public class WarbornShaders {
                         ShaderPresets.greenDigitalVision(0.7f)
                 );
                 LOGGER.info("Digital green shader registered: {}", dvgGRegistered);
-                
+
                 boolean tvgRegistered = ShaderRegistry.getInstance().registerShader(
                         TVG_SHADER_ID,
                         ShaderPresets.THERMAL_VISION,
@@ -87,64 +146,5 @@ public class WarbornShaders {
                 LOGGER.info("Registered shaders: {}", registeredShaders);
             });
         }
-    }
-
-
-    /**
-     * Check if NVG should be active for the current player
-     */
-    private static boolean isNvgEnabled(Minecraft mc) {
-        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_NVG);
-        if (active && DEBUG) {
-            LOGGER.info("NVG shader activation requested");
-        }
-        return active;
-    }
-    
-    /**
-     * Check if simple NVG should be active
-     */
-    private static boolean isSimpleNvgEnabled(Minecraft mc) {
-        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_SIMPLE_NVG);
-        if (active && DEBUG) {
-            LOGGER.info("Simple NVG shader activation requested");
-        }
-        return active;
-    }
-    
-    /**
-     * Check if thermal vision should be active
-     */
-    private static boolean isThermalEnabled(Minecraft mc) {
-        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_THERMAL);
-        if (active && DEBUG) {
-            LOGGER.info("Thermal shader activation requested");
-        }
-        return active;
-    }
-    
-    /**
-     * Check if digital vision should be active
-     */
-    private static boolean isDigitalEnabled(Minecraft mc) {
-        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_DIGITAL);
-        if (active && DEBUG) {
-            LOGGER.info("Digital shader activation requested");
-        }
-        return active;
-    }
-    
-    /**
-     * Used for shaders that are never automatically enabled
-     */
-    private static boolean isNever(Minecraft minecraft) {
-        return false;
-    }
-
-    @SubscribeEvent
-    public static void renderNVG(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
-        
-        ShaderRegistry.getInstance().processShaders();
     }
 }

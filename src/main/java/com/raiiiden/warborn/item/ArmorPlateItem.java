@@ -1,6 +1,6 @@
 package com.raiiiden.warborn.item;
 
-import com.raiiiden.warborn.ModRegistry;
+import com.raiiiden.warborn.common.init.ModRegistry;
 import com.raiiiden.warborn.common.object.capability.PlateHolderImpl;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import net.minecraft.network.chat.Component;

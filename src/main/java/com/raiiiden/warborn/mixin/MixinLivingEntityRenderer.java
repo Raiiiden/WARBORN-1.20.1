@@ -32,15 +32,17 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
     protected MixinLivingEntityRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
+
     /**
      * Completely override the render method for maximum control
      */
-    @Redirect(method = "render*", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
-    private void redirectRender(M model, PoseStack poseStack, VertexConsumer buffer, 
-                               int packedLight, int packedOverlay, 
-                               float red, float green, float blue, float alpha, 
-                               T entity) {
+    @Redirect(method = "render", // Specify the exact method name
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
+    private void redirectRender(M model, PoseStack poseStack, VertexConsumer buffer,
+                                int packedLight, int packedOverlay,
+                                float red, float green, float blue, float alpha,
+                                T entity) {
         if (!wARBORN_1_20_1$isActive()) {
             model.renderToBuffer(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
             return;
@@ -53,10 +55,10 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
         float[] heatColor = wARBORN_1_20_1$getHeatColor(heat);
 
-        model.renderToBuffer(poseStack, buffer, newLight, newOverlay, 
-                             heatColor[0], heatColor[1], heatColor[2], alpha);
+        model.renderToBuffer(poseStack, buffer, newLight, newOverlay,
+                heatColor[0], heatColor[1], heatColor[2], alpha);
     }
-    
+
     /**
      * Check if thermal vision is active
      */
@@ -67,7 +69,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
         return dvgActive || tvgActive;
     }
-    
+
     /**
      * Map heat value to RGB color
      * Cold = blue/purple (0.0)
@@ -77,7 +79,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
     @Unique
     private float[] wARBORN_1_20_1$getHeatColor(float heat) {
         float[] color = new float[3]; // R,G,B
-        
+
         if (heat < 0.3f) {
             color[0] = 0.0f;
             color[1] = 0.0f;
@@ -91,10 +93,10 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
             color[1] = 0.0f;
             color[2] = 0.0f;
         }
-        
+
         return color;
     }
-    
+
     /**
      * Calculate heat level for an entity (0.0-1.0)
      */
@@ -120,12 +122,12 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
         }
 
         double movementSpeed = entity.getDeltaMovement().length();
-        baseHeat += Math.min(0.3f, (float)movementSpeed * 0.5f);
+        baseHeat += Math.min(0.3f, (float) movementSpeed * 0.5f);
 
         if (entity.isOnFire() || entity.isCurrentlyGlowing()) {
             baseHeat = 1.0f;
         }
-        
+
         return Math.min(1.0f, baseHeat);
     }
 }
