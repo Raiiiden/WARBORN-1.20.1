@@ -20,6 +20,7 @@ public class PlateHudOverlay {
     private static final ResourceLocation PLATE_ICON = new ResourceLocation(WARBORN.MODID, "textures/gui/plate_icon.png");
     private static final int BAR_COLOR = 0xFF007BFF;
     private static final int BAR_BACKGROUND = 0xFF1A1A2A;
+    //TODO adapt to new system
 
     @SubscribeEvent
     public static void renderOverlay(RenderGuiOverlayEvent.Post event) {

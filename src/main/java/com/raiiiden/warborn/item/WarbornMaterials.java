@@ -25,12 +25,13 @@ public class WarbornMaterials {
                 map.put(ArmorItem.Type.HELMET, 3);
             }),
             15,
-            () -> ModSoundEvents.WARBORN_ARMOR_EQUIP.get(),
-            () -> ModSoundEvents.WARBORN_ARMOR_BREAK.get(),
+            ModSoundEvents.WARBORN_ARMOR_EQUIP,
+            ModSoundEvents.WARBORN_ARMOR_BREAK,
             3.0F,
             0.1F,
             () -> Ingredient.of(Items.NETHERITE_INGOT)
     );
+    //TODO Add more armor materials
 
     public static class WarbornArmorMaterial implements ArmorMaterial {
         private static final EnumMap<ArmorItem.Type, Integer> HEALTH_FUNCTION_FOR_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
