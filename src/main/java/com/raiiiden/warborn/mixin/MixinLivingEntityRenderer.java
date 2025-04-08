@@ -1,5 +1,7 @@
 package com.raiiiden.warborn.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
@@ -15,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
  * Mixin to make entities glow when thermal vision is active
@@ -33,18 +34,16 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
         super(context);
     }
 
-    /**
-     * Completely override the render method for maximum control
-     */
-    @Redirect(method = "render", // Specify the exact method name
+    @WrapOperation(method = "render",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
-    private void redirectRender(M model, PoseStack poseStack, VertexConsumer buffer,
-                                int packedLight, int packedOverlay,
-                                float red, float green, float blue, float alpha,
-                                T entity) {
+    private void wrapRender(EntityModel<?> model, PoseStack poseStack, VertexConsumer buffer,
+                            int packedLight, int packedOverlay,
+                            float red, float green, float blue, float alpha,
+                            Operation<Void> original,
+                            T entity) {
         if (!wARBORN_1_20_1$isActive()) {
-            model.renderToBuffer(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+            original.call(model, poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
             return;
         }
 
@@ -55,7 +54,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
         float[] heatColor = wARBORN_1_20_1$getHeatColor(heat);
 
-        model.renderToBuffer(poseStack, buffer, newLight, newOverlay,
+        original.call(model, poseStack, buffer, newLight, newOverlay,
                 heatColor[0], heatColor[1], heatColor[2], alpha);
     }
 

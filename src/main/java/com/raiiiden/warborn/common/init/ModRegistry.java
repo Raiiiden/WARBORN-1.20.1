@@ -1,6 +1,8 @@
 package com.raiiiden.warborn.common.init;
 
 import com.raiiiden.warborn.WARBORN;
+import com.raiiiden.warborn.common.object.plate.MaterialType;
+import com.raiiiden.warborn.common.object.plate.ProtectionTier;
 import com.raiiiden.warborn.item.ArmorPlateItem;
 import com.raiiiden.warborn.item.WarbornArmorItem;
 import com.raiiiden.warborn.item.WarbornMaterials;
@@ -12,6 +14,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class ModRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
@@ -20,9 +25,23 @@ public class ModRegistry {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
 
+    // Armor Plate mapping for getPlateItem method
+    private static final Map<String, RegistryObject<ArmorPlateItem>> PLATE_REGISTRY = new HashMap<>();
+
     //Armor Plates
-    public static final RegistryObject<Item> ARMOR_PLATE = ITEMS.register("armor_plate",
-            () -> new ArmorPlateItem(new Item.Properties().durability(10)));
+    // Legacy plate - keeping for compatibility
+    public static final RegistryObject<ArmorPlateItem> ARMOR_PLATE = ITEMS.register("armor_plate",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_III, MaterialType.STEEL, new Item.Properties()));
+
+    // New plate types with different materials and protection levels
+    public static final RegistryObject<ArmorPlateItem> CERAMIC_PLATE_LEVEL_IV = ITEMS.register("ceramic_plate_level_iv",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_IV, MaterialType.CERAMIC, new Item.Properties()));
+
+    public static final RegistryObject<ArmorPlateItem> KEVLAR_PLATE_LEVEL_IIIA = ITEMS.register("kevlar_plate_level_iiia",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_IIIA, MaterialType.SOFT_KEVLAR, new Item.Properties()));
+            
+    public static final RegistryObject<ArmorPlateItem> COMPOSITE_PLATE_LEVEL_IV = ITEMS.register("composite_plate_level_iv",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_IV, MaterialType.COMPOSITE, new Item.Properties()));
 
     //RU Armor
     public static final RegistryObject<WarbornArmorItem> RU_HELMET = ITEMS.register("ru_helmet",
@@ -203,7 +222,33 @@ public class ModRegistry {
                         // ----------------
 
                         entries.accept(ARMOR_PLATE.get());
+                        entries.accept(CERAMIC_PLATE_LEVEL_IV.get());
+                        entries.accept(KEVLAR_PLATE_LEVEL_IIIA.get());
+                        entries.accept(COMPOSITE_PLATE_LEVEL_IV.get());
                     })
                     .build()
     );
+
+    /**
+     * Gets a plate item for the given tier and material type.
+     * If no specific match is found, returns the closest match or the default plate.
+     */
+    public static Item getPlateItem(ProtectionTier tier, MaterialType material) {
+        // Lazy initialization of the plate registry mapping
+        if (PLATE_REGISTRY.isEmpty()) {
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_III.name() + "_" + MaterialType.STEEL.name(), ARMOR_PLATE);
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.CERAMIC.name(), CERAMIC_PLATE_LEVEL_IV);
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_IIIA.name() + "_" + MaterialType.SOFT_KEVLAR.name(), KEVLAR_PLATE_LEVEL_IIIA);
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.COMPOSITE.name(), COMPOSITE_PLATE_LEVEL_IV);
+        }
+
+        // Look for exact match
+        String key = tier.name() + "_" + material.name();
+        if (PLATE_REGISTRY.containsKey(key)) {
+            return PLATE_REGISTRY.get(key).get();
+        }
+
+        // If no exact match, return default plate
+        return ARMOR_PLATE.get();
+    }
 }

@@ -1,5 +1,6 @@
 {
   "itemGroup.warborn_tab": "Warborn",
+
   "item.warborn.ru_helmet": "RU Helmet",
   "item.warborn.shturmovik_ru_chestplate": "Shturmovik RU Chestplate",
   "item.warborn.shturmovikv2_chestplate": "Shturmovik V2 Chestplate",
@@ -49,7 +50,10 @@
   "item.warborn.tagilla_chestplate": "Tagilla Chestplate",
   "item.warborn.tagilla_leggings": "Tagilla Leggings",
   "item.warborn.tagilla_molot": "Tagilla Hammer",
+
   "menu.warborn.backpack": "Backpack",
+
+  "key.categories.warborn": "Warborn",
   "key.warborn.open_backpack": "Open Backpack",
-  "key.warborn.toggle_night_vision": "Toggle Night Vision"
+  "key.warborn.toggle_special_vision": "Toggle Special Vision"
 }

@@ -1,6 +1,7 @@
 package com.raiiiden.warborn.common.event;
 
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
+import com.raiiiden.warborn.common.object.plate.Plate;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,48 +26,48 @@ public class DamageHandler {
 
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
             float originalDamage = event.getAmount();
-            float reducedDamage = originalDamage * 0.6f;
-            int plateDamage = Math.max(1, Math.round(originalDamage / 3f));
-
+            
+            // Determine hit direction (front or back)
             var sourcePos = event.getSource().getEntity().position();
             var playerPos = player.position();
             var attackVec = sourcePos.subtract(playerPos).normalize();
             var lookVec = player.getLookAngle().normalize();
-
-            double dot = lookVec.dot(attackVec); // front vs back
-
-            if (dot > 0 && cap.hasFrontPlate() && cap.getFrontDurability() > 0) {
-                int durability = cap.getFrontDurability();
-
-                if (durability >= plateDamage) {
-                    cap.damageFront(plateDamage);
-                    event.setAmount(reducedDamage);
-                    LOGGER.info("Front plate absorbed {}. Remaining: {}", plateDamage, cap.getFrontDurability());
+            double dot = lookVec.dot(attackVec);
+            
+            boolean isFrontHit = dot > 0;
+            Plate plateHit = isFrontHit ? cap.getFrontPlate() : cap.getBackPlate();
+            boolean hasPlate = isFrontHit ? cap.hasFrontPlate() : cap.hasBackPlate();
+            
+            if (hasPlate && plateHit != null) {
+                // Calculate damage reduction
+                float damageReduction = plateHit.calculateDamageReduction(originalDamage);
+                float reducedDamage = originalDamage * (1 - damageReduction);
+                
+                // Apply plate damage
+                if (isFrontHit) {
+                    cap.damageFrontPlate(originalDamage / 3f);
+                    LOGGER.info("Front plate absorbed {}% of {} damage. Remaining durability: {}/{}",
+                            Math.round(damageReduction * 100), originalDamage,
+                            plateHit.getCurrentDurability(), plateHit.getMaxDurability());
                 } else {
-                    cap.damageFront(durability); // break it
-                    float overflowRatio = (plateDamage - durability) / (float) plateDamage;
-                    float overflowDamage = originalDamage * overflowRatio;
-                    event.setAmount(reducedDamage + overflowDamage);
-                    LOGGER.info("Front plate broke. Overflow damage: {}", overflowDamage);
+                    cap.damageBackPlate(originalDamage / 3f);
+                    LOGGER.info("Back plate absorbed {}% of {} damage. Remaining durability: {}/{}",
+                            Math.round(damageReduction * 100), originalDamage,
+                            plateHit.getCurrentDurability(), plateHit.getMaxDurability());
                 }
-
-            } else if (dot < 0 && cap.hasBackPlate() && cap.getBackDurability() > 0) {
-                int durability = cap.getBackDurability();
-
-                if (durability >= plateDamage) {
-                    cap.damageBack(plateDamage);
-                    event.setAmount(reducedDamage);
-                    LOGGER.info("Back plate absorbed {}. Remaining: {}", plateDamage, cap.getBackDurability());
-                } else {
-                    cap.damageBack(durability); // break it
-                    float overflowRatio = (plateDamage - durability) / (float) plateDamage;
-                    float overflowDamage = originalDamage * overflowRatio;
-                    event.setAmount(reducedDamage + overflowDamage);
-                    LOGGER.info("Back plate broke. Overflow damage: {}", overflowDamage);
+                
+                // Set reduced damage
+                event.setAmount(reducedDamage);
+                
+                // Apply movement penalty based on plate material
+                float speedModifier = plateHit.getSpeedModifier();
+                if (speedModifier != 0) {
+                    // This is just a placeholder - actual speed modification would need to be implemented elsewhere
+                    LOGGER.info("Player speed affected by {}% due to plate material.", speedModifier * 100);
                 }
-
+                
             } else {
-                LOGGER.info("No plate in direction of hit or plate broken. Full damage.");
+                LOGGER.info("No plate in direction of hit or plate broken. Full damage taken.");
             }
         });
     }

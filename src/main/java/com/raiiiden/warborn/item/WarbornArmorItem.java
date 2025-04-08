@@ -383,14 +383,14 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return super.initCapabilities(stack, nbt);
     }
 
-    @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-
-        //TODO: Maybe adjust it so that it plays a little earlier
-        if (stack.getDamageValue() + amount >= stack.getMaxDamage() && 
-            getMaterial() instanceof WarbornMaterials.WarbornArmorMaterial warbornMaterial) {
-            entity.playSound(warbornMaterial.getBreakSound(), 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
-        }
-        return super.damageItem(stack, amount, entity, onBroken);
-    }
+//    @Override
+//    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+//
+//        //TODO: Maybe adjust it so that it plays a little earlier and or if we add durability
+//        if (stack.getDamageValue() + amount >= stack.getMaxDamage() &&
+//            getMaterial() instanceof WarbornMaterials.WarbornArmorMaterial warbornMaterial) {
+//            entity.playSound(warbornMaterial.getBreakSound(), 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
+//        }
+//        return super.damageItem(stack, amount, entity, onBroken);
+//    }
 }
