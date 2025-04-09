@@ -2,6 +2,7 @@ package com.raiiiden.warborn.client.gui;
 
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
+import com.raiiiden.warborn.common.object.plate.Plate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +17,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, value = Dist.CLIENT)
 public class PlateHudOverlay {
 
-    private static final int MAX_DURABILITY = 10;
     private static final ResourceLocation PLATE_ICON = new ResourceLocation(WARBORN.MODID, "textures/gui/plate_icon.png");
     private static final int BAR_COLOR = 0xFF007BFF;
     private static final int BAR_BACKGROUND = 0xFF1A1A2A;
@@ -25,7 +25,7 @@ public class PlateHudOverlay {
     public static void renderOverlay(RenderGuiOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
-        if (player == null) return;
+        if (player == null || player.isCreative()) return; // Skip if creative
 
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
         if (chest.isEmpty()) return;
@@ -46,30 +46,31 @@ public class PlateHudOverlay {
             int spacing = 4;
             int centerX = screenWidth / 2;
 
-            // Dynamic height logic
             int absorption = player.getAbsorptionAmount() > 0 ? 1 : 0;
             int armor = player.getArmorValue() > 0 ? 1 : 0;
             int baseY = screenHeight - 45;
-            int offset = 9 * (absorption + armor); // each bar pushes height up
+            int offset = 9 * (absorption + armor);
             int barY = baseY - offset;
 
             int leftBarX = centerX - barWidth - spacing - 50;
             int rightBarX = centerX + spacing - 50;
 
             if (cap.hasFrontPlate()) {
-                drawPlateBar(gui, leftBarX, barY, cap.getFrontDurability(), BAR_COLOR);
+                Plate plate = cap.getFrontPlate();
+                drawPlateBar(gui, leftBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), BAR_COLOR);
             }
 
             if (cap.hasBackPlate()) {
-                drawPlateBar(gui, rightBarX, barY, cap.getBackDurability(), BAR_COLOR);
+                Plate plate = cap.getBackPlate();
+                drawPlateBar(gui, rightBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), BAR_COLOR);
             }
         });
     }
 
-    private static void drawPlateBar(GuiGraphics gui, int x, int y, int durability, int fillColor) {
+    private static void drawPlateBar(GuiGraphics gui, int x, int y, float currentDurability, float maxDurability, int fillColor) {
         int width = 36;
         int height = 2;
-        int filled = (int) ((durability / (float) MAX_DURABILITY) * width);
+        int filled = (int) ((currentDurability / maxDurability) * width);
 
         gui.fill(x, y, x + width, y + height, BAR_BACKGROUND);  // background
         gui.fill(x, y, x + filled, y + height, fillColor);      // fill
