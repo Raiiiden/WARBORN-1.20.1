@@ -55,7 +55,10 @@ public class ArmorPlateItem extends Item {
 
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
             Plate plate = new Plate(tier, material);
-            plate.damage(plate.getMaxDurability() - currentDurability); // Apply any existing damage
+            float delta = plate.getMaxDurability() - currentDurability;
+            if (delta > 0.01f) {
+                plate.damage(delta);
+            }
 
             if (!cap.hasFrontPlate()) {
                 cap.insertFrontPlate(plate);
