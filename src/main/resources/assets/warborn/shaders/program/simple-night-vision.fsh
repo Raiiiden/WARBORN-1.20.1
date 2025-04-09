@@ -16,7 +16,7 @@ varying vec2 oneTexel;
 varying vec4 outPos;
 uniform vec2 InSize;
 
-float hash(in float n) { return fract(sin(n)*43758.5453123); }
+float hash(in float n) { return fract(sin(n) * 43758.5453123); }
 
 void main() {
     vec2 p = texCoord;

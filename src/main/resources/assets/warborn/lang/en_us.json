@@ -49,7 +49,11 @@
   "item.warborn.tagilla_chestplate": "Tagilla Chestplate",
   "item.warborn.tagilla_leggings": "Tagilla Leggings",
   "item.warborn.tagilla_molot": "Tagilla Hammer",
+
+  "key.categories.warborn": "Warborn",
+
   "menu.warborn.backpack": "Backpack",
+
   "key.warborn.open_backpack": "Open Backpack",
-  "key.warborn.toggle_night_vision": "Toggle Night Vision"
+  "key.warborn.toggle_special_vision": "Toggle Special Vision"
 }

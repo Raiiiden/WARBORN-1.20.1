@@ -1,148 +1,153 @@
-package com.raiiiden.warborn;
+package com.raiiiden.warborn.common.init;
 
-import com.raiiiden.warborn.common.object.BackpackMenu;
+import com.raiiiden.warborn.WARBORN;
+import com.raiiiden.warborn.common.object.plate.MaterialType;
+import com.raiiiden.warborn.common.object.plate.ProtectionTier;
 import com.raiiiden.warborn.item.ArmorPlateItem;
+import com.raiiiden.warborn.item.WarbornArmorItem;
+import com.raiiiden.warborn.item.WarbornMaterials;
 import com.raiiiden.warborn.item.WarbornWeaponItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import com.raiiiden.warborn.item.WarbornArmorItem;
-import net.minecraft.world.inventory.MenuType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ModRegistry {
-    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, "warborn");
-
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
-
-    //backpack menu
-    public static final RegistryObject<MenuType<BackpackMenu>> BACKPACK_MENU =
-            MENU_TYPES.register("backpack", () -> IForgeMenuType.create(BackpackMenu::new));
-
-//Armor Plates
-
-    public static final RegistryObject<Item> ARMOR_PLATE = ITEMS.register("armor_plate",
-            () -> new ArmorPlateItem(new Item.Properties().durability(10)));
-
-    //RU Armor
-    public static final RegistryObject<WarbornArmorItem> RU_HELMET = ITEMS.register("ru_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
-    public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_CHESTPLATE = ITEMS.register("shturmovik_ru_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "shturmovik_ru"));
-    public static final RegistryObject<WarbornArmorItem> SHTURMOVIKV2_CHESTPLATE = ITEMS.register("shturmovikv2_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "shturmovikv2"));
-    public static final RegistryObject<WarbornArmorItem> RAZVETCHIK_CHESTPLATE = ITEMS.register("razvetchik_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "razvetchik"));
-    public static final RegistryObject<WarbornArmorItem> MASHINEGUNNER_RU_CHESTPLATE = ITEMS.register("mashinegunner_ru_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "mashinegunner_ru"));
-    public static final RegistryObject<WarbornArmorItem> RU_SHOULDERPADS = ITEMS.register("ru_shoulderpads",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "mashinegunner_ru_shoulderpads"));
-    public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_CHESTPLATE = ITEMS.register("squad_lider_ru_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "squad_lider_ru"));
-    public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_BACKPACK = ITEMS.register("squad_lider_ru_backpack",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "squad_lider_ru_backpack"));
-    public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_BACKPACK = ITEMS.register("shturmovik_ru_backpack",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "shturmovik_ru_backpack"));
-//nato
-    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_HELMET = ITEMS.register("nato_sqad_leader_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_sqad_leader"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_CHESTPLATE = ITEMS.register("nato_sqad_leader_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_sqad_leader"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_BACKPACK = ITEMS.register("nato_sqad_leader_backpack",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_backpack"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SHOULDERPADS = ITEMS.register("nato_shoulderpads",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads"));
-    public static final RegistryObject<WarbornArmorItem> NATO_UKR_HELMET = ITEMS.register("nato_ukr_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_ukr"));
-    public static final RegistryObject<WarbornArmorItem> NATO_UKR_CHESTPLATE = ITEMS.register("nato_ukr_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_ukr"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK2_CHESTPLATE = ITEMS.register("nato_shturmovik2_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik2"));
-    public static final RegistryObject<WarbornArmorItem> NATO_HELMET = ITEMS.register("nato_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_shturmovik"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK_CHESTPLATE = ITEMS.register("nato_shturmovik_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik"));
-    public static final RegistryObject<WarbornArmorItem> NATO_MG_CHESTPLATE = ITEMS.register("nato_mg_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_mg"));
-//nato woodland
-    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_HELMET_WOODLAND = ITEMS.register("nato_sqad_leader_helmet_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_sqad_leader_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_CHESTPLATE_WOODLAND = ITEMS.register("nato_sqad_leader_chestplate_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_sqad_leader_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_BACKPACK_WOODLAND = ITEMS.register("nato_sqad_leader_backpack_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_backpack_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SHOULDERPADS_WOODLAND = ITEMS.register("nato_shoulderpads_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_UKR_HELMET_WOODLAND = ITEMS.register("nato_ukr_helmet_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_ukr_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_UKR_CHESTPLATE_WOODLAND = ITEMS.register("nato_ukr_chestplate_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_ukr_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK2_CHESTPLATE_WOODLAND = ITEMS.register("nato_shturmovik2_chestplate_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik2_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_HELMET_WOODLAND = ITEMS.register("nato_helmet_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "nato_shturmovik_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK_CHESTPLATE_WOODLAND = ITEMS.register("nato_shturmovik_chestplate_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik_woodland"));
-    public static final RegistryObject<WarbornArmorItem> NATO_MG_CHESTPLATE_WOODLAND = ITEMS.register("nato_mg_chestplate_woodland",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_mg_woodland"));
-//beta7
-    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET = ITEMS.register("beta7_nvg_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET = ITEMS.register("beta7_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE = ITEMS.register("beta7_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS = ITEMS.register("beta7_shoulderpads",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET_SLATE = ITEMS.register("beta7_nvg_helmet_slate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg_slate"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET_SLATE = ITEMS.register("beta7_helmet_slate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_slate"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE_SLATE = ITEMS.register("beta7_chestplate_slate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_slate"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS_SLATE = ITEMS.register("beta7_shoulderpads_slate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_slate"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET_ASH = ITEMS.register("beta7_nvg_helmet_ash",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg_ash"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET_ASH = ITEMS.register("beta7_helmet_ash",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_ash"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE_ASH = ITEMS.register("beta7_chestplate_ash",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_ash"));
-    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS_ASH = ITEMS.register("beta7_shoulderpads_ash",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_ash"));
-
-//killa
-    public static final RegistryObject<Item> KILLA_HELMET = ITEMS.register("killa_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "killa"));
-    public static final RegistryObject<Item> KILLA_CHESTPLATE = ITEMS.register("killa_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "killa"));
-//tagila
-    public static final RegistryObject<Item> TAGILLA_HELMET = ITEMS.register("tagilla_helmet",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties(), "tagilla"));
-    public static final RegistryObject<Item> TAGILLA_CHESTPLATE = ITEMS.register("tagilla_chestplate",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "tagilla"));
-    public static final RegistryObject<Item> TAGILLA_LEGGINGS = ITEMS.register("tagilla_leggings",
-            () -> new WarbornArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS, new Item.Properties(), "tagilla"));
-
-// ---------------
-// Weapons Start Here
-// ---------------
-    public static final RegistryObject<Item> TAGILLA_MOLOT = ITEMS.register("tagilla_molot",
-            () -> new WarbornWeaponItem(new Item.Properties().stacksTo(1).durability(500)));
-
 
     //creative tab
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
 
+    // Armor Plate mapping for getPlateItem method
+    private static final Map<String, RegistryObject<ArmorPlateItem>> PLATE_REGISTRY = new HashMap<>();
+
+    //Armor Plates
+    // Legacy plate - keeping for compatibility
+    public static final RegistryObject<ArmorPlateItem> ARMOR_PLATE = ITEMS.register("armor_plate",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_III, MaterialType.STEEL, new Item.Properties()));
+
+    // New plate types with different materials and protection levels
+    public static final RegistryObject<ArmorPlateItem> CERAMIC_PLATE_LEVEL_IV = ITEMS.register("ceramic_plate_level_iv",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_IV, MaterialType.CERAMIC, new Item.Properties()));
+
+    public static final RegistryObject<ArmorPlateItem> KEVLAR_PLATE_LEVEL_IIIA = ITEMS.register("kevlar_plate_level_iiia",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_IIIA, MaterialType.SOFT_KEVLAR, new Item.Properties()));
+
+    public static final RegistryObject<ArmorPlateItem> COMPOSITE_PLATE_LEVEL_IV = ITEMS.register("composite_plate_level_iv",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_IV, MaterialType.COMPOSITE, new Item.Properties()));
+
+    //RU Armor
+    public static final RegistryObject<WarbornArmorItem> RU_HELMET = ITEMS.register("ru_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
+    public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_CHESTPLATE = ITEMS.register("shturmovik_ru_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "shturmovik_ru"));
+    public static final RegistryObject<WarbornArmorItem> SHTURMOVIKV2_CHESTPLATE = ITEMS.register("shturmovikv2_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "shturmovikv2"));
+    public static final RegistryObject<WarbornArmorItem> RAZVETCHIK_CHESTPLATE = ITEMS.register("razvetchik_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "razvetchik"));
+    public static final RegistryObject<WarbornArmorItem> MASHINEGUNNER_RU_CHESTPLATE = ITEMS.register("mashinegunner_ru_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "mashinegunner_ru"));
+    public static final RegistryObject<WarbornArmorItem> RU_SHOULDERPADS = ITEMS.register("ru_shoulderpads",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "mashinegunner_ru_shoulderpads"));
+    public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_CHESTPLATE = ITEMS.register("squad_lider_ru_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "squad_lider_ru"));
+    public static final RegistryObject<WarbornArmorItem> SQUAD_LIDER_RU_BACKPACK = ITEMS.register("squad_lider_ru_backpack",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "squad_lider_ru_backpack"));
+    public static final RegistryObject<WarbornArmorItem> SHTURMOVIK_RU_BACKPACK = ITEMS.register("shturmovik_ru_backpack",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "shturmovik_ru_backpack"));
+    //nato
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_HELMET = ITEMS.register("nato_sqad_leader_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "nato_sqad_leader"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_CHESTPLATE = ITEMS.register("nato_sqad_leader_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_sqad_leader"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_BACKPACK = ITEMS.register("nato_sqad_leader_backpack",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_backpack"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHOULDERPADS = ITEMS.register("nato_shoulderpads",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads"));
+    public static final RegistryObject<WarbornArmorItem> NATO_UKR_HELMET = ITEMS.register("nato_ukr_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "nato_ukr"));
+    public static final RegistryObject<WarbornArmorItem> NATO_UKR_CHESTPLATE = ITEMS.register("nato_ukr_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_ukr"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK2_CHESTPLATE = ITEMS.register("nato_shturmovik2_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik2"));
+    public static final RegistryObject<WarbornArmorItem> NATO_HELMET = ITEMS.register("nato_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "nato_shturmovik"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK_CHESTPLATE = ITEMS.register("nato_shturmovik_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik"));
+    public static final RegistryObject<WarbornArmorItem> NATO_MG_CHESTPLATE = ITEMS.register("nato_mg_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_mg"));
+    //nato woodland
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_HELMET_WOODLAND = ITEMS.register("nato_sqad_leader_helmet_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "nato_sqad_leader_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_CHESTPLATE_WOODLAND = ITEMS.register("nato_sqad_leader_chestplate_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_sqad_leader_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SQAD_LEADER_BACKPACK_WOODLAND = ITEMS.register("nato_sqad_leader_backpack_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_backpack_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHOULDERPADS_WOODLAND = ITEMS.register("nato_shoulderpads_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_UKR_HELMET_WOODLAND = ITEMS.register("nato_ukr_helmet_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "nato_ukr_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_UKR_CHESTPLATE_WOODLAND = ITEMS.register("nato_ukr_chestplate_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_ukr_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK2_CHESTPLATE_WOODLAND = ITEMS.register("nato_shturmovik2_chestplate_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik2_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_HELMET_WOODLAND = ITEMS.register("nato_helmet_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "nato_shturmovik_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_SHTURMOVIK_CHESTPLATE_WOODLAND = ITEMS.register("nato_shturmovik_chestplate_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik_woodland"));
+    public static final RegistryObject<WarbornArmorItem> NATO_MG_CHESTPLATE_WOODLAND = ITEMS.register("nato_mg_chestplate_woodland",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_mg_woodland"));
+    //beta7
+    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET = ITEMS.register("beta7_nvg_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET = ITEMS.register("beta7_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE = ITEMS.register("beta7_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS = ITEMS.register("beta7_shoulderpads",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET_SLATE = ITEMS.register("beta7_nvg_helmet_slate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET_SLATE = ITEMS.register("beta7_helmet_slate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE_SLATE = ITEMS.register("beta7_chestplate_slate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS_SLATE = ITEMS.register("beta7_shoulderpads_slate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET_ASH = ITEMS.register("beta7_nvg_helmet_ash",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg_ash"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_HELMET_ASH = ITEMS.register("beta7_helmet_ash",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_ash"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE_ASH = ITEMS.register("beta7_chestplate_ash",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_ash"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS_ASH = ITEMS.register("beta7_shoulderpads_ash",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_ash"));
+
+    //killa
+    public static final RegistryObject<Item> KILLA_HELMET = ITEMS.register("killa_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "killa"));
+    public static final RegistryObject<Item> KILLA_CHESTPLATE = ITEMS.register("killa_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "killa"));
+    //tagila
+    public static final RegistryObject<Item> TAGILLA_HELMET = ITEMS.register("tagilla_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "tagilla"));
+    public static final RegistryObject<Item> TAGILLA_CHESTPLATE = ITEMS.register("tagilla_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "tagilla"));
+    public static final RegistryObject<Item> TAGILLA_LEGGINGS = ITEMS.register("tagilla_leggings",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties(), "tagilla"));
+
+    // ---------------
+    // Weapons Start Here
+    // ---------------
+    public static final RegistryObject<Item> TAGILLA_MOLOT = ITEMS.register("tagilla_molot",
+            () -> new WarbornWeaponItem(new Item.Properties().stacksTo(1).durability(500)));
     public static final RegistryObject<CreativeModeTab> WARBORN_TAB = CREATIVE_MODE_TABS.register("warborn_tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.warborn_tab"))
@@ -217,7 +222,33 @@ public class ModRegistry {
                         // ----------------
 
                         entries.accept(ARMOR_PLATE.get());
+                        entries.accept(CERAMIC_PLATE_LEVEL_IV.get());
+                        entries.accept(KEVLAR_PLATE_LEVEL_IIIA.get());
+                        entries.accept(COMPOSITE_PLATE_LEVEL_IV.get());
                     })
                     .build()
     );
+
+    /**
+     * Gets a plate item for the given tier and material type.
+     * If no specific match is found, returns the closest match or the default plate.
+     */
+    public static Item getPlateItem(ProtectionTier tier, MaterialType material) {
+        // Lazy initialization of the plate registry mapping
+        if (PLATE_REGISTRY.isEmpty()) {
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_III.name() + "_" + MaterialType.STEEL.name(), ARMOR_PLATE);
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.CERAMIC.name(), CERAMIC_PLATE_LEVEL_IV);
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_IIIA.name() + "_" + MaterialType.SOFT_KEVLAR.name(), KEVLAR_PLATE_LEVEL_IIIA);
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.COMPOSITE.name(), COMPOSITE_PLATE_LEVEL_IV);
+        }
+
+        // Look for exact match
+        String key = tier.name() + "_" + material.name();
+        if (PLATE_REGISTRY.containsKey(key)) {
+            return PLATE_REGISTRY.get(key).get();
+        }
+
+        // If no exact match, return default plate
+        return ARMOR_PLATE.get();
+    }
 }

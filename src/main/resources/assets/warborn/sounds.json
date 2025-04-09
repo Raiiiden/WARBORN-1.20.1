@@ -1,0 +1,22 @@
+{
+  "item.armor.warborn_equip": {
+    "subtitle": "warborn.subtitle.armor_equip",
+    "sounds": [
+      {
+        "name": "warborn:item/armor/warborn_equip",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "item.armor.warborn_break": {
+    "subtitle": "warborn.subtitle.armor_break",
+    "sounds": [
+      {
+        "name": "warborn:item/armor/warborn_break",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  }
+}

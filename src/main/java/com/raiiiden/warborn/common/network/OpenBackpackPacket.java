@@ -32,10 +32,6 @@ public class OpenBackpackPacket {
         this.backpackItem = buf.readItem();
     }
 
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeItem(this.backpackItem);
-    }
-
     public static void handle(OpenBackpackPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
@@ -100,5 +96,9 @@ public class OpenBackpackPacket {
         }
 
         return ItemStack.EMPTY;
+    }
+
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeItem(this.backpackItem);
     }
 }

@@ -4,10 +4,18 @@
   ],
   "passes": [
     {
-      "name": "warborn:simple-night-vision",
+      "name": "warborn:thermal-vision",
       "intarget": "minecraft:main",
       "outtarget": "swap",
-      "auxtargets": [],
+      "auxtargets": [
+        {
+          "name": "NoiseSampler",
+          "id": "warborn:noise",
+          "width": 512,
+          "height": 512,
+          "bilinear": false
+        }
+      ],
       "uniforms": []
     },
     {

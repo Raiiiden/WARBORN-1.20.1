@@ -49,7 +49,7 @@ public class PlateHudOverlay {
             // Dynamic height logic
             int absorption = player.getAbsorptionAmount() > 0 ? 1 : 0;
             int armor = player.getArmorValue() > 0 ? 1 : 0;
-            int baseY = screenHeight - 49;
+            int baseY = screenHeight - 45;
             int offset = 9 * (absorption + armor); // each bar pushes height up
             int barY = baseY - offset;
 

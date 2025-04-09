@@ -51,16 +51,12 @@ public class ClientKeyEvents {
             });
         }
 
-        // TOGGLE NIGHT VISION (shader-based)
         if (ModKeybindings.TOGGLE_SPECIAL_VISION.consumeClick()) {
-            // Use the helmet vision handler which correctly manages vision states based on helmet capabilities
             if (HelmetVisionHandler.toggleVision(player)) {
-                // Vision was toggled successfully
                 ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
                 String activeVision = HelmetVisionHandler.getActiveVisionType(helmet);
-                
+
                 if (!activeVision.isEmpty()) {
-                    // Vision was turned on
                     String message;
                     ChatFormatting color = switch (activeVision) {
                         case WarbornArmorItem.TAG_NVG -> {
@@ -87,11 +83,9 @@ public class ClientKeyEvents {
 
                     player.displayClientMessage(Component.literal(message + " Activated").withStyle(color), true);
                 } else {
-                    // Vision was turned off
                     player.displayClientMessage(Component.literal("Vision Mode Disabled").withStyle(ChatFormatting.YELLOW), true);
                 }
             } else {
-                // Failed to toggle vision
                 player.displayClientMessage(Component.literal("No appropriate helmet equipped").withStyle(ChatFormatting.RED), true);
             }
         }
@@ -111,21 +105,17 @@ public class ClientKeyEvents {
         Player player = mc.player;
         ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
 
-        // Remove night vision if the helmet is removed or swapped
         if (player.hasEffect(MobEffects.NIGHT_VISION) && !HelmetVisionHandler.isAllowedHelmet(helmet)) {
             player.removeEffect(MobEffects.NIGHT_VISION);
         }
-        
-        // Remove shader effects if the helmet is removed or swapped
+
         if (!HelmetVisionHandler.isAllowedHelmet(helmet)) {
             ShaderRegistry registry = ShaderRegistry.getInstance();
-            
-            // List of all vision shader IDs
+
             final String[] VISION_SHADERS = {
-                "nvg", "snvg", "dvg", "dnvg", "tvg"
+                    "nvg", "snvg", "dvg", "dnvg", "tvg"
             };
-            
-            // Check if any shader is active and disable it
+
             boolean wasActive = false;
             for (String shaderId : VISION_SHADERS) {
                 if (registry.isShaderActive(shaderId) || registry.isShaderForceEnabled(shaderId)) {
@@ -133,12 +123,10 @@ public class ClientKeyEvents {
                     wasActive = true;
                 }
             }
-            
-            // Inform the player if a shader was active and got disabled
+
             if (wasActive) {
                 player.displayClientMessage(Component.literal("Vision mode disabled - helmet removed").withStyle(ChatFormatting.YELLOW), true);
             }
         }
     }
 }
-

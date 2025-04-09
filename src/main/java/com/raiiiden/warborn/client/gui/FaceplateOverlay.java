@@ -21,10 +21,10 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, value = Dist.CLIENT)
 public class FaceplateOverlay {
-    private static final ResourceLocation FACEPLATE_TEXTURE = 
+    private static final ResourceLocation FACEPLATE_TEXTURE =
             new ResourceLocation(WARBORN.MODID, "textures/overlay/faceplate_overlay2.png");
 
-    private static final TagKey<Item> FACEPLATE_TAG = 
+    private static final TagKey<Item> FACEPLATE_TAG =
             TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "has_faceplate"));
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -36,13 +36,13 @@ public class FaceplateOverlay {
         if (!event.getOverlay().id().equals(VanillaGuiOverlay.HELMET.id())) {
             return;
         }
-        
+
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.player == null || !mc.options.getCameraType().isFirstPerson()) {
             return;
         }
-        
+
         Player player = mc.player;
 
         ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
