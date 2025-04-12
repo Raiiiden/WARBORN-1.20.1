@@ -102,9 +102,8 @@ public class ArmorPlateItem extends Item {
         tooltip.add(Component.literal("Durability: " + currentDurability + " / " + material.getBaseDurability())
                 .withStyle(ChatFormatting.RED));
 
-        // Add speed impact
         float speedMod = material.getSpeedModifier();
-        String speedText = speedMod > 0 ? "+" + (speedMod * 100) + "%" : (speedMod * 100) + "%";
+        String speedText = String.format("%+.1f%%", speedMod * 100); // e.g. +5.0% or -10.0%
         ChatFormatting speedColor = speedMod >= 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
         tooltip.add(Component.literal("Movement: " + speedText)
                 .withStyle(speedColor));

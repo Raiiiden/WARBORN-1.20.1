@@ -4,6 +4,7 @@ import com.raiiiden.warborn.common.config.WarbornCommonConfig;
 import com.raiiiden.warborn.common.init.MenuTypeInit;
 import com.raiiiden.warborn.common.init.ModRegistry;
 import com.raiiiden.warborn.common.network.ModNetworking;
+import com.raiiiden.warborn.common.init.ModSoundEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -24,6 +25,7 @@ public class WARBORN {
 
     ModRegistry.ITEMS.register(modEventBus);
     ModRegistry.CREATIVE_MODE_TABS.register(modEventBus);
+    ModSoundEvents.SOUND_EVENTS.register(modEventBus);
 
     modEventBus.addListener(this::setup);
     MenuTypeInit.register(modEventBus);

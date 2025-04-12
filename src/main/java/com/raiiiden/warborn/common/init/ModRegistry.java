@@ -111,6 +111,8 @@ public class ModRegistry {
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7"));
     public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE = ITEMS.register("beta7_chestplate",
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_LEGGINGS = ITEMS.register("beta7_leggings",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7"));
     public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS = ITEMS.register("beta7_shoulderpads",
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
     public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET_SLATE = ITEMS.register("beta7_nvg_helmet_slate",
@@ -119,6 +121,8 @@ public class ModRegistry {
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_slate"));
     public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE_SLATE = ITEMS.register("beta7_chestplate_slate",
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_slate"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_LEGGINGS_SLATE = ITEMS.register("beta7_leggings_slate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7_slate"));
     public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS_SLATE = ITEMS.register("beta7_shoulderpads_slate",
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_slate"));
     public static final RegistryObject<WarbornArmorItem> BETA7_NVG_HELMET_ASH = ITEMS.register("beta7_nvg_helmet_ash",
@@ -127,6 +131,8 @@ public class ModRegistry {
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "beta7_ash"));
     public static final RegistryObject<WarbornArmorItem> BETA7_CHESTPLATE_ASH = ITEMS.register("beta7_chestplate_ash",
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_ash"));
+    public static final RegistryObject<WarbornArmorItem> BETA7_LEGGINGS_ASH = ITEMS.register("beta7_leggings_ash",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7_ash"));
     public static final RegistryObject<WarbornArmorItem> BETA7_SHOULDERPADS_ASH = ITEMS.register("beta7_shoulderpads_ash",
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_ash"));
 
@@ -192,14 +198,17 @@ public class ModRegistry {
                         entries.accept(BETA7_NVG_HELMET.get());
                         entries.accept(BETA7_HELMET.get());
                         entries.accept(BETA7_CHESTPLATE.get());
+                        entries.accept(BETA7_LEGGINGS.get());
                         entries.accept(BETA7_SHOULDERPADS.get());
                         entries.accept(BETA7_NVG_HELMET_SLATE.get());
                         entries.accept(BETA7_HELMET_SLATE.get());
                         entries.accept(BETA7_CHESTPLATE_SLATE.get());
+                        entries.accept(BETA7_LEGGINGS_SLATE.get());
                         entries.accept(BETA7_SHOULDERPADS_SLATE.get());
                         entries.accept(BETA7_NVG_HELMET_ASH.get());
                         entries.accept(BETA7_HELMET_ASH.get());
                         entries.accept(BETA7_CHESTPLATE_ASH.get());
+                        entries.accept(BETA7_LEGGINGS_ASH.get());
                         entries.accept(BETA7_SHOULDERPADS_ASH.get());
 
                         //killa
