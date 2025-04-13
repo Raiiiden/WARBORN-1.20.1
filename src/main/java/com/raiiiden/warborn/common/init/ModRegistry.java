@@ -148,7 +148,15 @@ public class ModRegistry {
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "tagilla"));
     public static final RegistryObject<Item> TAGILLA_LEGGINGS = ITEMS.register("tagilla_leggings",
             () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties(), "tagilla"));
-
+    //insurgency commander
+    public static final RegistryObject<Item> INSURGENCY_COMMANDER_HELMET = ITEMS.register("insurgency_commander_helmet",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.HELMET, new Item.Properties(), "insurgency_commander"));
+    public static final RegistryObject<Item> INSURGENCY_COMMANDER_CHESTPLATE = ITEMS.register("insurgency_commander_chestplate",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties(), "insurgency_commander"));
+    public static final RegistryObject<Item> INSURGENCY_COMMANDER_SHOULDERPADS = ITEMS.register("insurgency_commander_shoulderpads",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "insurgency_commander_shoulderpads"));
+    public static final RegistryObject<Item> INSURGENCY_COMMANDER_LEGGINGS = ITEMS.register("insurgency_commander_leggings",
+            () -> new WarbornArmorItem(WarbornMaterials.WARBORN_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties(), "insurgency_commander"));
     // ---------------
     // Weapons Start Here
     // ---------------
@@ -219,6 +227,12 @@ public class ModRegistry {
                         entries.accept(TAGILLA_HELMET.get());
                         entries.accept(TAGILLA_CHESTPLATE.get());
                         entries.accept(TAGILLA_LEGGINGS.get());
+
+                        //insurgency commander
+                        entries.accept(INSURGENCY_COMMANDER_HELMET.get());
+                        entries.accept(INSURGENCY_COMMANDER_CHESTPLATE.get());
+                        entries.accept(INSURGENCY_COMMANDER_SHOULDERPADS.get());
+                        entries.accept(INSURGENCY_COMMANDER_LEGGINGS.get());
 
                         // ---------------
                         // Weapons Start Here
