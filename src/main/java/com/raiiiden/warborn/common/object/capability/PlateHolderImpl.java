@@ -10,97 +10,82 @@ import org.apache.logging.log4j.Logger;
 
 public class PlateHolderImpl implements PlateHolderCapability {
     private static final Logger LOGGER = LogManager.getLogger();
-
     private final ItemStack chestplate;
-    private Plate frontPlate;
-    private Plate backPlate;
 
     public PlateHolderImpl(ItemStack chestplate) {
         this.chestplate = chestplate;
-        loadPlatesFromNBT();
     }
 
-    private void loadPlatesFromNBT() {
+    private CompoundTag getPlateData() {
         CompoundTag tag = chestplate.getOrCreateTag();
-        if (!tag.contains("PlateData")) return;
-
-        CompoundTag plateData = tag.getCompound("PlateData");
-
-        // Load front plate
-        if (plateData.contains("FrontPlate")) {
-            frontPlate = new Plate(plateData.getCompound("FrontPlate"));
+        if (!tag.contains("PlateData")) {
+            tag.put("PlateData", new CompoundTag());
         }
-        // Legacy support
-        else if (plateData.contains("FrontDurability") && plateData.getInt("FrontDurability") > 0) {
-            frontPlate = new Plate(ProtectionTier.LEVEL_III, MaterialType.STEEL);
-            frontPlate.damage(frontPlate.getMaxDurability() - plateData.getInt("FrontDurability"));
-        }
-
-        // Load back plate
-        if (plateData.contains("BackPlate")) {
-            backPlate = new Plate(plateData.getCompound("BackPlate"));
-        }
-        // Legacy support
-        else if (plateData.contains("BackDurability") && plateData.getInt("BackDurability") > 0) {
-            backPlate = new Plate(ProtectionTier.LEVEL_III, MaterialType.STEEL);
-            backPlate.damage(backPlate.getMaxDurability() - plateData.getInt("BackDurability"));
-        }
+        return tag.getCompound("PlateData");
     }
 
-    private void savePlatesToNBT() {
-        CompoundTag tag = chestplate.getOrCreateTag();
-        CompoundTag plateData = new CompoundTag();
+    private void setPlateData(CompoundTag plateData) {
+        chestplate.getOrCreateTag().put("PlateData", plateData);
+    }
 
-        if (frontPlate != null) {
-            plateData.put("FrontPlate", frontPlate.save());
-            // For legacy support
-            plateData.putInt("FrontDurability", (int) frontPlate.getCurrentDurability());
-        } else {
-            plateData.putInt("FrontDurability", 0);
+    private Plate readPlate(String key) {
+        CompoundTag plateData = getPlateData();
+        if (plateData.contains(key)) {
+            return new Plate(plateData.getCompound(key));
         }
+        return null;
+    }
 
-        if (backPlate != null) {
-            plateData.put("BackPlate", backPlate.save());
-            // For legacy support
-            plateData.putInt("BackDurability", (int) backPlate.getCurrentDurability());
+    private void writePlate(String key, Plate plate) {
+        CompoundTag plateData = getPlateData();
+        if (plate != null) {
+            plateData.put(key, plate.save());
         } else {
-            plateData.putInt("BackDurability", 0);
+            plateData.remove(key);
         }
+        setPlateData(plateData);
+    }
 
-        tag.put("PlateData", plateData);
+    private void damagePlate(String key, float amount) {
+        Plate plate = readPlate(key);
+        if (plate != null && !plate.isBroken()) {
+            plate.damage(amount);
+            writePlate(key, plate);
+            LOGGER.info("Damaged {}. Remaining: {}/{}", key, plate.getCurrentDurability(), plate.getMaxDurability());
+        }
     }
 
     @Override
     public boolean hasFrontPlate() {
-        return frontPlate != null && !frontPlate.isBroken();
+        Plate plate = readPlate("FrontPlate");
+        return plate != null && !plate.isBroken();
     }
 
     @Override
     public boolean hasBackPlate() {
-        return backPlate != null && !backPlate.isBroken();
+        Plate plate = readPlate("BackPlate");
+        return plate != null && !plate.isBroken();
     }
 
     @Override
     public Plate getFrontPlate() {
-        return frontPlate;
+        return readPlate("FrontPlate");
     }
 
     @Override
     public Plate getBackPlate() {
-        return backPlate;
+        return readPlate("BackPlate");
     }
 
     @Override
     public void insertFrontPlate(Plate plate) {
-        this.frontPlate = plate;
-        savePlatesToNBT();
+        writePlate("FrontPlate", plate);
         LOGGER.info("Inserted front plate: {} {}", plate.getTier(), plate.getMaterial());
     }
 
     @Override
     public void insertBackPlate(Plate plate) {
-        this.backPlate = plate;
-        savePlatesToNBT();
+        writePlate("BackPlate", plate);
         LOGGER.info("Inserted back plate: {} {}", plate.getTier(), plate.getMaterial());
     }
 
@@ -116,35 +101,23 @@ public class PlateHolderImpl implements PlateHolderCapability {
 
     @Override
     public void damageFrontPlate(float damageAmount) {
-        if (!hasFrontPlate()) return;
-
-        frontPlate.damage(damageAmount);
-        savePlatesToNBT();
-        LOGGER.info("Damaged front plate. Remaining: {}/{}",
-                frontPlate.getCurrentDurability(), frontPlate.getMaxDurability());
+        damagePlate("FrontPlate", damageAmount);
     }
 
     @Override
     public void damageBackPlate(float damageAmount) {
-        if (!hasBackPlate()) return;
-
-        backPlate.damage(damageAmount);
-        savePlatesToNBT();
-        LOGGER.info("Damaged back plate. Remaining: {}/{}",
-                backPlate.getCurrentDurability(), backPlate.getMaxDurability());
+        damagePlate("BackPlate", damageAmount);
     }
 
     @Override
     public void removeFrontPlate() {
-        frontPlate = null;
-        savePlatesToNBT();
+        writePlate("FrontPlate", null);
         LOGGER.info("Front plate removed.");
     }
 
     @Override
     public void removeBackPlate() {
-        backPlate = null;
-        savePlatesToNBT();
+        writePlate("BackPlate", null);
         LOGGER.info("Back plate removed.");
     }
 }

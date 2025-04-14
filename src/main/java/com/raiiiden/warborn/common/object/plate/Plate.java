@@ -75,8 +75,7 @@ public class Plate {
     public void damage(float damageAmount) {
         if (isBroken()) return;
 
-        float newDurability = material.calculateRemainingDurability(damageAmount, maxDurability);
-        this.currentDurability = Math.max(0, newDurability);
+        this.currentDurability = Math.max(0, material.calculateRemainingDurability(currentDurability, damageAmount));
     }
 
     public float getSpeedModifier() {
