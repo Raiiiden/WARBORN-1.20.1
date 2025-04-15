@@ -105,10 +105,6 @@ public class ClientKeyEvents {
         Player player = mc.player;
         ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
 
-        if (player.hasEffect(MobEffects.NIGHT_VISION) && !HelmetVisionHandler.isAllowedHelmet(helmet)) {
-            player.removeEffect(MobEffects.NIGHT_VISION);
-        }
-
         if (!HelmetVisionHandler.isAllowedHelmet(helmet)) {
             ShaderRegistry registry = ShaderRegistry.getInstance();
 
