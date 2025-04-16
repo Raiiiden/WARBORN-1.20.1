@@ -2,7 +2,7 @@ package com.raiiiden.warborn.client.renderer.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
-import com.raiiiden.warborn.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

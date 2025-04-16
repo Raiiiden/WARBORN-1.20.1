@@ -1,19 +1,21 @@
-package com.raiiiden.warborn.item;
+package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
-import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.object.capability.BackpackCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
+import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
+import com.raiiiden.warborn.common.object.plate.Plate;
+import com.raiiiden.warborn.common.util.Color;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -32,6 +34,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -46,6 +49,8 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.ChatFormatting;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +64,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public static final String TAG_SIMPLE_NVG = "simple_nvg";
     public static final String TAG_THERMAL = "thermal";
     public static final String TAG_DIGITAL = "digital";
+    public static final TagKey<Item> PLATE_COMPATIBLE = ItemTags.create(new ResourceLocation("warborn", "plate_compatible"));
     private static final int MAX_STACK_SIZE = 100;
     private static final int MAX_SLOTS = 4;
     private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
@@ -179,6 +185,14 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         CompoundTag tag = stack.getOrCreateTag();
         tag.putBoolean(TAG_GOGGLE, true); // Base tag
         tag.putBoolean(visionTag, true);  // Specific vision type
+    }
+
+
+    public static boolean isPlateCompatible(ItemStack stack) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
+        if (((ArmorItem) stack.getItem()).getType() != Type.CHESTPLATE) return false;
+        
+        return stack.is(PLATE_COMPATIBLE);
     }
 
     @Override
@@ -381,6 +395,59 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
             return new ChestplateBundleCapabilityProvider(stack);
         }
         return super.initCapabilities(stack, nbt);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag flag) {
+        super.appendHoverText(stack, level, components, flag);
+        
+        if (isPlateCompatible(stack)) {
+            components.add(Component.literal("Plate Compatible").withStyle(style -> style.withColor(0xFFAA00)));
+            
+            stack.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
+                float totalSpeedMod = 0.0F;
+                int plateCount = 0;
+
+                if (cap.hasFrontPlate()) {
+                    Plate frontPlate = cap.getFrontPlate();
+                    if (frontPlate != null && !frontPlate.isBroken()) {
+                        Component frontInfo = Component.empty()
+                            .append(Component.literal("Front: ").withStyle(ChatFormatting.GRAY))
+                            .append(frontPlate.getMaterial().getDisplayName())
+                            .append(Component.literal(" " + frontPlate.getTier().getDisplayName().getString()));
+                        components.add(frontInfo);
+                        
+                        totalSpeedMod += frontPlate.getSpeedModifier();
+                        plateCount++;
+                    }
+                }
+                
+                if (cap.hasBackPlate()) {
+                    Plate backPlate = cap.getBackPlate();
+                    if (backPlate != null && !backPlate.isBroken()) {
+                        Component backInfo = Component.empty()
+                            .append(Component.literal("Back: ").withStyle(ChatFormatting.GRAY))
+                            .append(backPlate.getMaterial().getDisplayName())
+                            .append(Component.literal(" " + backPlate.getTier().getDisplayName().getString()));
+                        components.add(backInfo);
+                        
+                        totalSpeedMod += backPlate.getSpeedModifier();
+                        plateCount++;
+                    }
+                }
+                
+                if (plateCount > 0) {
+                    float averageSpeedMod = totalSpeedMod / plateCount;
+                    String speedText = String.format("%+.1f%%", averageSpeedMod * 100);
+                    ChatFormatting speedColor = averageSpeedMod >= 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
+                    
+                    Component speedInfo = Component.empty()
+                        .append(Component.literal("Speed Effect: ").withStyle(ChatFormatting.GRAY))
+                        .append(Component.literal(speedText).withStyle(speedColor));
+                    components.add(speedInfo);
+                }
+            });
+        }
     }
 
 //    @Override

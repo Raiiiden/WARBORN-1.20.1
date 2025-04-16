@@ -1,8 +1,8 @@
 package com.raiiiden.warborn.mixin;
 
+import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
 import com.raiiiden.warborn.common.util.MutableInt;
-import com.raiiiden.warborn.item.WarbornArmorItem;
 import com.tacz.guns.api.DefaultAssets;
 import com.tacz.guns.api.item.IAmmo;
 import com.tacz.guns.api.item.IAmmoBox;
@@ -48,7 +48,8 @@ public class ChestplateGunMixin {
         if (!(shooter instanceof Player player)) return;
 
         ItemStack chestplate = player.getInventory().getArmor(2);
-        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !WarbornArmorItem.isChestplateItem(chestplate)) return;
+        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !WarbornArmorItem.isChestplateItem(chestplate))
+            return;
 
         boolean hasAmmo = chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
             for (int i = 0; i < handler.getSlots(); i++) {

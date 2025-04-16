@@ -5,7 +5,7 @@ import com.raiiiden.warborn.client.screen.RemovePlateScreen;
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
-import com.raiiiden.warborn.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;

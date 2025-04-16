@@ -3,7 +3,7 @@ package com.raiiiden.warborn.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.raiiiden.warborn.client.model.WarbornPlateModel;
-import com.raiiiden.warborn.item.WarbornPlateItem;
+import com.raiiiden.warborn.common.item.WarbornPlateItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;

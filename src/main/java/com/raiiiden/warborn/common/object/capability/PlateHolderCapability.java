@@ -3,6 +3,7 @@ package com.raiiiden.warborn.common.object.capability;
 import com.raiiiden.warborn.common.object.plate.MaterialType;
 import com.raiiiden.warborn.common.object.plate.Plate;
 import com.raiiiden.warborn.common.object.plate.ProtectionTier;
+import net.minecraftforge.registries.RegistryObject;
 
 public interface PlateHolderCapability {
     boolean hasFrontPlate();
@@ -29,28 +30,11 @@ public interface PlateHolderCapability {
 
     void removeBackPlate();
 
-    // Legacy methods for backward compatibility
-    default int getFrontDurability() {
-        return hasFrontPlate() ? (int)getFrontPlate().getCurrentDurability() : 0;
+    default void insertFrontPlate(RegistryObject<ProtectionTier> tierRef, RegistryObject<MaterialType> materialRef) {
+        insertFrontPlate(tierRef.get(), materialRef.get());
     }
 
-    default int getBackDurability() {
-        return hasBackPlate() ? (int)getBackPlate().getCurrentDurability() : 0;
-    }
-
-    default void insertFrontPlateWithDurability(int durability) {
-        insertFrontPlate(ProtectionTier.LEVEL_III, MaterialType.STEEL);
-    }
-
-    default void insertBackPlateWithDurability(int durability) {
-        insertBackPlate(ProtectionTier.LEVEL_III, MaterialType.STEEL);
-    }
-
-    default void damageFront(int amount) {
-        damageFrontPlate(amount);
-    }
-
-    default void damageBack(int amount) {
-        damageBackPlate(amount);
+    default void insertBackPlate(RegistryObject<ProtectionTier> tierRef, RegistryObject<MaterialType> materialRef) {
+        insertBackPlate(tierRef.get(), materialRef.get());
     }
 }

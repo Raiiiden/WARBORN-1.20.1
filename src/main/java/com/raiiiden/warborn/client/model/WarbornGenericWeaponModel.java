@@ -1,7 +1,7 @@
 package com.raiiiden.warborn.client.model;
 
 import com.raiiiden.warborn.WARBORN;
-import com.raiiiden.warborn.item.WarbornWeaponItem;
+import com.raiiiden.warborn.common.item.WarbornWeaponItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.model.GeoModel;
