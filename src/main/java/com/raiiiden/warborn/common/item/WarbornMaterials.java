@@ -1,10 +1,9 @@
-package com.raiiiden.warborn.item;
+package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.common.init.ModSoundEvents;
 import net.minecraft.Util;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -32,6 +31,23 @@ public class WarbornMaterials {
             () -> Ingredient.of(Items.NETHERITE_INGOT)
     );
     //TODO Add more armor materials
+
+    public static final WarbornArmorMaterial WARBORN_PLATE = new WarbornArmorMaterial(
+            "warborn_plate",
+            40,
+    Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+        map.put(ArmorItem.Type.LEGGINGS, 3);
+        map.put(ArmorItem.Type.CHESTPLATE, 6);
+        map.put(ArmorItem.Type.HELMET, 3);
+        map.put(ArmorItem.Type.BOOTS, 3);
+    }),
+            15,
+            ModSoundEvents.WARBORN_ARMOR_EQUIP,
+            ModSoundEvents.WARBORN_ARMOR_BREAK,
+            3.0F,
+            0.1F,
+            () -> Ingredient.of(Items.NETHERITE_INGOT)
+    );
 
     public static class WarbornArmorMaterial implements ArmorMaterial {
         private static final EnumMap<ArmorItem.Type, Integer> HEALTH_FUNCTION_FOR_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {

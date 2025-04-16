@@ -1,5 +1,6 @@
 {
   "itemGroup.warborn_tab": "Warborn",
+
   "item.warborn.ru_helmet": "RU Helmet",
   "item.warborn.shturmovik_ru_chestplate": "Shturmovik RU Chestplate",
   "item.warborn.shturmovikv2_chestplate": "Shturmovik V2 Chestplate",
@@ -31,29 +32,47 @@
   "item.warborn.nato_helmet_woodland": "NATO Helmet (Woodland)",
   "item.warborn.nato_shturmovik_chestplate_woodland": "NATO Shturmovik Chestplate (Woodland)",
   "item.warborn.nato_mg_chestplate_woodland": "NATO Machine Gunner Chestplate (Woodland)",
+
   "item.warborn.beta7_nvg_helmet": "Beta 7 NVG Helmet",
   "item.warborn.beta7_helmet": "Beta 7 Helmet",
   "item.warborn.beta7_chestplate": "Beta 7 Chestplate",
   "item.warborn.beta7_shoulderpads": "Beta 7 Shoulderpads",
+  "item.warborn.beta7_leggings": "Beta 7 Leggings",
+
   "item.warborn.beta7_nvg_helmet_slate": "Beta 7 NVG Helmet (Slate)",
   "item.warborn.beta7_helmet_slate": "Beta 7 Helmet (Slate)",
   "item.warborn.beta7_chestplate_slate": "Beta 7 Chestplate (Slate)",
   "item.warborn.beta7_shoulderpads_slate": "Beta 7 Shoulderpads (Slate)",
+  "item.warborn.beta7_leggings_slate": "Beta 7 Leggings (Slate)",
+
   "item.warborn.beta7_nvg_helmet_ash": "Beta 7 NVG Helmet (Ash)",
   "item.warborn.beta7_helmet_ash": "Beta 7 Helmet (Ash)",
   "item.warborn.beta7_chestplate_ash": "Beta 7 Chestplate (Ash)",
   "item.warborn.beta7_shoulderpads_ash": "Beta 7 Shoulderpads (Ash)",
+  "item.warborn.beta7_leggings_ash": "Beta 7 Leggings (Ash)",
+
   "item.warborn.killa_helmet": "Killa Helmet",
   "item.warborn.killa_chestplate": "Killa Chestplate",
+
   "item.warborn.tagilla_helmet": "Tagilla Helmet",
   "item.warborn.tagilla_chestplate": "Tagilla Chestplate",
   "item.warborn.tagilla_leggings": "Tagilla Leggings",
+
+  "item.warborn.insurgency_commander_helmet": "Insurgency Commander Helmet",
+  "item.warborn.insurgency_commander_chestplate": "Insurgency Commander Chestplate",
+  "item.warborn.insurgency_commander_shoulderpads": "Insurgency Commander Shoulderpads",
+  "item.warborn.insurgency_commander_leggings": "Insurgency Commander leggings",
+
   "item.warborn.tagilla_molot": "Tagilla Hammer",
 
+  "item.warborn.armor_plate": "Steel Plate (Level III)",
+  "item.warborn.ceramic_plate_level_iv": "Ceramic Plate (Level IV)",
+  "item.warborn.kevlar_plate_level_iiia": "Kevlar Plate (Level IIIA)",
+  "item.warborn.composite_plate_level_iv": "Composite Plate (Level IV)",
+
   "key.categories.warborn": "Warborn",
-
-  "menu.warborn.backpack": "Backpack",
-
   "key.warborn.open_backpack": "Open Backpack",
-  "key.warborn.toggle_special_vision": "Toggle Special Vision"
+  "key.warborn.toggle_special_vision": "Toggle Special Vision",
+
+  "menu.warborn.backpack": "Backpack"
 }

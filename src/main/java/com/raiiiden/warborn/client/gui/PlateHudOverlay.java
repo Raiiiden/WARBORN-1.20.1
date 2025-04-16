@@ -3,6 +3,7 @@ package com.raiiiden.warborn.client.gui;
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import com.raiiiden.warborn.common.object.plate.Plate;
+import com.raiiiden.warborn.common.util.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -14,18 +15,18 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+//TODO MAKE THIS SEXY
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, value = Dist.CLIENT)
 public class PlateHudOverlay {
 
     private static final ResourceLocation PLATE_ICON = new ResourceLocation(WARBORN.MODID, "textures/gui/plate_icon.png");
-    private static final int BAR_COLOR = 0xFF007BFF;
-    private static final int BAR_BACKGROUND = 0xFF1A1A2A;
+    private static final Color BAR_BACKGROUND = new Color(26, 26, 42);
 
     @SubscribeEvent
     public static void renderOverlay(RenderGuiOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
-        if (player == null || player.isCreative()) return; // Skip if creative
+        if (player == null || player.isCreative() || player.isSpectator()) return;
 
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
         if (chest.isEmpty()) return;
@@ -57,22 +58,22 @@ public class PlateHudOverlay {
 
             if (cap.hasFrontPlate()) {
                 Plate plate = cap.getFrontPlate();
-                drawPlateBar(gui, leftBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), BAR_COLOR);
+                drawPlateBar(gui, leftBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), plate.getMaterial().getColor());
             }
 
             if (cap.hasBackPlate()) {
                 Plate plate = cap.getBackPlate();
-                drawPlateBar(gui, rightBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), BAR_COLOR);
+                drawPlateBar(gui, rightBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), plate.getMaterial().getColor());
             }
         });
     }
 
-    private static void drawPlateBar(GuiGraphics gui, int x, int y, float currentDurability, float maxDurability, int fillColor) {
+    private static void drawPlateBar(GuiGraphics gui, int x, int y, float currentDurability, float maxDurability, Color fillColor) {
         int width = 36;
         int height = 2;
         int filled = (int) ((currentDurability / maxDurability) * width);
 
-        gui.fill(x, y, x + width, y + height, BAR_BACKGROUND);  // background
-        gui.fill(x, y, x + filled, y + height, fillColor);      // fill
+        gui.fill(x, y, x + width, y + height, BAR_BACKGROUND.getARGB());
+        gui.fill(x, y, x + filled, y + height, fillColor.getARGB());
     }
 }

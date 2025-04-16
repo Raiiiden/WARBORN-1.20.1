@@ -1,7 +1,7 @@
 package com.raiiiden.warborn.client.model;
 
 import com.raiiiden.warborn.WARBORN;
-import com.raiiiden.warborn.item.WarbornPlateItem;
+import com.raiiiden.warborn.common.item.WarbornPlateItem;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

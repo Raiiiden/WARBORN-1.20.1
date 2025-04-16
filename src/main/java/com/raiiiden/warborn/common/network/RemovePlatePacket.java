@@ -4,7 +4,7 @@ import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import com.raiiiden.warborn.common.object.plate.MaterialType;
 import com.raiiiden.warborn.common.object.plate.Plate;
 import com.raiiiden.warborn.common.object.plate.ProtectionTier;
-import com.raiiiden.warborn.item.ArmorPlateItem;
+import com.raiiiden.warborn.common.item.ArmorPlateItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

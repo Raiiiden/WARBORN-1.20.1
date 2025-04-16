@@ -1,7 +1,7 @@
 package com.raiiiden.warborn.common.util;
 
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
-import com.raiiiden.warborn.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;

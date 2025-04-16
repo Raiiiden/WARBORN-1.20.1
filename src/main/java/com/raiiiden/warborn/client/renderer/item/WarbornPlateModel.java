@@ -1,6 +1,6 @@
 package com.raiiiden.warborn.client.renderer.item;
 
-import com.raiiiden.warborn.item.WarbornPlateItem;
+import com.raiiiden.warborn.common.item.WarbornPlateItem;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 

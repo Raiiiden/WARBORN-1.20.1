@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -47,15 +45,10 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
             return;
         }
 
-        float heat = wARBORN_1_20_1$calculateEntityHeat(entity);
-
         int newLight = 15728880;
         int newOverlay = OverlayTexture.NO_OVERLAY;
 
-        float[] heatColor = wARBORN_1_20_1$getHeatColor(heat);
-
-        original.call(model, poseStack, buffer, newLight, newOverlay,
-                heatColor[0], heatColor[1], heatColor[2], alpha);
+        original.call(model, poseStack, buffer, newLight, newOverlay, red, green, blue, alpha);
     }
 
     /**
@@ -67,66 +60,5 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
         boolean tvgActive = ShaderRegistry.getInstance().isShaderActive(DVG_SHADERT_ID);
 
         return dvgActive || tvgActive;
-    }
-
-    /**
-     * Map heat value to RGB color
-     * Cold = blue/purple (0.0)
-     * Warm = yellow/orange (0.7)
-     * Hot = white/red (1.0)
-     */
-    @Unique
-    private float[] wARBORN_1_20_1$getHeatColor(float heat) {
-        float[] color = new float[3]; // R,G,B
-
-        if (heat < 0.3f) {
-            color[0] = 0.0f;
-            color[1] = 0.0f;
-            color[2] = 2.0f;
-        } else if (heat < 0.6f) {
-            color[0] = 0.0f;
-            color[1] = 2.0f;
-            color[2] = 0.0f;
-        } else {
-            color[0] = 2.0f;
-            color[1] = 0.0f;
-            color[2] = 0.0f;
-        }
-
-        return color;
-    }
-
-    /**
-     * Calculate heat level for an entity (0.0-1.0)
-     */
-    @Unique
-    private float wARBORN_1_20_1$calculateEntityHeat(LivingEntity entity) {
-        float baseHeat = 0.6f;
-
-        if (entity instanceof Monster) {
-            baseHeat = 0.7f;
-        }
-
-        if (entity instanceof Player) {
-            baseHeat = 0.65f;
-
-            if (entity.isCrouching()) {
-                baseHeat *= 0.7f;
-            }
-        }
-
-        float healthPercent = entity.getHealth() / entity.getMaxHealth();
-        if (healthPercent < 0.5f) {
-            baseHeat += (1 - healthPercent) * 0.3f;
-        }
-
-        double movementSpeed = entity.getDeltaMovement().length();
-        baseHeat += Math.min(0.3f, (float) movementSpeed * 0.5f);
-
-        if (entity.isOnFire() || entity.isCurrentlyGlowing()) {
-            baseHeat = 1.0f;
-        }
-
-        return Math.min(1.0f, baseHeat);
     }
 }

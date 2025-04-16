@@ -1,5 +1,6 @@
 package com.raiiiden.warborn.common.object.capability;
 
+import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
@@ -20,7 +21,7 @@ public class ChestplateBundleHandler extends ItemStackHandler {
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
         return stack.getItem().canFitInsideContainerItems()
-                && !com.raiiiden.warborn.item.WarbornArmorItem.isArmor(stack);
+                && !WarbornArmorItem.isArmor(stack);
     }
 
     @Override

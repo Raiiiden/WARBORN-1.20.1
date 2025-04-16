@@ -2,7 +2,7 @@ package com.raiiiden.warborn.client.shader;
 
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
-import com.raiiiden.warborn.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;

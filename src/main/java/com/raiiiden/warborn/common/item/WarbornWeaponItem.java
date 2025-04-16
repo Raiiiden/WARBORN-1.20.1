@@ -1,4 +1,4 @@
-package com.raiiiden.warborn.item;
+package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.client.renderer.weapon.WarbornGenericWeaponRenderer;
 import net.minecraft.world.InteractionHand;
