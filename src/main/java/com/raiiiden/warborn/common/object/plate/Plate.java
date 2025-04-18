@@ -31,6 +31,10 @@ public class Plate {
         return tag;
     }
 
+    public void setCurrentDurability(float durability) {
+        this.currentDurability = Math.max(0, Math.min(durability, maxDurability));
+    }
+
     public ProtectionTier getTier() {
         return tier;
     }
