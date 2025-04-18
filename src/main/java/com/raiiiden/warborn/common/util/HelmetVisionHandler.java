@@ -1,10 +1,10 @@
 package com.raiiiden.warborn.common.util;
 
+import com.raiiiden.warborn.client.shader.ClientVisionState;
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
 import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,58 +16,42 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Set;
 
-/**
- * Handles helmet vision effects based on item tags for now
- */
 public class HelmetVisionHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final String NVG_SHADER_ID = "warborn_nvg";
-    private static final String SIMPLE_NVG_SHADER_ID = "warborn_simple_nvg";
+    private static final String NVG_SHADER_ID = "nvg";
+    private static final String SIMPLE_NVG_SHADER_ID = "snvg";
     private static final String THERMAL_SHADER_ID = "tvg";
-    private static final String DIGITAL_SHADER_ID = "warborn_dvg";
+    private static final String DIGITAL_SHADER_ID = "dvg";
 
     private static final boolean DEBUG_MODE = false;
 
-    /**
-     * Checks if a helmet is allowed to use vision modes
-     */
     public static boolean isAllowedHelmet(ItemStack helmet) {
         return WarbornArmorItem.hasVisionCapability(helmet);
     }
 
-    /**
-     * Gets the current active vision type for a helmet
-     *
-     * @return The vision type tag, or empty string if none active
-     */
+    public static String getShaderIdFromVisionType(String visionType) {
+        return switch (visionType) {
+            case WarbornArmorItem.TAG_NVG -> "nvg";
+            case WarbornArmorItem.TAG_SIMPLE_NVG -> "snvg";
+            case WarbornArmorItem.TAG_THERMAL -> "tvg";
+            case WarbornArmorItem.TAG_DIGITAL -> "dvg";
+            default -> "";
+        };
+    }
+
     public static String getActiveVisionType(ItemStack helmet) {
-        if (!isAllowedHelmet(helmet)) return "";
-
-        CompoundTag tag = helmet.getTag();
-        if (tag != null && tag.contains("ActiveVision")) {
-            return tag.getString("ActiveVision");
-        }
-        return "";
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return "";
+        return ClientVisionState.getActive(player.getUUID());
     }
 
-    /**
-     * Sets the active vision type for a helmet
-     */
     public static void setActiveVisionType(ItemStack helmet, String visionType) {
-        if (!isAllowedHelmet(helmet)) return;
-
-        CompoundTag tag = helmet.getOrCreateTag();
-        if (visionType.isEmpty()) {
-            tag.remove("ActiveVision");
-        } else {
-            tag.putString("ActiveVision", visionType);
-        }
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return;
+        ClientVisionState.setActive(player.getUUID(), visionType);
     }
 
-    /**
-     * Checks if a helmet has a specific vision type capability
-     */
     public static boolean hasVisionType(ItemStack helmet, String visionType) {
         if (!isAllowedHelmet(helmet)) {
             if (DEBUG_MODE) {
@@ -76,8 +60,7 @@ public class HelmetVisionHandler {
             return false;
         }
 
-        CompoundTag tag = helmet.getTag();
-        if (tag != null && tag.contains(visionType)) {
+        if (helmet.getTag() != null && helmet.getTag().contains(visionType)) {
             if (DEBUG_MODE) {
                 LOGGER.info("Found {} capability in NBT for {}", visionType, helmet.getDisplayName().getString());
             }
@@ -96,11 +79,6 @@ public class HelmetVisionHandler {
         return hasTag;
     }
 
-    /**
-     * Toggles vision mode when the key is pressed
-     *
-     * @return true if vision was toggled successfully
-     */
     public static boolean toggleVision(Player player) {
         ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
 
@@ -116,10 +94,8 @@ public class HelmetVisionHandler {
                 LOGGER.info("  Has Simple NVG: {}", hasVisionType(helmet, WarbornArmorItem.TAG_SIMPLE_NVG));
                 LOGGER.info("  Has Thermal: {}", hasVisionType(helmet, WarbornArmorItem.TAG_THERMAL));
                 LOGGER.info("  Has Digital: {}", hasVisionType(helmet, WarbornArmorItem.TAG_DIGITAL));
-
-                CompoundTag tag = helmet.getTag();
-                if (tag != null) {
-                    LOGGER.info("  NBT: {}", tag.toString());
+                if (helmet.getTag() != null) {
+                    LOGGER.info("  NBT: {}", helmet.getTag().toString());
                 }
             }
         }
@@ -165,23 +141,6 @@ public class HelmetVisionHandler {
         return false;
     }
 
-    /**
-     * Converts a vision type to its corresponding shader ID
-     */
-    private static String visionTypeToShaderId(String visionType) {
-        return switch (visionType) {
-            case WarbornArmorItem.TAG_NVG -> NVG_SHADER_ID;
-            case WarbornArmorItem.TAG_SIMPLE_NVG -> SIMPLE_NVG_SHADER_ID;
-            case WarbornArmorItem.TAG_THERMAL -> THERMAL_SHADER_ID;
-            case WarbornArmorItem.TAG_DIGITAL -> DIGITAL_SHADER_ID;
-            default -> "";
-        };
-    }
-
-    /**
-     * Determines the primary vision type for a helmet
-     * Each helmet should have exactly one vision type
-     */
     private static String getPrimaryVisionType(ItemStack helmet) {
         if (hasVisionType(helmet, WarbornArmorItem.TAG_DIGITAL)) {
             LOGGER.info("Helmet has digital vision capability");
@@ -207,9 +166,16 @@ public class HelmetVisionHandler {
         return "";
     }
 
-    /**
-     * Enables the correct shader for a vision type
-     */
+    private static String visionTypeToShaderId(String visionType) {
+        return switch (visionType) {
+            case WarbornArmorItem.TAG_NVG -> NVG_SHADER_ID;
+            case WarbornArmorItem.TAG_SIMPLE_NVG -> SIMPLE_NVG_SHADER_ID;
+            case WarbornArmorItem.TAG_THERMAL -> THERMAL_SHADER_ID;
+            case WarbornArmorItem.TAG_DIGITAL -> DIGITAL_SHADER_ID;
+            default -> "";
+        };
+    }
+
     private static void enableVisionShader(String visionType) {
         disableAllShaders();
 
@@ -217,33 +183,9 @@ public class HelmetVisionHandler {
             LOGGER.info("Enabling shader for vision type: {}", visionType);
         }
 
-        String shaderId = "";
-        switch (visionType) {
-            case WarbornArmorItem.TAG_NVG:
-                shaderId = NVG_SHADER_ID;
-                if (DEBUG_MODE) LOGGER.info("Activating NVG shader: {}", shaderId);
-                break;
-            case WarbornArmorItem.TAG_SIMPLE_NVG:
-                shaderId = SIMPLE_NVG_SHADER_ID;
-                if (DEBUG_MODE) LOGGER.info("Activating Simple NVG shader: {}", shaderId);
-                break;
-            case WarbornArmorItem.TAG_THERMAL:
-                shaderId = THERMAL_SHADER_ID;
-                if (DEBUG_MODE) LOGGER.info("Activating Thermal shader: {}", shaderId);
-                break;
-            case WarbornArmorItem.TAG_DIGITAL:
-                shaderId = DIGITAL_SHADER_ID;
-                if (DEBUG_MODE) LOGGER.info("Activating Digital shader: {}", shaderId);
-                break;
-            default:
-                LOGGER.warn("Unknown vision type: {}", visionType);
-                return;
-        }
-
-        if (DEBUG_MODE) {
-            LOGGER.info("Setting shader {} to be force enabled", shaderId);
-        }
+        String shaderId = visionTypeToShaderId(visionType);
         boolean result = ShaderRegistry.getInstance().setShaderEnabled(shaderId, true);
+
         if (DEBUG_MODE) {
             LOGGER.info("Shader enable result: {}", result);
         }
@@ -255,35 +197,13 @@ public class HelmetVisionHandler {
         } else {
             LOGGER.error("SHADER NOT FOUND: {} is not registered!", shaderId);
         }
-
-        if (DEBUG_MODE) {
-            LOGGER.info("Shader activation complete");
-        }
     }
 
-    /**
-     * Disables the shader for a specific vision type
-     */
     private static void disableVisionShader(String visionType) {
-        switch (visionType) {
-            case WarbornArmorItem.TAG_NVG:
-                ShaderRegistry.getInstance().setShaderEnabled(NVG_SHADER_ID, false);
-                break;
-            case WarbornArmorItem.TAG_SIMPLE_NVG:
-                ShaderRegistry.getInstance().setShaderEnabled(SIMPLE_NVG_SHADER_ID, false);
-                break;
-            case WarbornArmorItem.TAG_THERMAL:
-                ShaderRegistry.getInstance().setShaderEnabled(THERMAL_SHADER_ID, false);
-                break;
-            case WarbornArmorItem.TAG_DIGITAL:
-                ShaderRegistry.getInstance().setShaderEnabled(DIGITAL_SHADER_ID, false);
-                break;
-        }
+        String shaderId = visionTypeToShaderId(visionType);
+        ShaderRegistry.getInstance().setShaderEnabled(shaderId, false);
     }
 
-    /**
-     * Disables all vision shaders
-     */
     private static void disableAllShaders() {
         ShaderRegistry.getInstance().setShaderEnabled(NVG_SHADER_ID, false);
         ShaderRegistry.getInstance().setShaderEnabled(SIMPLE_NVG_SHADER_ID, false);
@@ -291,31 +211,11 @@ public class HelmetVisionHandler {
         ShaderRegistry.getInstance().setShaderEnabled(DIGITAL_SHADER_ID, false);
     }
 
-    /**
-     * For automatic shader activation checks
-     */
     public static boolean isVisionActive(Minecraft mc, String visionType) {
         if (mc.player == null) return false;
-
-        ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
-        if (!isAllowedHelmet(helmet)) return false;
-
-        String activeType = getActiveVisionType(helmet);
-        boolean isActive = activeType.equals(visionType);
-
-        if (DEBUG_MODE && isActive) {
-            LOGGER.info("Vision active check: {} is active for helmet {}",
-                    visionType, helmet.getDisplayName().getString());
-        }
-
-        return isActive;
+        return ClientVisionState.isActive(mc.player.getUUID(), visionType);
     }
 
-    /**
-     * Debug method to provide information about the vision system
-     *
-     * @return A string with debug info
-     */
     public static String getDebugInfo(Player player) {
         StringBuilder info = new StringBuilder();
         info.append("=== Vision System Debug ===\n");
@@ -334,11 +234,10 @@ public class HelmetVisionHandler {
             info.append("Active vision: ").append(activeType.isEmpty() ? "NONE" : activeType).append("\n");
         }
 
-        // Check shader registry
         info.append("\nRegistered shaders:\n");
-        Set<String> shaderIds = com.raiiiden.warborn.client.shader.ShaderRegistry.getInstance().getRegisteredShaderIds();
+        Set<String> shaderIds = ShaderRegistry.getInstance().getRegisteredShaderIds();
         for (String id : shaderIds) {
-            boolean active = com.raiiiden.warborn.client.shader.ShaderRegistry.getInstance().isShaderActive(id);
+            boolean active = ShaderRegistry.getInstance().isShaderActive(id);
             info.append("- ").append(id).append(": ").append(active ? "ACTIVE" : "inactive").append("\n");
         }
 
