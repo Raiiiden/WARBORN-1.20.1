@@ -1,6 +1,7 @@
 package com.raiiiden.warborn;
 
 import com.raiiiden.warborn.common.config.WarbornCommonConfig;
+import com.raiiiden.warborn.common.config.WarbornArmorConfig;
 import com.raiiiden.warborn.common.init.MenuTypeInit;
 import com.raiiiden.warborn.common.init.ModRegistry;
 import com.raiiiden.warborn.common.network.ModNetworking;
@@ -30,6 +31,7 @@ public class WARBORN {
     modEventBus.addListener(this::setup);
     MenuTypeInit.register(modEventBus);
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WarbornCommonConfig.SPEC);
+    ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WarbornArmorConfig.SPEC, "warborn-armor.toml");
 
     MinecraftForge.EVENT_BUS.register(this);
   }
