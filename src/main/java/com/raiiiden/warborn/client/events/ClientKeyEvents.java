@@ -7,6 +7,7 @@ import com.raiiiden.warborn.client.shader.ClientVisionState;
 import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
+import com.raiiiden.warborn.common.item.WarbornBackpackItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -36,7 +37,7 @@ public class ClientKeyEvents {
 
         if (ModKeybindings.OPEN_BACKPACK.consumeClick()) {
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-            if (WarbornArmorItem.isBackpackItem(chest)) {
+            if (WarbornBackpackItem.isBackpackItem(chest)) {
                 ModNetworking.openBackpack(chest);
                 return;
             }
@@ -45,7 +46,7 @@ public class ClientKeyEvents {
                 inv.getCurios().forEach((slotId, handler) -> {
                     for (int i = 0; i < handler.getStacks().getSlots(); i++) {
                         ItemStack stack = handler.getStacks().getStackInSlot(i);
-                        if (WarbornArmorItem.isBackpackItem(stack)) {
+                        if (WarbornBackpackItem.isBackpackItem(stack)) {
                             ModNetworking.openBackpack(stack);
                             return;
                         }

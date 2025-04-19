@@ -1,8 +1,6 @@
 package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
-import com.raiiiden.warborn.common.network.ModNetworking;
-import com.raiiiden.warborn.common.object.capability.BackpackCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
@@ -127,12 +125,6 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return stack.getItem() instanceof ArmorItem;
     }
 
-    public static boolean isBackpackItem(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        return id.getPath().toLowerCase().contains("backpack");
-    }
-
     /**
      * Checks if a helmet has vision capabilities (has the goggle tag)
      */
@@ -187,11 +179,10 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         tag.putBoolean(visionTag, true);  // Specific vision type
     }
 
-
     public static boolean isPlateCompatible(ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
         if (((ArmorItem) stack.getItem()).getType() != Type.CHESTPLATE) return false;
-        
+
         return stack.is(PLATE_COMPATIBLE);
     }
 
@@ -340,10 +331,6 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                 playDropContentsSound(player);
                 return InteractionResultHolder.success(stack);
             }
-
-            if (level.isClientSide && isBackpackItem(stack)) {
-                ModNetworking.openBackpack(stack);
-            }
         }
 
         EquipmentSlot slot = this.getEquipmentSlot();
@@ -389,9 +376,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        if (isBackpackItem(stack)) {
-            return new BackpackCapabilityProvider(stack);
-        } else if (isChestplateItem(stack)) {
+        if (isChestplateItem(stack)) {
             return new ChestplateBundleCapabilityProvider(stack);
         }
         return super.initCapabilities(stack, nbt);
@@ -400,10 +385,10 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag flag) {
         super.appendHoverText(stack, level, components, flag);
-        
+
         if (isPlateCompatible(stack)) {
             components.add(Component.literal("Plate Compatible").withStyle(style -> style.withColor(0xFFAA00)));
-            
+
             stack.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
                 float totalSpeedMod = 0.0F;
                 int plateCount = 0;
@@ -412,52 +397,41 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                     Plate frontPlate = cap.getFrontPlate();
                     if (frontPlate != null && !frontPlate.isBroken()) {
                         Component frontInfo = Component.empty()
-                            .append(Component.literal("Front: ").withStyle(ChatFormatting.GRAY))
-                            .append(frontPlate.getMaterial().getDisplayName())
-                            .append(Component.literal(" " + frontPlate.getTier().getDisplayName().getString()));
+                                .append(Component.literal("Front: ").withStyle(ChatFormatting.GRAY))
+                                .append(frontPlate.getMaterial().getDisplayName())
+                                .append(Component.literal(" " + frontPlate.getTier().getDisplayName().getString()));
                         components.add(frontInfo);
-                        
+
                         totalSpeedMod += frontPlate.getSpeedModifier();
                         plateCount++;
                     }
                 }
-                
+
                 if (cap.hasBackPlate()) {
                     Plate backPlate = cap.getBackPlate();
                     if (backPlate != null && !backPlate.isBroken()) {
                         Component backInfo = Component.empty()
-                            .append(Component.literal("Back: ").withStyle(ChatFormatting.GRAY))
-                            .append(backPlate.getMaterial().getDisplayName())
-                            .append(Component.literal(" " + backPlate.getTier().getDisplayName().getString()));
+                                .append(Component.literal("Back: ").withStyle(ChatFormatting.GRAY))
+                                .append(backPlate.getMaterial().getDisplayName())
+                                .append(Component.literal(" " + backPlate.getTier().getDisplayName().getString()));
                         components.add(backInfo);
-                        
+
                         totalSpeedMod += backPlate.getSpeedModifier();
                         plateCount++;
                     }
                 }
-                
+
                 if (plateCount > 0) {
                     float averageSpeedMod = totalSpeedMod / plateCount;
                     String speedText = String.format("%+.1f%%", averageSpeedMod * 100);
                     ChatFormatting speedColor = averageSpeedMod >= 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
-                    
+
                     Component speedInfo = Component.empty()
-                        .append(Component.literal("Speed Effect: ").withStyle(ChatFormatting.GRAY))
-                        .append(Component.literal(speedText).withStyle(speedColor));
+                            .append(Component.literal("Speed Effect: ").withStyle(ChatFormatting.GRAY))
+                            .append(Component.literal(speedText).withStyle(speedColor));
                     components.add(speedInfo);
                 }
             });
         }
     }
-
-//    @Override
-//    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-//
-//        //TODO: Maybe adjust it so that it plays a little earlier and or if we add durability
-//        if (stack.getDamageValue() + amount >= stack.getMaxDamage() &&
-//            getMaterial() instanceof WarbornMaterials.WarbornArmorMaterial warbornMaterial) {
-//            entity.playSound(warbornMaterial.getBreakSound(), 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
-//        }
-//        return super.damageItem(stack, amount, entity, onBroken);
-//    }
 }

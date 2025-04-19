@@ -123,7 +123,7 @@ public class HelmetVisionHandler {
         if (DEBUG_MODE) {
             LOGGER.info("Primary vision type for helmet: {}", primaryVisionType.isEmpty() ? "NONE" : primaryVisionType);
         }
-
+// disable from here to the next bit to disable nvg
         if (!primaryVisionType.isEmpty()) {
             LOGGER.info("*** ACTIVATING VISION: {} ***", primaryVisionType);
             enableVisionShader(primaryVisionType);
@@ -136,6 +136,7 @@ public class HelmetVisionHandler {
 
             return true;
         }
+// to here
 
         LOGGER.debug("No vision types available on helmet");
         return false;
