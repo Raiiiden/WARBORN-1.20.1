@@ -1,26 +1,33 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"helmet_open": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"bones": {
-				"bone6": {
-					"rotation": {
-						"0.0": { "vector": [0, 0, 0] },
-						"1.0": { "vector": [45, 0, 0] }
-					}
-				}
-			}
-		},
 		"helmet_closed": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
 				"bone6": {
 					"rotation": {
-						"0.0": { "vector": [45, 0, 0] },
-						"1.0": { "vector": [0, 0, 0] }
+						"0.0":  { "vector": [0, 0, 0] },
+						"0.2":  { "vector": [37.5, 0, 0] },
+						"0.3":  { "vector": [45, 0, 0] },
+						"0.4":  { "vector": [40, 0, 0] },
+						"0.55": { "vector": [45, 0, 0] },
+						"1.0":  { "vector": [45, 0, 0] }
+					}
+				}
+			}
+		},
+		"helmet_open": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"bone6": {
+					"rotation": {
+						"0.0":  { "vector": [45, 0, 0] },
+						"0.15": { "vector": [30, 0, 0] },
+						"0.25": { "vector": [15, 0, 0] },
+						"0.4":  { "vector": [0, 0, 0] },
+						"1.0":  { "vector": [0, 0, 0] }
 					}
 				}
 			}

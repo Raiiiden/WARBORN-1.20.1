@@ -26,7 +26,8 @@ public class ChestplateBundleHandler extends ItemStackHandler {
 
     @Override
     public int getStackLimit(int slot, @NotNull ItemStack stack) {
-        return MAX_STACK_SIZE;
+        int naturalMax = stack.getMaxStackSize();
+        return naturalMax > 1 ? MAX_STACK_SIZE : 1;
     }
 
     @Override
