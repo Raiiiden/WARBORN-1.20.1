@@ -27,6 +27,7 @@ public class ModNetworking {
         var id = 0;
         PACKET_CHANNEL.registerMessage(id++, OpenBackpackPacket.class, OpenBackpackPacket::encode, OpenBackpackPacket::new, OpenBackpackPacket::handle);
         PACKET_CHANNEL.registerMessage(id++, RemovePlatePacket.class, RemovePlatePacket::encode, RemovePlatePacket::new, RemovePlatePacket::handle);
+        PACKET_CHANNEL.registerMessage(id++, ToggleHelmetTopPacket.class, ToggleHelmetTopPacket::encode, ToggleHelmetTopPacket::new, ToggleHelmetTopPacket::handle);
     }
 
     public static <MSG> void sendToServer(MSG message) {
@@ -39,5 +40,8 @@ public class ModNetworking {
 
     protected static <MSG> void sendToClients(MSG message) {
         PACKET_CHANNEL.send(PacketDistributor.ALL.noArg(), message);
+    }
+    public static void sendToggleHelmetTop(boolean open) {
+        sendToServer(new ToggleHelmetTopPacket(open));
     }
 }

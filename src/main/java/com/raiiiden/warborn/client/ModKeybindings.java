@@ -11,6 +11,12 @@ import org.lwjgl.glfw.GLFW;
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModKeybindings {
 
+    public static final KeyMapping TOGGLE_HELMET_TOP = new KeyMapping(
+            "key.warborn.toggle_helmet_top",
+            GLFW.GLFW_KEY_H,  // Default key H
+            "key.categories.warborn"
+    );
+
     public static final KeyMapping OPEN_BACKPACK = new KeyMapping(
             "key.warborn.open_backpack",
             GLFW.GLFW_KEY_B,
@@ -33,6 +39,7 @@ public class ModKeybindings {
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(OPEN_BACKPACK);
         event.register(TOGGLE_SPECIAL_VISION);
+        event.register(TOGGLE_HELMET_TOP);
         //TODO clean up this
 //        event.register(REMOVE_PLATE_MENU);
     }

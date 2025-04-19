@@ -40,9 +40,12 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -364,9 +367,32 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         });
     }
 
+    private static boolean isAnimatedHelmet(WarbornArmorItem item) {
+        return item.getArmorType().equals("insurgency_commander");
+    }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, 20, state -> PlayState.CONTINUE));
+        if (!isAnimatedHelmet(this)) return; // Skip if not in list
+
+        controllers.add(new AnimationController<>(this, "helmet_toggle", 0, state -> {
+            ItemStack stack = state.getData(DataTickets.ITEMSTACK);
+            if (stack == null || !stack.hasTag()) return PlayState.STOP;
+
+            boolean open = stack.getOrCreateTag().getBoolean("helmet_top_open");
+            String animationName = open ? "helmet_open" : "helmet_closed";
+
+            state.setAnimation(RawAnimation.begin().then(animationName, Animation.LoopType.HOLD_ON_LAST_FRAME));
+            return PlayState.CONTINUE;
+        }));
+    }
+
+    public void setTopOpen(ItemStack stack, boolean open) {
+        stack.getOrCreateTag().putBoolean("helmet_top_open", open);
+    }
+
+    public boolean isTopOpen(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("helmet_top_open");
     }
 
     @Override

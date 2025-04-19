@@ -1,0 +1,29 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"helmet_open": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"bone6": {
+					"rotation": {
+						"0.0": { "vector": [0, 0, 0] },
+						"1.0": { "vector": [45, 0, 0] }
+					}
+				}
+			}
+		},
+		"helmet_closed": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"bone6": {
+					"rotation": {
+						"0.0": { "vector": [45, 0, 0] },
+						"1.0": { "vector": [0, 0, 0] }
+					}
+				}
+			}
+		}
+	}
+}

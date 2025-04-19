@@ -11,6 +11,7 @@ import com.raiiiden.warborn.common.item.WarbornBackpackItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -53,6 +54,30 @@ public class ClientKeyEvents {
                     }
                 });
             });
+        }
+
+        if (ModKeybindings.TOGGLE_HELMET_TOP.consumeClick()) {
+            ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+            if (helmet.getItem() instanceof WarbornArmorItem helmetItem) {
+                boolean newState = !helmetItem.isTopOpen(helmet);
+                ModNetworking.sendToggleHelmetTop(newState);
+
+                player.playSound(newState ?
+                                SoundEvents.IRON_TRAPDOOR_OPEN : SoundEvents.IRON_TRAPDOOR_CLOSE,
+                        1.0F, 1.0F);
+
+                player.displayClientMessage(
+                        Component.literal("Helmet Top " + (newState ? "Closed" : "Opened"))
+                                .withStyle(ChatFormatting.GRAY),
+                        true
+                );
+            } else {
+                player.displayClientMessage(
+                        Component.literal("Not Waring Openable Helmet")
+                                .withStyle(ChatFormatting.RED),
+                        true
+                );
+            }
         }
 
         if (ModKeybindings.TOGGLE_SPECIAL_VISION.consumeClick()) {
