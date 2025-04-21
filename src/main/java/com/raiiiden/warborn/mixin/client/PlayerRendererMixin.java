@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Set;
+
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
@@ -27,8 +29,10 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     private void warborn$shrinkVanillaArms(AbstractClientPlayer player, CallbackInfo ci) {
         PlayerModel<AbstractClientPlayer> model = this.getModel();
 
+        Set<String> validArmorTypes = Set.of("insurgency_commander", "beta7", "beta7_ash", "beta7_slate");
+
         if (player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof WarbornArmorItem armor &&
-                armor.getArmorType().equals("insurgency_commander")) {
+                validArmorTypes.contains(armor.getArmorType())) {
 
             // Shrink vanilla arms to hide them
             model.leftArm.xScale = 0.0001F;
