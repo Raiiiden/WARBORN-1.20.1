@@ -67,7 +67,7 @@ public class ClientKeyEvents {
                         1.0F, 1.0F);
 
                 player.displayClientMessage(
-                        Component.literal("Helmet Top " + (newState ? "Closed" : "Opened"))
+                        Component.literal("Helmet Top " + (newState ? "Opened" : "Closed"))
                                 .withStyle(ChatFormatting.GRAY),
                         true
                 );
