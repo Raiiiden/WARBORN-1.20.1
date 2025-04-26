@@ -50,6 +50,12 @@ public class FaceplateOverlay {
             return;
         }
 
+        if (helmet.getItem() instanceof com.raiiiden.warborn.common.item.WarbornArmorItem armorItem) {
+            if (armorItem.isTopOpen(helmet)) {
+                return; // Helmet top open → don't render overlay
+            }
+        }
+
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 

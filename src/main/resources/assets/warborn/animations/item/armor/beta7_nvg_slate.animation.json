@@ -3,36 +3,33 @@
 	"animations": {
 		"helmet_open": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 0.2917,
+			"animation_length": 0.5,
 			"bones": {
-				"bone3": {
+				"bone5": {
 					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.2917": {
-							"vector": [-90, 0, 0]
-						}
+						"0.0": { "vector": [0, 0, 0] },
+						"0.2": { "vector": [-210, 0, 0] },
+						"0.32": { "vector": [-195, 0, 0] },
+						"0.42": { "vector": [-202, 0, 0] },
+						"0.5": { "vector": [-200, 0, 0] }
 					}
 				}
 			}
 		},
 		"helmet_closed": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 0.2917,
+			"animation_length": 0.5,
 			"bones": {
-				"bone3": {
+				"bone5": {
 					"rotation": {
-						"0.0": {
-							"vector": [-90, 0, 0]
-						},
-						"0.2917": {
-							"vector": [0, 0, 0]
-						}
+						"0.0": { "vector": [-200, 0, 0] },
+						"0.2": { "vector": [10, 0, 0] },
+						"0.32": { "vector": [-5, 0, 0] },
+						"0.42": { "vector": [2, 0, 0] },
+						"0.5": { "vector": [0, 0, 0] }
 					}
 				}
 			}
 		}
-	},
-	"geckolib_format_version": 2
+	}
 }

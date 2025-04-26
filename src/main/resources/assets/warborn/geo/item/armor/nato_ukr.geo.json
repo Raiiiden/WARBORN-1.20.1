@@ -6,7 +6,7 @@
 				"identifier": "geometry.nato_pidr_ukr",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 2,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -836,7 +836,8 @@
 				{
 					"name": "anpvs14",
 					"parent": "Ops_Core",
-					"pivot": [0.125, 29.37361, -7.25311],
+					"pivot": [0.125, 31.62361, -5.75311],
+					"rotation": [0, 0, 0],
 					"cubes": [
 						{
 							"origin": [-0.875, 28.1347, -9.09352],
@@ -938,7 +939,7 @@
 						},
 						{
 							"origin": [-0.5, 29.68421, -6.43002],
-							"size": [1, 2.75, 1.25],
+							"size": [1, 2, 1.25],
 							"pivot": [0, 31.30693, -5.88717],
 							"rotation": [-42.5, 0, 0],
 							"uv": {
@@ -1539,7 +1540,7 @@
 						},
 						{
 							"origin": [-6.62521, 17.86925, -0.86859],
-							"size": [1, 0.025, 1],
+							"size": [1, 0, 1],
 							"pivot": [-6.1572, 15.57505, -0.73757],
 							"rotation": [-44.78074, -11.60168, 30.73904],
 							"uv": {

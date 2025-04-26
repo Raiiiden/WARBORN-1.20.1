@@ -1,9 +1,12 @@
 package com.raiiiden.warborn.client.shader;
 
+import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.PostPass;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
@@ -224,8 +227,20 @@ public class ShaderRegistry {
                 }
 
                 try {
+                    // Before processing, check helmet top state
+                    if (mc.player != null) {
+                        ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
+                        if (helmet.getItem() instanceof WarbornArmorItem armorItem) {
+                            if (armorItem.isTopOpen(helmet)) {
+                                continue; // helmet open → skip rendering this shader frame
+                            }
+                        }
+                    }
+
+// actually apply shader if helmet is closed
                     shaderEntry.configurer.accept(shaderEntry.shader);
                     shaderEntry.shader.process(mc.getFrameTime());
+
 
                     mc.getMainRenderTarget().bindWrite(false);
                 } catch (Exception e) {

@@ -369,7 +369,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     private static boolean isAnimatedHelmet(WarbornArmorItem item) {
-        Set<String> animatedHelmets = Set.of("insurgency_commander", "beta7_nvg", "beta7_nvg_ash", "beta7_nvg_slate");
+        Set<String> animatedHelmets = Set.of("insurgency_commander", "beta7_nvg", "beta7_nvg_ash", "beta7_nvg_slate", "nato_sqad_leader", "nato_sqad_leader_woodland", "nato_ukr", "nato_ukr_woodland", "killa", "tagilla");
         return animatedHelmets.contains(item.getArmorType());
     }
 

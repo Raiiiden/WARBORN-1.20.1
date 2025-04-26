@@ -18,5 +18,15 @@
         "pitch": 1.0
       }
     ]
-  }
+  },
+    "item.armor.warborn_nvg_toggle": {
+        "subtitle": "warborn.subtitle.nvg_toggle",
+        "sounds": [
+        {
+            "name": "warborn:item/armor/warborn_nvg_toggle",
+            "volume": 1.0,
+            "pitch": 1.0
+        }
+        ]
+    }
 }

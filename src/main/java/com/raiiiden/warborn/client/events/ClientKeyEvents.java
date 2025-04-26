@@ -6,6 +6,7 @@ import com.raiiiden.warborn.client.shader.ShaderRegistry;
 import com.raiiiden.warborn.client.shader.ClientVisionState;
 import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import com.raiiiden.warborn.common.network.ModNetworking;
+import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
 import com.raiiiden.warborn.common.item.WarbornBackpackItem;
 import net.minecraft.ChatFormatting;
@@ -84,6 +85,7 @@ public class ClientKeyEvents {
             if (HelmetVisionHandler.toggleVision(player)) {
                 ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
                 String activeVision = HelmetVisionHandler.getActiveVisionType(helmet);
+                player.playSound(ModSoundEvents.WARBORN_NVG_TOGGLE.get(), 1.0F, 1.0F);
 
                 if (!activeVision.isEmpty()) {
                     String message;
