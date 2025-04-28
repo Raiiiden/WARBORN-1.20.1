@@ -12,10 +12,10 @@ import net.minecraftforge.registries.RegistryObject;
 public class MenuTypeInit {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, WARBORN.MODID);
 
-    public static final RegistryObject<MenuType<BackpackMenu>> BACKPACK_MENU =
-            MENU_TYPES.register("backpack", () -> IForgeMenuType.create(BackpackMenu::new));
-
     public static void register(IEventBus modEventBus) {
         MENU_TYPES.register(modEventBus);
-    }
+    }    public static final RegistryObject<MenuType<BackpackMenu>> BACKPACK_MENU =
+            MENU_TYPES.register("backpack", () -> IForgeMenuType.create(BackpackMenu::new));
+
+
 }

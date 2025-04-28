@@ -41,6 +41,7 @@ public class ModNetworking {
     protected static <MSG> void sendToClients(MSG message) {
         PACKET_CHANNEL.send(PacketDistributor.ALL.noArg(), message);
     }
+
     public static void sendToggleHelmetTop(boolean open) {
         sendToServer(new ToggleHelmetTopPacket(open));
     }

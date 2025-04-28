@@ -1,6 +1,6 @@
 package com.raiiiden.warborn.common.network;
 
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -27,8 +27,8 @@ public class ToggleHelmetTopPacket {
             if (player == null) return;
 
             var helmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
-            if (helmet.getItem() instanceof WarbornArmorItem armorItem) {
-                armorItem.setTopOpen(helmet, open); // You'll need this method in your item class
+            if (helmet.getItem() instanceof WBArmorItem WBArmorItem) {
+                WBArmorItem.setTopOpen(helmet, open); // You'll need this method in your item class
             }
         });
         ctx.get().setPacketHandled(true);

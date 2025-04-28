@@ -1,6 +1,6 @@
 package com.raiiiden.warborn.client.shader;
 
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.PostPass;
@@ -230,8 +230,8 @@ public class ShaderRegistry {
                     // Before processing, check helmet top state
                     if (mc.player != null) {
                         ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
-                        if (helmet.getItem() instanceof WarbornArmorItem armorItem) {
-                            if (armorItem.isTopOpen(helmet)) {
+                        if (helmet.getItem() instanceof WBArmorItem WBArmorItem) {
+                            if (WBArmorItem.isTopOpen(helmet)) {
                                 continue; // helmet open → skip rendering this shader frame
                             }
                         }

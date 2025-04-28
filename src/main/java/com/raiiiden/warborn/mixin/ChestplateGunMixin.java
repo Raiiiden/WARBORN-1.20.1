@@ -1,6 +1,6 @@
 package com.raiiiden.warborn.mixin;
 
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
 import com.raiiiden.warborn.common.util.MutableInt;
 import com.tacz.guns.api.DefaultAssets;
@@ -48,7 +48,7 @@ public class ChestplateGunMixin {
         if (!(shooter instanceof Player player)) return;
 
         ItemStack chestplate = player.getInventory().getArmor(2);
-        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !WarbornArmorItem.isChestplateItem(chestplate))
+        if (!(chestplate.getItem() instanceof WBArmorItem) || !WBArmorItem.isChestplateItem(chestplate))
             return;
 
         boolean hasAmmo = chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
@@ -92,7 +92,7 @@ public class ChestplateGunMixin {
         if (player == null) return;
 
         ItemStack chestplate = player.getInventory().getArmor(2);
-        if (!(chestplate.getItem() instanceof WarbornArmorItem armor) || !WarbornArmorItem.isChestplateItem(chestplate)) {
+        if (!(chestplate.getItem() instanceof WBArmorItem armor) || !WBArmorItem.isChestplateItem(chestplate)) {
             LOGGER.info("Invalid or missing chestplate");
             return;
         }

@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class WarbornClientEventSubscriber {
+public class ClientModEvents {
 
     @SubscribeEvent
     public static void registerEntityLayers(EntityRenderersEvent.AddLayers event) {
@@ -26,5 +26,6 @@ public class WarbornClientEventSubscriber {
             }
         }
     }
+
 
 }

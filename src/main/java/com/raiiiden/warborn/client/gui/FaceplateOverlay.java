@@ -3,6 +3,7 @@ package com.raiiiden.warborn.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.common.config.WarbornCommonConfig;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.Registries;
@@ -50,8 +51,8 @@ public class FaceplateOverlay {
             return;
         }
 
-        if (helmet.getItem() instanceof com.raiiiden.warborn.common.item.WarbornArmorItem armorItem) {
-            if (armorItem.isTopOpen(helmet)) {
+        if (helmet.getItem() instanceof WBArmorItem WBArmorItem) {
+            if (WBArmorItem.isTopOpen(helmet)) {
                 return; // Helmet top open → don't render overlay
             }
         }

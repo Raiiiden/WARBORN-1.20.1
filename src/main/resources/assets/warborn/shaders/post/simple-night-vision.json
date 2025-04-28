@@ -4,7 +4,7 @@
   ],
   "passes": [
     {
-      "name": "warborn:thermal-vision",
+      "name": "warborn:simple-night-vision",
       "intarget": "minecraft:main",
       "outtarget": "swap",
       "auxtargets": [

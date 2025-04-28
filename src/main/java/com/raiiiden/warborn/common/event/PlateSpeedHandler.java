@@ -19,11 +19,11 @@ public class PlateSpeedHandler {
     // we can be funny with the uuid
     private static final UUID PLATE_SPEED_MODIFIER_UUID = UUID.fromString("d10a0ceb-f815-4b8c-8b41-b7c3b8612891");
     private static final String PLATE_SPEED_MODIFIER_NAME = "Armor Plate Speed Modifier";
-    
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.START) return;
-        
+
         Player player = event.player;
 
         if (player.isSpectator()) {
@@ -65,7 +65,7 @@ public class PlateSpeedHandler {
             }
         });
     }
-    
+
     private static void applySpeedModifier(Player player, float speedModifier) {
         removeSpeedModifier(player);
 
@@ -76,17 +76,17 @@ public class PlateSpeedHandler {
                     PLATE_SPEED_MODIFIER_NAME,
                     speedModifier,
                     AttributeModifier.Operation.MULTIPLY_TOTAL);
-            
+
             player.getAttribute(Attributes.MOVEMENT_SPEED)
-                  .addTransientModifier(modifier);
+                    .addTransientModifier(modifier);
         }
     }
-    
+
     private static void removeSpeedModifier(Player player) {
         if (player.getAttribute(Attributes.MOVEMENT_SPEED)
-                 .getModifier(PLATE_SPEED_MODIFIER_UUID) != null) {
+                .getModifier(PLATE_SPEED_MODIFIER_UUID) != null) {
             player.getAttribute(Attributes.MOVEMENT_SPEED)
-                  .removeModifier(PLATE_SPEED_MODIFIER_UUID);
+                    .removeModifier(PLATE_SPEED_MODIFIER_UUID);
         }
     }
 } 

@@ -2,7 +2,7 @@ package com.raiiiden.warborn.client.renderer.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.raiiiden.warborn.client.renderer.armor.WarbornBackpackRenderer;
-import com.raiiiden.warborn.common.item.WarbornBackpackItem;
+import com.raiiiden.warborn.common.item.BackpackItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -29,7 +29,7 @@ public class WarbornBackpackLayer<T extends LivingEntity, M extends HumanoidMode
 
         // Get equipped backpack
         List<SlotResult> backpacks = CuriosApi.getCuriosHelper().findCurios(entity,
-                stack -> stack.getItem() instanceof WarbornBackpackItem);
+                stack -> stack.getItem() instanceof BackpackItem);
 
         for (SlotResult slotResult : backpacks) {
             // Only render if:
@@ -39,14 +39,14 @@ public class WarbornBackpackLayer<T extends LivingEntity, M extends HumanoidMode
                     slotResult.slotContext().visible()) {
 
                 renderBackpack(poseStack, bufferSource, packedLight, entity,
-                        (WarbornBackpackItem) slotResult.stack().getItem(),
+                        (BackpackItem) slotResult.stack().getItem(),
                         slotResult.stack());
             }
         }
     }
 
     private void renderBackpack(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
-                                T entity, WarbornBackpackItem backpackItem, ItemStack stack) {
+                                T entity, BackpackItem backpackItem, ItemStack stack) {
         WarbornBackpackRenderer renderer = new WarbornBackpackRenderer(backpackItem);
         this.getParentModel().copyPropertiesTo(renderer);
         renderer.prepForRender(entity, stack, EquipmentSlot.CHEST, renderer);

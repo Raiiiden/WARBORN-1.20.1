@@ -1,8 +1,8 @@
 package com.raiiiden.warborn.client.shader;
 
 import com.raiiiden.warborn.WARBORN;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -29,7 +29,7 @@ public class WarbornShaders {
      * Check if NVG should be active for the current player
      */
     private static boolean isNvgEnabled(Minecraft mc) {
-        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_NVG);
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_NVG);
         if (active && DEBUG) {
             LOGGER.info("NVG shader activation requested");
         }
@@ -40,7 +40,7 @@ public class WarbornShaders {
      * Check if simple NVG should be active
      */
     private static boolean isSimpleNvgEnabled(Minecraft mc) {
-        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_SIMPLE_NVG);
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_SIMPLE_NVG);
         if (active && DEBUG) {
             LOGGER.info("Simple NVG shader activation requested");
         }
@@ -51,7 +51,7 @@ public class WarbornShaders {
      * Check if thermal vision should be active
      */
     private static boolean isThermalEnabled(Minecraft mc) {
-        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_THERMAL);
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_THERMAL);
         if (active && DEBUG) {
             LOGGER.info("Thermal shader activation requested");
         }
@@ -62,7 +62,7 @@ public class WarbornShaders {
      * Check if digital vision should be active
      */
     private static boolean isDigitalEnabled(Minecraft mc) {
-        boolean active = HelmetVisionHandler.isVisionActive(mc, WarbornArmorItem.TAG_DIGITAL);
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_DIGITAL);
         if (active && DEBUG) {
             LOGGER.info("Digital shader activation requested");
         }

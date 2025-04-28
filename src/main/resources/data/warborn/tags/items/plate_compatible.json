@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "minecraft:netherite_chestplate",
     "warborn:shturmovik_ru_chestplate",
     "warborn:shturmovikv2_chestplate",
     "warborn:razvetchik_chestplate",

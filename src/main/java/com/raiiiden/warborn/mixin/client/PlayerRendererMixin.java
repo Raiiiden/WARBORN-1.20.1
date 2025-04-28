@@ -1,18 +1,18 @@
 // This is a temp class until I can figure out the
 package com.raiiiden.warborn.mixin.client;
 
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.EquipmentSlot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Set;
 
@@ -31,7 +31,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 
         Set<String> validArmorTypes = Set.of("insurgency_commander", "beta7", "beta7_ash", "beta7_slate");
 
-        if (player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof WarbornArmorItem armor &&
+        if (player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof WBArmorItem armor &&
                 validArmorTypes.contains(armor.getArmorType())) {
 
             // Shrink vanilla arms to hide them

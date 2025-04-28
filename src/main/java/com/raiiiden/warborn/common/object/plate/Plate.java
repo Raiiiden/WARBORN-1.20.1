@@ -5,8 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 public class Plate {
     private final ProtectionTier tier;
     private final MaterialType material;
-    private float currentDurability;
     private final float maxDurability;
+    private float currentDurability;
 
     public Plate(ProtectionTier tier, MaterialType material) {
         this.tier = tier;
@@ -31,10 +31,6 @@ public class Plate {
         return tag;
     }
 
-    public void setCurrentDurability(float durability) {
-        this.currentDurability = Math.max(0, Math.min(durability, maxDurability));
-    }
-
     public ProtectionTier getTier() {
         return tier;
     }
@@ -45,6 +41,10 @@ public class Plate {
 
     public float getCurrentDurability() {
         return currentDurability;
+    }
+
+    public void setCurrentDurability(float durability) {
+        this.currentDurability = Math.max(0, Math.min(durability, maxDurability));
     }
 
     public float getMaxDurability() {
