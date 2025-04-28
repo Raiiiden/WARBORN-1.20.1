@@ -2,7 +2,7 @@ package com.raiiiden.warborn.client.renderer.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -25,7 +25,7 @@ public class WarbornShoulderpadsLayer<T extends LivingEntity, M extends Humanoid
             curios.getCurios().forEach((slot, handler) -> {
                 for (int i = 0; i < handler.getStacks().getSlots(); i++) {
                     ItemStack itemStack = handler.getStacks().getStackInSlot(i);
-                    if (itemStack.getItem() instanceof WarbornArmorItem shoulderpadsItem && shoulderpadsItem.getArmorType().contains("shoulderpads")) {
+                    if (itemStack.getItem() instanceof WBArmorItem shoulderpadsItem && shoulderpadsItem.getArmorType().contains("shoulderpads")) {
                         WarbornGenericArmorRenderer shoulderpadsRenderer = new WarbornGenericArmorRenderer(shoulderpadsItem);
                         this.getParentModel().copyPropertiesTo(shoulderpadsRenderer);
                         shoulderpadsRenderer.prepForRender(entity, itemStack, EquipmentSlot.CHEST, shoulderpadsRenderer);

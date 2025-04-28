@@ -19,10 +19,10 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class WarbornWeaponItem extends SwordItem implements GeoItem {
+public class WeaponItem extends SwordItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public WarbornWeaponItem(Properties props) {
+    public WeaponItem(Properties props) {
         super(Tiers.IRON, 7, -3.4F, props);
     }
 

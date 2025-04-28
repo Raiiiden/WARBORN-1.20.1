@@ -3,18 +3,15 @@ package com.raiiiden.warborn.common.item;
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
-import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
-import com.raiiiden.warborn.common.object.plate.Plate;
-import com.raiiiden.warborn.common.util.Color;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -28,11 +25,7 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -50,8 +43,6 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.ChatFormatting;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,7 +51,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
+public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public static final String TAG_GOGGLE = "goggle";
     public static final String TAG_NVG = "nvg";
     public static final String TAG_SIMPLE_NVG = "simple_nvg";
@@ -73,7 +64,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final String armorType;
 
-    public WarbornArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType) {
+    public WBArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType) {
         super(armorMaterial, type, properties.stacksTo(1));
         this.armorType = armorType;
     }
@@ -126,15 +117,15 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     public static boolean isArmor(ItemStack stack) {
-        return stack.getItem() instanceof ArmorItem;
+        return stack.getItem() instanceof net.minecraft.world.item.ArmorItem;
     }
 
     /**
      * Checks if a helmet has vision capabilities (has the goggle tag)
      */
     public static boolean hasVisionCapability(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
-        if (((ArmorItem) stack.getItem()).getType() != Type.HELMET) return false;
+        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
+        if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.HELMET) return false;
 
         CompoundTag tag = stack.getTag();
         if (tag != null && tag.contains(TAG_GOGGLE)) {
@@ -165,7 +156,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
             return true;
         }
 
-        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
+        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
 
         ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionTag);
         return stack.is(TagKey.create(Registries.ITEM, tagId));
@@ -175,8 +166,8 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
      * Add a specific vision capability to a helmet
      */
     public static void addVisionCapability(ItemStack stack, String visionTag) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return;
-        if (((ArmorItem) stack.getItem()).getType() != Type.HELMET) return;
+        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return;
+        if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.HELMET) return;
 
         CompoundTag tag = stack.getOrCreateTag();
         tag.putBoolean(TAG_GOGGLE, true); // Base tag
@@ -184,10 +175,15 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     public static boolean isPlateCompatible(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ArmorItem)) return false;
-        if (((ArmorItem) stack.getItem()).getType() != Type.CHESTPLATE) return false;
+        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
+        if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.CHESTPLATE) return false;
 
         return stack.is(PLATE_COMPATIBLE);
+    }
+
+    private static boolean isAnimatedHelmet(WBArmorItem item) {
+        Set<String> animatedHelmets = Set.of("insurgency_commander", "beta7_nvg", "beta7_nvg_ash", "beta7_nvg_slate", "nato_sqad_leader", "nato_sqad_leader_woodland", "nato_ukr", "nato_ukr_woodland", "killa", "tagilla");
+        return animatedHelmets.contains(item.getArmorType());
     }
 
     @Override
@@ -197,7 +193,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     @Override
     public boolean overrideStackedOnOther(ItemStack chestplate, Slot slot, ClickAction action, Player player) {
-        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !isChestplateItem(chestplate)) return false;
+        if (!(chestplate.getItem() instanceof WBArmorItem) || !isChestplateItem(chestplate)) return false;
         if (action != ClickAction.SECONDARY) return false;
 
         ItemStack slotStack = slot.getItem();
@@ -242,7 +238,7 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack chestplate, ItemStack itemBeingMoved, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !isChestplateItem(chestplate)) return false;
+        if (!(chestplate.getItem() instanceof WBArmorItem) || !isChestplateItem(chestplate)) return false;
         if (action != ClickAction.SECONDARY || !slot.allowModification(player)) return false;
 
         if (itemBeingMoved.isEmpty()) {
@@ -360,17 +356,12 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack,
                                                                    EquipmentSlot slot, HumanoidModel<?> original) {
                 if (this.renderer == null) {
-                    this.renderer = new WarbornGenericArmorRenderer(WarbornArmorItem.this);
+                    this.renderer = new WarbornGenericArmorRenderer(WBArmorItem.this);
                 }
                 this.renderer.prepForRender(entity, stack, slot, original);
                 return this.renderer;
             }
         });
-    }
-
-    private static boolean isAnimatedHelmet(WarbornArmorItem item) {
-        Set<String> animatedHelmets = Set.of("insurgency_commander", "beta7_nvg", "beta7_nvg_ash", "beta7_nvg_slate", "nato_sqad_leader", "nato_sqad_leader_woodland", "nato_ukr", "nato_ukr_woodland", "killa", "tagilla");
-        return animatedHelmets.contains(item.getArmorType());
     }
 
     @Override
@@ -408,58 +399,5 @@ public class WarbornArmorItem extends ArmorItem implements GeoItem, ICurioItem {
             return new ChestplateBundleCapabilityProvider(stack);
         }
         return super.initCapabilities(stack, nbt);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag flag) {
-        super.appendHoverText(stack, level, components, flag);
-
-        if (isPlateCompatible(stack)) {
-            components.add(Component.literal("Plate Compatible").withStyle(style -> style.withColor(0xFFAA00)));
-
-            stack.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
-                float totalSpeedMod = 0.0F;
-                int plateCount = 0;
-
-                if (cap.hasFrontPlate()) {
-                    Plate frontPlate = cap.getFrontPlate();
-                    if (frontPlate != null && !frontPlate.isBroken()) {
-                        Component frontInfo = Component.empty()
-                                .append(Component.literal("Front: ").withStyle(ChatFormatting.GRAY))
-                                .append(frontPlate.getMaterial().getDisplayName())
-                                .append(Component.literal(" " + frontPlate.getTier().getDisplayName().getString()));
-                        components.add(frontInfo);
-
-                        totalSpeedMod += frontPlate.getSpeedModifier();
-                        plateCount++;
-                    }
-                }
-
-                if (cap.hasBackPlate()) {
-                    Plate backPlate = cap.getBackPlate();
-                    if (backPlate != null && !backPlate.isBroken()) {
-                        Component backInfo = Component.empty()
-                                .append(Component.literal("Back: ").withStyle(ChatFormatting.GRAY))
-                                .append(backPlate.getMaterial().getDisplayName())
-                                .append(Component.literal(" " + backPlate.getTier().getDisplayName().getString()));
-                        components.add(backInfo);
-
-                        totalSpeedMod += backPlate.getSpeedModifier();
-                        plateCount++;
-                    }
-                }
-
-                if (plateCount > 0) {
-                    float averageSpeedMod = totalSpeedMod / plateCount;
-                    String speedText = String.format("%+.1f%%", averageSpeedMod * 100);
-                    ChatFormatting speedColor = averageSpeedMod >= 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
-
-                    Component speedInfo = Component.empty()
-                            .append(Component.literal("Speed Effect: ").withStyle(ChatFormatting.GRAY))
-                            .append(Component.literal(speedText).withStyle(speedColor));
-                    components.add(speedInfo);
-                }
-            });
-        }
     }
 }
