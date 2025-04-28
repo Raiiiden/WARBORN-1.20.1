@@ -1,4 +1,4 @@
-package com.raiiiden.warborn.client;
+package com.raiiiden.warborn.client.events;
 
 import com.raiiiden.warborn.WARBORN;
 import net.minecraft.client.KeyMapping;

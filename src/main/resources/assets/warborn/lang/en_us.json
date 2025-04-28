@@ -70,9 +70,43 @@
   "item.warborn.kevlar_plate_level_iiia": "Kevlar Plate (Level IIIA)",
   "item.warborn.composite_plate_level_iv": "Composite Plate (Level IV)",
 
+  "material.warborn.default": "Default Material",
+  "material.warborn.soft_kevlar": "Soft Kevlar",
+  "material.warborn.steel": "Steel",
+  "material.warborn.ceramic": "Ceramic",
+  "material.warborn.polyethylene": "Polyethylene",
+  "material.warborn.composite": "Composite",
+
+  "tier.warborn.default": "No Tier",
+  "tier.warborn.level_iia": "NIJ Level IIA",
+  "tier.warborn.level_ii": "NIJ Level II",
+  "tier.warborn.level_iiia": "NIJ Level IIIA",
+  "tier.warborn.level_iii": "NIJ Level III",
+  "tier.warborn.level_iv": "NIJ Level IV",
+
   "key.categories.warborn": "Warborn",
   "key.warborn.open_backpack": "Open Backpack",
   "key.warborn.toggle_special_vision": "Toggle Special Vision",
+  "key.warborn.toggle_helmet_top": "Toggle Helmet Goggles/Visor",
+
+  "message.warborn.plate.missing_chestplate": "You must be wearing a chestplate.",
+  "message.warborn.plate.incompatible_chestplate": "This armor doesn't support armor plates.",
+  "message.warborn.plate.is_broken": "This plate is broken.",
+  "message.warborn.plate.front_installed": "Front plate installed!",
+  "message.warborn.plate.back_installed": "Back plate installed!",
+  "message.warborn.plate.slots_full": "All plate slots are full!",
+
+  "tooltip.warborn.plate.rating": "Rating: %s",
+  "tooltip.warborn.plate.material": "Material: %s",
+  "tooltip.warborn.plate.durability": "Durability: %1$d / %2$d",
+  "tooltip.warborn.plate.movement": "Movement: %s",
+  "tooltip.warborn.plate.movement.suffix": " (averaged with other plates)",
+  "tooltip.warborn.plate.vest_only": "Can only be inserted into vests.",
+
+  "tooltip.warborn.vest.compatible": "Plate Compatible",
+  "tooltip.warborn.vest.front": "Front: %s %s",
+  "tooltip.warborn.vest.back": "Back: %s %s",
+  "tooltip.warborn.vest.speed": "Speed Effect: %s",
 
   "menu.warborn.backpack": "Backpack"
 }

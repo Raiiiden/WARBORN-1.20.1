@@ -13,7 +13,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import java.util.EnumMap;
 import java.util.function.Supplier;
 
-public class WarbornMaterials {
+public class Materials {
     public static final WarbornArmorMaterial WARBORN_ARMOR = new WarbornArmorMaterial(
             "warborn",
             40,
@@ -35,12 +35,12 @@ public class WarbornMaterials {
     public static final WarbornArmorMaterial WARBORN_PLATE = new WarbornArmorMaterial(
             "warborn_plate",
             40,
-    Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-        map.put(ArmorItem.Type.LEGGINGS, 3);
-        map.put(ArmorItem.Type.CHESTPLATE, 6);
-        map.put(ArmorItem.Type.HELMET, 3);
-        map.put(ArmorItem.Type.BOOTS, 3);
-    }),
+            Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.LEGGINGS, 3);
+                map.put(ArmorItem.Type.CHESTPLATE, 6);
+                map.put(ArmorItem.Type.HELMET, 3);
+                map.put(ArmorItem.Type.BOOTS, 3);
+            }),
             15,
             ModSoundEvents.WARBORN_ARMOR_EQUIP,
             ModSoundEvents.WARBORN_ARMOR_BREAK,

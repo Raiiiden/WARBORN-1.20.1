@@ -1,8 +1,6 @@
 package com.raiiiden.warborn.common.item;
 
-import com.raiiiden.warborn.client.model.WarbornBackpackModel;
 import com.raiiiden.warborn.client.renderer.armor.WarbornBackpackRenderer;
-import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.object.BackpackMenu;
 import com.raiiiden.warborn.common.object.capability.BackpackCapabilityProvider;
 import net.minecraft.ChatFormatting;
@@ -11,7 +9,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.*;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,17 +38,17 @@ import top.theillusivec4.curios.api.CuriosApi;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class WarbornBackpackItem extends ArmorItem implements GeoItem {
+public class BackpackItem extends ArmorItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final String armorType;
 
-    public WarbornBackpackItem(ArmorMaterial material, Type type, Properties properties, String armorType) {
+    public BackpackItem(ArmorMaterial material, Type type, Properties properties, String armorType) {
         super(material, type, properties);
         this.armorType = armorType;
     }
 
     public static boolean isBackpackItem(ItemStack stack) {
-        return stack.getItem() instanceof WarbornBackpackItem;
+        return stack.getItem() instanceof BackpackItem;
     }
 
     @Override
@@ -139,7 +139,7 @@ public class WarbornBackpackItem extends ArmorItem implements GeoItem {
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack,
                                                                    EquipmentSlot slot, HumanoidModel<?> original) {
                 if (this.renderer == null) {
-                    this.renderer = new WarbornBackpackRenderer(WarbornBackpackItem.this);
+                    this.renderer = new WarbornBackpackRenderer(BackpackItem.this);
                 }
                 this.renderer.prepForRender(entity, stack, slot, original);
                 return this.renderer;

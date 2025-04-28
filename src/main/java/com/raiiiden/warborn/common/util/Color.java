@@ -21,21 +21,25 @@ public class Color {
 //    public static final Color GRAY = new Color(128, 128, 128);
 //    public static final Color LIGHT_GRAY = new Color(192, 192, 192);
 //    public static final Color DARK_GRAY = new Color(64, 64, 64);
-    
+
+
+    // Default color
+    public static final Color DEFAULT = new Color(51, 51, 51);
+
     // Material colors
     public static final Color STEEL = new Color(80, 80, 80);
     public static final Color CERAMIC = new Color(255, 255, 255);
     public static final Color SOFT_KEVLAR = new Color(212, 212, 212);
     public static final Color POLYETHYLENE = new Color(85, 170, 85);
     public static final Color COMPOSITE = new Color(255, 170, 0);
-    
+
     // Protection tier colors - blue gradient
     public static final Color TIER_IIA = new Color(159, 197, 232);
     public static final Color TIER_II = new Color(111, 168, 220);
     public static final Color TIER_IIIA = new Color(61, 133, 198);
     public static final Color TIER_III = new Color(11, 83, 148);
     public static final Color TIER_IV = new Color(7, 55, 99);
-    
+
     private final int r;
     private final int g;
     private final int b;
@@ -71,9 +75,11 @@ public class Color {
     public int getRed() {
         return r;
     }
+
     public int getGreen() {
         return g;
     }
+
     public int getBlue() {
         return b;
     }
@@ -81,9 +87,11 @@ public class Color {
     public int getRGB() {
         return rgb;
     }
+
     public int getARGB() {
         return 0xFF000000 | rgb;
     }
+
     public String toHexString() {
         return String.format("#%06X", rgb);
     }
@@ -91,28 +99,28 @@ public class Color {
     // don't mind this just from old code from other project
     public Color lighter(float factor) {
         factor = Mth.clamp(factor, 0.0f, 1.0f);
-        int newR = r + (int)((255 - r) * factor);
-        int newG = g + (int)((255 - g) * factor);
-        int newB = b + (int)((255 - b) * factor);
+        int newR = r + (int) ((255 - r) * factor);
+        int newG = g + (int) ((255 - g) * factor);
+        int newB = b + (int) ((255 - b) * factor);
         return new Color(newR, newG, newB);
     }
 
     public Color darker(float factor) {
         factor = Mth.clamp(factor, 0.0f, 1.0f);
-        int newR = (int)(r * (1 - factor));
-        int newG = (int)(g * (1 - factor));
-        int newB = (int)(b * (1 - factor));
+        int newR = (int) (r * (1 - factor));
+        int newG = (int) (g * (1 - factor));
+        int newB = (int) (b * (1 - factor));
         return new Color(newR, newG, newB);
     }
 
     public Color blend(Color other, float ratio) {
         ratio = Mth.clamp(ratio, 0.0f, 1.0f);
-        int newR = (int)(r * (1 - ratio) + other.r * ratio);
-        int newG = (int)(g * (1 - ratio) + other.g * ratio);
-        int newB = (int)(b * (1 - ratio) + other.b * ratio);
+        int newR = (int) (r * (1 - ratio) + other.r * ratio);
+        int newG = (int) (g * (1 - ratio) + other.g * ratio);
+        int newB = (int) (b * (1 - ratio) + other.b * ratio);
         return new Color(newR, newG, newB);
     }
-    
+
     /**
      * Creates a text component with this color
      */
@@ -128,7 +136,7 @@ public class Color {
         Color color = (Color) obj;
         return rgb == color.rgb;
     }
-    
+
     @Override
     public int hashCode() {
         return rgb;

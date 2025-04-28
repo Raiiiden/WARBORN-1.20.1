@@ -1,14 +1,13 @@
 package com.raiiiden.warborn.client.events;
 
-import com.raiiiden.warborn.client.ModKeybindings;
 import com.raiiiden.warborn.client.screen.RemovePlateScreen;
-import com.raiiiden.warborn.client.shader.ShaderRegistry;
 import com.raiiiden.warborn.client.shader.ClientVisionState;
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
-import com.raiiiden.warborn.common.network.ModNetworking;
+import com.raiiiden.warborn.client.shader.ShaderRegistry;
 import com.raiiiden.warborn.common.init.ModSoundEvents;
+import com.raiiiden.warborn.common.item.WBArmorItem;
+import com.raiiiden.warborn.common.item.BackpackItem;
+import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
-import com.raiiiden.warborn.common.item.WarbornBackpackItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -39,7 +38,7 @@ public class ClientKeyEvents {
 
         if (ModKeybindings.OPEN_BACKPACK.consumeClick()) {
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-            if (WarbornBackpackItem.isBackpackItem(chest)) {
+            if (BackpackItem.isBackpackItem(chest)) {
                 ModNetworking.openBackpack(chest);
                 return;
             }
@@ -48,7 +47,7 @@ public class ClientKeyEvents {
                 inv.getCurios().forEach((slotId, handler) -> {
                     for (int i = 0; i < handler.getStacks().getSlots(); i++) {
                         ItemStack stack = handler.getStacks().getStackInSlot(i);
-                        if (WarbornBackpackItem.isBackpackItem(stack)) {
+                        if (BackpackItem.isBackpackItem(stack)) {
                             ModNetworking.openBackpack(stack);
                             return;
                         }
@@ -59,7 +58,7 @@ public class ClientKeyEvents {
 
         if (ModKeybindings.TOGGLE_HELMET_TOP.consumeClick()) {
             ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet.getItem() instanceof WarbornArmorItem helmetItem) {
+            if (helmet.getItem() instanceof WBArmorItem helmetItem) {
                 boolean newState = !helmetItem.isTopOpen(helmet);
                 ModNetworking.sendToggleHelmetTop(newState);
 
@@ -90,19 +89,19 @@ public class ClientKeyEvents {
                 if (!activeVision.isEmpty()) {
                     String message;
                     ChatFormatting color = switch (activeVision) {
-                        case WarbornArmorItem.TAG_NVG -> {
+                        case WBArmorItem.TAG_NVG -> {
                             message = "Night Vision Mode";
                             yield ChatFormatting.GREEN;
                         }
-                        case WarbornArmorItem.TAG_SIMPLE_NVG -> {
+                        case WBArmorItem.TAG_SIMPLE_NVG -> {
                             message = "Simple Night Vision Mode";
                             yield ChatFormatting.GREEN;
                         }
-                        case WarbornArmorItem.TAG_DIGITAL -> {
+                        case WBArmorItem.TAG_DIGITAL -> {
                             message = "Digital Vision Mode";
                             yield ChatFormatting.WHITE;
                         }
-                        case WarbornArmorItem.TAG_THERMAL -> {
+                        case WBArmorItem.TAG_THERMAL -> {
                             message = "Thermal Vision Mode";
                             yield ChatFormatting.RED;
                         }
@@ -166,7 +165,7 @@ public class ClientKeyEvents {
     }
 
     private static void disableAllShaders(Player player) {
-        String[] shaders = { "nvg", "snvg", "dvg", "dnvg", "tvg" };
+        String[] shaders = {"nvg", "snvg", "dvg", "dnvg", "tvg"};
         boolean wasActive = false;
 
         for (String id : shaders) {

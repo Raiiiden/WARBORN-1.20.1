@@ -2,14 +2,13 @@ package com.raiiiden.warborn.common.util;
 
 import com.raiiiden.warborn.client.shader.ClientVisionState;
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,15 +26,15 @@ public class HelmetVisionHandler {
     private static final boolean DEBUG_MODE = false;
 
     public static boolean isAllowedHelmet(ItemStack helmet) {
-        return WarbornArmorItem.hasVisionCapability(helmet);
+        return WBArmorItem.hasVisionCapability(helmet);
     }
 
     public static String getShaderIdFromVisionType(String visionType) {
         return switch (visionType) {
-            case WarbornArmorItem.TAG_NVG -> "nvg";
-            case WarbornArmorItem.TAG_SIMPLE_NVG -> "snvg";
-            case WarbornArmorItem.TAG_THERMAL -> "tvg";
-            case WarbornArmorItem.TAG_DIGITAL -> "dvg";
+            case WBArmorItem.TAG_NVG -> "nvg";
+            case WBArmorItem.TAG_SIMPLE_NVG -> "snvg";
+            case WBArmorItem.TAG_THERMAL -> "tvg";
+            case WBArmorItem.TAG_DIGITAL -> "dvg";
             default -> "";
         };
     }
@@ -67,7 +66,7 @@ public class HelmetVisionHandler {
             return true;
         }
 
-        if (helmet.isEmpty() || !(helmet.getItem() instanceof ArmorItem)) return false;
+        if (helmet.isEmpty() || !(helmet.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
 
         ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionType);
         boolean hasTag = helmet.is(TagKey.create(Registries.ITEM, tagId));
@@ -90,10 +89,10 @@ public class HelmetVisionHandler {
             LOGGER.info("Is allowed helmet: {}", isAllowedHelmet(helmet));
             if (!helmet.isEmpty()) {
                 LOGGER.info("Item tags for {}: {}", helmet.getDisplayName().getString(), helmet.getTags().toString());
-                LOGGER.info("  Has NVG: {}", hasVisionType(helmet, WarbornArmorItem.TAG_NVG));
-                LOGGER.info("  Has Simple NVG: {}", hasVisionType(helmet, WarbornArmorItem.TAG_SIMPLE_NVG));
-                LOGGER.info("  Has Thermal: {}", hasVisionType(helmet, WarbornArmorItem.TAG_THERMAL));
-                LOGGER.info("  Has Digital: {}", hasVisionType(helmet, WarbornArmorItem.TAG_DIGITAL));
+                LOGGER.info("  Has NVG: {}", hasVisionType(helmet, WBArmorItem.TAG_NVG));
+                LOGGER.info("  Has Simple NVG: {}", hasVisionType(helmet, WBArmorItem.TAG_SIMPLE_NVG));
+                LOGGER.info("  Has Thermal: {}", hasVisionType(helmet, WBArmorItem.TAG_THERMAL));
+                LOGGER.info("  Has Digital: {}", hasVisionType(helmet, WBArmorItem.TAG_DIGITAL));
                 if (helmet.getTag() != null) {
                     LOGGER.info("  NBT: {}", helmet.getTag().toString());
                 }
@@ -143,24 +142,24 @@ public class HelmetVisionHandler {
     }
 
     private static String getPrimaryVisionType(ItemStack helmet) {
-        if (hasVisionType(helmet, WarbornArmorItem.TAG_DIGITAL)) {
+        if (hasVisionType(helmet, WBArmorItem.TAG_DIGITAL)) {
             LOGGER.info("Helmet has digital vision capability");
-            return WarbornArmorItem.TAG_DIGITAL;
+            return WBArmorItem.TAG_DIGITAL;
         }
 
-        if (hasVisionType(helmet, WarbornArmorItem.TAG_THERMAL)) {
+        if (hasVisionType(helmet, WBArmorItem.TAG_THERMAL)) {
             LOGGER.info("Helmet has thermal vision capability");
-            return WarbornArmorItem.TAG_THERMAL;
+            return WBArmorItem.TAG_THERMAL;
         }
 
-        if (hasVisionType(helmet, WarbornArmorItem.TAG_NVG)) {
+        if (hasVisionType(helmet, WBArmorItem.TAG_NVG)) {
             LOGGER.info("Helmet has standard NVG capability");
-            return WarbornArmorItem.TAG_NVG;
+            return WBArmorItem.TAG_NVG;
         }
 
-        if (hasVisionType(helmet, WarbornArmorItem.TAG_SIMPLE_NVG)) {
+        if (hasVisionType(helmet, WBArmorItem.TAG_SIMPLE_NVG)) {
             LOGGER.info("Helmet has simple NVG capability");
-            return WarbornArmorItem.TAG_SIMPLE_NVG;
+            return WBArmorItem.TAG_SIMPLE_NVG;
         }
 
         LOGGER.warn("Helmet has no vision capabilities");
@@ -169,10 +168,10 @@ public class HelmetVisionHandler {
 
     private static String visionTypeToShaderId(String visionType) {
         return switch (visionType) {
-            case WarbornArmorItem.TAG_NVG -> NVG_SHADER_ID;
-            case WarbornArmorItem.TAG_SIMPLE_NVG -> SIMPLE_NVG_SHADER_ID;
-            case WarbornArmorItem.TAG_THERMAL -> THERMAL_SHADER_ID;
-            case WarbornArmorItem.TAG_DIGITAL -> DIGITAL_SHADER_ID;
+            case WBArmorItem.TAG_NVG -> NVG_SHADER_ID;
+            case WBArmorItem.TAG_SIMPLE_NVG -> SIMPLE_NVG_SHADER_ID;
+            case WBArmorItem.TAG_THERMAL -> THERMAL_SHADER_ID;
+            case WBArmorItem.TAG_DIGITAL -> DIGITAL_SHADER_ID;
             default -> "";
         };
     }
@@ -226,10 +225,10 @@ public class HelmetVisionHandler {
 
         if (!helmet.isEmpty()) {
             info.append("Is allowed helmet: ").append(isAllowedHelmet(helmet)).append("\n");
-            info.append("Has NVG: ").append(hasVisionType(helmet, WarbornArmorItem.TAG_NVG)).append("\n");
-            info.append("Has Simple NVG: ").append(hasVisionType(helmet, WarbornArmorItem.TAG_SIMPLE_NVG)).append("\n");
-            info.append("Has Thermal: ").append(hasVisionType(helmet, WarbornArmorItem.TAG_THERMAL)).append("\n");
-            info.append("Has Digital: ").append(hasVisionType(helmet, WarbornArmorItem.TAG_DIGITAL)).append("\n");
+            info.append("Has NVG: ").append(hasVisionType(helmet, WBArmorItem.TAG_NVG)).append("\n");
+            info.append("Has Simple NVG: ").append(hasVisionType(helmet, WBArmorItem.TAG_SIMPLE_NVG)).append("\n");
+            info.append("Has Thermal: ").append(hasVisionType(helmet, WBArmorItem.TAG_THERMAL)).append("\n");
+            info.append("Has Digital: ").append(hasVisionType(helmet, WBArmorItem.TAG_DIGITAL)).append("\n");
 
             String activeType = getActiveVisionType(helmet);
             info.append("Active vision: ").append(activeType.isEmpty() ? "NONE" : activeType).append("\n");

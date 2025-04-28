@@ -1,7 +1,6 @@
 package com.raiiiden.warborn.common.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
 
 public class WarbornArmorConfig {
     public static final ForgeConfigSpec SPEC;
