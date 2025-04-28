@@ -83,6 +83,14 @@
       "values": [
         1.0
       ]
+    },
+    {
+      "name": "CenterOffsetX",
+      "type": "float",
+        "count": 1,
+        "values": [
+          0.6
+        ]
     }
   ]
 }
