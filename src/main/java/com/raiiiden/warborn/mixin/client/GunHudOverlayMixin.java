@@ -1,6 +1,6 @@
 package com.raiiiden.warborn.mixin.client;
 
-import com.raiiiden.warborn.common.item.WarbornArmorItem;
+import com.raiiiden.warborn.common.item.WBArmorItem;
 import com.tacz.guns.api.item.IAmmo;
 import com.tacz.guns.api.item.IAmmoBox;
 import com.tacz.guns.client.gui.overlay.GunHudOverlay;
@@ -26,7 +26,7 @@ public class GunHudOverlayMixin {
         Player player = inventory.player;
         ItemStack chestplate = player.getInventory().getArmor(2);
 
-        if (!(chestplate.getItem() instanceof WarbornArmorItem) || !WarbornArmorItem.isChestplateItem(chestplate)) {
+        if (!(chestplate.getItem() instanceof WBArmorItem) || !WBArmorItem.isChestplateItem(chestplate)) {
             return;
         }
 

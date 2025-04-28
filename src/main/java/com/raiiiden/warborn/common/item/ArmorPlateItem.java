@@ -156,8 +156,10 @@ public class ArmorPlateItem extends Item implements GeoItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar reg) {
-        reg.add(new AnimationController<>(this, CONTROLLER, 0, s -> PlayState.CONTINUE)
-                .triggerableAnim("use", INSERT_ANIMATION));
+        reg.add(new AnimationController<>(this, CONTROLLER, 0, state -> {
+            state.setAnimation(IDLE_ANIMATION);
+            return PlayState.CONTINUE;
+        }).triggerableAnim("use", INSERT_ANIMATION));
     }
 
     @Override

@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * First-person plate-insertion renderer that matches the “new” gun-renderer pattern.
+ * First-person plate-insertion renderer that matches the "new" gun-renderer pattern.
  */
 
 // TODO??? Add abstract class for this or make it extendable for future use? also smd
@@ -76,8 +76,15 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack pose,
                              MultiBufferSource buf, int light, int overlay) {
         this.transformType = ctx;
-        if (stack.hasTag() && stack.getTag().getBoolean(NBT_INSERT) && ctx.firstPerson())
+
+        if (ctx.firstPerson()) {
             this.renderArms = true;
+
+            if (stack.getTag() == null || !stack.getTag().contains(NBT_INSERT)) {
+                stack.getOrCreateTag().putBoolean(NBT_INSERT, true);
+            }
+
+        }
 
         super.renderByItem(stack, ctx, pose, buf, light, overlay);
     }
@@ -94,7 +101,7 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
         super.actuallyRender(pose, anim, model, type, buf, vc,
                 isRenderer, pt, light, overlay, r, g, b, a);
 
-        this.renderArms = false;
+        this.renderArms = true;
     }
 
     @Override
@@ -109,7 +116,6 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
         bone.setHidden(isArmProxy || hiddenBones.contains(name));
 
         if (this.transformType != null && this.transformType.firstPerson() && isArmProxy && renderArms) {
-
             Minecraft mc = Minecraft.getInstance();
             AbstractClientPlayer player = mc.player;
             if (player != null) {
@@ -152,5 +158,4 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     public ResourceLocation getTextureLocation(ArmorPlateItem inst) {
         return super.getTextureLocation(inst);
     }
-
 }
