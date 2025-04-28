@@ -34,7 +34,6 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     private static final float SCALE_RECIPROCAL = 1f / 16f;
     private static final String LEFT_BONE = "left_hand";
     private static final String RIGHT_BONE = "right_hand";
-    private static final String NBT_INSERT = "inserting";
     private final Set<String> hiddenBones = new HashSet<>();
     public ItemDisplayContext transformType;
     protected boolean renderArms = false;
@@ -45,10 +44,6 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     public WarbornPlateRenderer() {
         super(new DefaultedItemGeoModel<>(new ResourceLocation(WARBORN.MODID, "armor_plate")));
     }
-
-    /* ------------------------------------------------------------------ */
-    /*  render-pipeline overrides                                         */
-    /* ------------------------------------------------------------------ */
 
     public static void renderPartOverBone(ModelPart model, GeoBone bone, PoseStack stack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, float alpha) {
         renderPartOverBone(model, bone, stack, buffer, packedLightIn, packedOverlayIn, 1.0f, 1.0f, 1.0f, alpha);
@@ -76,8 +71,8 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack pose,
                              MultiBufferSource buf, int light, int overlay) {
         this.transformType = ctx;
-        if (stack.hasTag() && stack.getTag().getBoolean(NBT_INSERT) && ctx.firstPerson())
-            this.renderArms = true;
+
+        this.renderArms = ctx.firstPerson();
 
         super.renderByItem(stack, ctx, pose, buf, light, overlay);
     }
@@ -94,7 +89,7 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
         super.actuallyRender(pose, anim, model, type, buf, vc,
                 isRenderer, pt, light, overlay, r, g, b, a);
 
-        this.renderArms = false;
+        this.renderArms = true;
     }
 
     @Override

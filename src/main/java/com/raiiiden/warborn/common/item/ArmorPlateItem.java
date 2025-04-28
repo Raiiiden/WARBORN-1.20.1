@@ -44,7 +44,7 @@ import java.util.function.Consumer;
 public class ArmorPlateItem extends Item implements GeoItem {
 
     public static final RawAnimation INSERT_ANIMATION =
-            RawAnimation.begin().thenPlay("animation.use");
+            RawAnimation.begin().thenPlay("animation.use_peny");
     public static final RawAnimation IDLE_ANIMATION =
             RawAnimation.begin().thenLoop("animation.idle");
     public static final TagKey<Item> PLATE_COMPATIBLE =
