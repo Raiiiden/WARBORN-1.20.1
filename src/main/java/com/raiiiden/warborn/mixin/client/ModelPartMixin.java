@@ -18,7 +18,7 @@ public abstract class ModelPartMixin {
             cancellable = true
     )
     private void warborn$cancelArmRendering(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, CallbackInfo ci) {
-        if (WBRenderState.HIDDEN_PARTS.contains(this)) {
+        if (!WBRenderState.IGNORE_HIDDEN && WBRenderState.HIDDEN_PARTS.contains(this)) {
             ci.cancel();
         }
     }
