@@ -3,7 +3,7 @@ package com.raiiiden.warborn;
 import com.raiiiden.warborn.common.config.WarbornArmorConfig;
 import com.raiiiden.warborn.common.config.WarbornCommonConfig;
 import com.raiiiden.warborn.common.init.MenuTypeInit;
-import com.raiiiden.warborn.common.init.ModRegistry;
+import com.raiiiden.warborn.common.init.ModItemRegistry;
 import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,8 +25,8 @@ public class WARBORN {
     public WARBORN() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModRegistry.ITEMS.register(modEventBus);
-        ModRegistry.CREATIVE_MODE_TABS.register(modEventBus);
+        ModItemRegistry.ITEMS.register(modEventBus);
+        ModItemRegistry.CREATIVE_MODE_TABS.register(modEventBus);
         ModSoundEvents.SOUND_EVENTS.register(modEventBus);
 
         modEventBus.addListener(this::setup);

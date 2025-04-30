@@ -2,7 +2,7 @@ package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.renderer.item.WarbornPlateRenderer;
-import com.raiiiden.warborn.common.init.ModRegistry;
+import com.raiiiden.warborn.common.init.ModItemRegistry;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import com.raiiiden.warborn.common.object.plate.MaterialType;
 import com.raiiiden.warborn.common.object.plate.Plate;
@@ -77,7 +77,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
     }
 
     public static ItemStack createPlateWithHitsRemaining(ProtectionTier t, MaterialType m, int currentDur) {
-        ItemStack stack = new ItemStack(ModRegistry.getPlateItem(t, m));
+        ItemStack stack = new ItemStack(ModItemRegistry.getPlateItem(t, m));
         int damage = Math.max(0, m.getBaseDurability() - currentDur);
         stack.setDamageValue(damage);
         return stack;

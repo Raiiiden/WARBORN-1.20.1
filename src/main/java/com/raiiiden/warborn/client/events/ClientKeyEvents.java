@@ -1,5 +1,6 @@
 package com.raiiiden.warborn.client.events;
 
+import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.screen.RemovePlateScreen;
 import com.raiiiden.warborn.client.shader.ClientVisionState;
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
@@ -10,8 +11,11 @@ import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -28,6 +32,11 @@ public class ClientKeyEvents {
 
     private static Item lastHelmetItem = null;
     private static String lastVisionType = "";
+
+    private static final TagKey<Item> FACEPLATE_TAG =
+            TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "has_faceplate"));
+    private static final TagKey<Item> BETA_7 =
+            TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "is_beta7"));
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
@@ -59,24 +68,26 @@ public class ClientKeyEvents {
         if (ModKeybindings.TOGGLE_HELMET_TOP.consumeClick()) {
             ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
             if (helmet.getItem() instanceof WBArmorItem helmetItem) {
-                boolean newState = !helmetItem.isTopOpen(helmet);
-                ModNetworking.sendToggleHelmetTop(newState);
+                if (helmet.is(FACEPLATE_TAG)) {
+                    boolean newState = !helmetItem.isTopOpen(helmet);
+                    ModNetworking.sendToggleHelmetTop(newState);
 
-                player.playSound(newState ?
-                                SoundEvents.IRON_TRAPDOOR_OPEN : SoundEvents.IRON_TRAPDOOR_CLOSE,
-                        1.0F, 1.0F);
+                    player.playSound(newState ?
+                                    SoundEvents.IRON_TRAPDOOR_OPEN : SoundEvents.IRON_TRAPDOOR_CLOSE,
+                            1.0F, 1.0F);
 
-                player.displayClientMessage(
-                        Component.literal("Helmet Top " + (newState ? "Opened" : "Closed"))
-                                .withStyle(ChatFormatting.GRAY),
-                        true
-                );
-            } else {
-                player.displayClientMessage(
-                        Component.literal("Not Waring Openable Helmet")
-                                .withStyle(ChatFormatting.RED),
-                        true
-                );
+                    player.displayClientMessage(
+                            Component.literal("Helmet Top " + (newState ? "Opened" : "Closed"))
+                                    .withStyle(ChatFormatting.GRAY),
+                            true
+                    );
+                } else {
+                    player.displayClientMessage(
+                            Component.literal("Not Waring Openable Helmet")
+                                    .withStyle(ChatFormatting.RED),
+                            true
+                    );
+                }
             }
         }
 
