@@ -10,6 +10,8 @@ import com.raiiiden.warborn.common.object.plate.ProtectionTier;
 import com.raiiiden.warborn.common.util.PlateTooltip;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -52,6 +54,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
     private static final Logger LOGGER =
             LogManager.getLogger(WARBORN.MODID + "/ArmorPlateItem");
     private static final String CONTROLLER = "controller";
+    public static final String PENDING_INSERT_TAG = "warborn_pending_insert";
 
     private static final String MSG_PREFIX = "message." + WARBORN.MODID + ".plate.";
     private static final String KEY_MSG_MISSING_CHEST = MSG_PREFIX + "missing_chestplate";
@@ -85,18 +88,34 @@ public class ArmorPlateItem extends Item implements GeoItem {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
         ItemStack held = player.getItemInHand(hand);
+        CompoundTag tag = held.getOrCreateTag();
 
         if (chest.isEmpty()) {
-            player.displayClientMessage(Component.translatable(KEY_MSG_MISSING_CHEST)
-                    .withStyle(ChatFormatting.RED), true);
+            player.displayClientMessage(Component.translatable(KEY_MSG_MISSING_CHEST).withStyle(ChatFormatting.RED), true);
             return InteractionResultHolder.fail(held);
         }
+
         if (!isPlateCompatible(chest)) {
-            player.displayClientMessage(Component.translatable(KEY_MSG_INCOMPATIBLE_CHEST)
-                    .withStyle(ChatFormatting.RED), true);
+            player.displayClientMessage(Component.translatable(KEY_MSG_INCOMPATIBLE_CHEST).withStyle(ChatFormatting.RED), true);
+            return InteractionResultHolder.fail(held);
+        }
+
+        if (tag.getBoolean(PENDING_INSERT_TAG)) {
+            return InteractionResultHolder.pass(held);
+        }
+
+        // Don’t play animation if both slots are full
+        AtomicBoolean canInsert = new AtomicBoolean(false);
+        chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
+            if (!cap.hasFrontPlate() || !cap.hasBackPlate()) {
+                canInsert.set(true);
+            }
+        });
+
+        if (!canInsert.get()) {
+            player.displayClientMessage(Component.translatable(KEY_MSG_SLOTS_FULL).withStyle(ChatFormatting.RED), true);
             return InteractionResultHolder.fail(held);
         }
 
@@ -104,41 +123,86 @@ public class ArmorPlateItem extends Item implements GeoItem {
         int currentDur = maxDur > 0 ? maxDur - held.getDamageValue() : 0;
 
         if (currentDur <= 0) {
-            player.displayClientMessage(Component.translatable(KEY_MSG_PLATE_BROKEN)
-                    .withStyle(ChatFormatting.RED), true);
+            player.displayClientMessage(Component.translatable(KEY_MSG_PLATE_BROKEN).withStyle(ChatFormatting.RED), true);
             return InteractionResultHolder.fail(held);
         }
 
-        AtomicBoolean inserted = new AtomicBoolean(false);
+        if (level instanceof ServerLevel serverLevel) {
+            tag.putBoolean(PENDING_INSERT_TAG, true);
+            tag.putInt("warborn_insert_delay", 57);
+            tag.putFloat("InsertDurability", currentDur);
+            tag.putString("InsertTier", tier.name());
+            tag.putString("InsertMaterial", material.getInternalName());
+
+            this.triggerAnim(player, GeoItem.getOrAssignId(held, serverLevel), CONTROLLER, "use");
+        }
+
+        return level.isClientSide
+                ? InteractionResultHolder.pass(held)
+                : InteractionResultHolder.consume(held);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if (!(entity instanceof Player player)) return;
+        if (level.isClientSide) return;
+
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.getBoolean("warborn_pending_insert")) return;
+
+        if (!selected) {
+            cancelPendingInsert(tag);
+            return;
+        }
+
+        int delay = tag.getInt("warborn_insert_delay") - 1;
+        tag.putInt("warborn_insert_delay", delay);
+        if (delay > 0) return;
+
+        tag.remove("warborn_pending_insert");
+        tag.remove("warborn_insert_delay");
+
+        ProtectionTier tier = ProtectionTier.valueOf(tag.getString("InsertTier"));
+        MaterialType material = MaterialType.valueOf(tag.getString("InsertMaterial"));
+        float durability = tag.getFloat("InsertDurability");
+
+        tag.remove("InsertDurability");
+        tag.remove("InsertTier");
+        tag.remove("InsertMaterial");
+
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (chest.isEmpty() || !isPlateCompatible(chest)) return;
+
+        Plate plate = new Plate(tier, material);
+        plate.setCurrentDurability(durability);
 
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
-            Plate plate = new Plate(this.tier, this.material);
-            plate.setCurrentDurability(currentDur);
+            boolean inserted = false;
 
+            // Only allow inserting if at least one slot is still free
             if (!cap.hasFrontPlate()) {
                 cap.insertFrontPlate(plate);
-                player.displayClientMessage(Component.translatable(KEY_MSG_FRONT_INSTALLED)
-                        .withStyle(ChatFormatting.GREEN), true);
-                inserted.set(true);
+                player.displayClientMessage(Component.translatable(KEY_MSG_FRONT_INSTALLED).withStyle(ChatFormatting.GREEN), true);
+                inserted = true;
             } else if (!cap.hasBackPlate()) {
                 cap.insertBackPlate(plate);
-                player.displayClientMessage(Component.translatable(KEY_MSG_BACK_INSTALLED)
-                        .withStyle(ChatFormatting.GREEN), true);
-                inserted.set(true);
+                player.displayClientMessage(Component.translatable(KEY_MSG_BACK_INSTALLED).withStyle(ChatFormatting.GREEN), true);
+                inserted = true;
             } else {
-                player.displayClientMessage(Component.translatable(KEY_MSG_SLOTS_FULL)
-                        .withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.translatable(KEY_MSG_SLOTS_FULL).withStyle(ChatFormatting.RED), true);
+            }
+
+            if (inserted && !player.isCreative()) {
+                stack.shrink(1);
             }
         });
-
-        if (!inserted.get()) return InteractionResultHolder.fail(held);
-        if (!player.isCreative()) held.shrink(1);
-
-        if (level instanceof ServerLevel serverLevel) {
-            this.triggerAnim(player, GeoItem.getOrAssignId(held, serverLevel),
-                    CONTROLLER, "use");
-        }
-        return InteractionResultHolder.sidedSuccess(held, level.isClientSide);
+    }
+    private void cancelPendingInsert(CompoundTag tag) {
+        tag.remove("warborn_pending_insert");
+        tag.remove("warborn_insert_delay");
+        tag.remove("InsertDurability");
+        tag.remove("InsertTier");
+        tag.remove("InsertMaterial");
     }
 
     @Override
@@ -173,8 +237,12 @@ public class ArmorPlateItem extends Item implements GeoItem {
     }
 
     @Override
-    public boolean shouldCauseReequipAnimation(ItemStack o, ItemStack n, boolean slotChanged) {
-        return slotChanged || o.getItem() != n.getItem();
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        CompoundTag tag = oldStack.getTag();
+        if (tag != null && tag.getBoolean("warborn_pending_insert")) {
+            cancelPendingInsert(tag);
+        }
+        return slotChanged || oldStack.getItem() != newStack.getItem();
     }
 
     @Override
