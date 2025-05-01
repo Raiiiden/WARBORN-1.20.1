@@ -87,6 +87,11 @@ public class ArmorPlateItem extends Item implements GeoItem {
     }
 
     @Override
+    public int getMaxStackSize(@NotNull ItemStack stack) {
+        return 2;
+    }
+
+    @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
         ItemStack held = player.getItemInHand(hand);
@@ -148,7 +153,15 @@ public class ArmorPlateItem extends Item implements GeoItem {
         if (level.isClientSide) return;
 
         CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.getBoolean("warborn_pending_insert")) return;
+        if (tag == null) return;
+
+        // Clean up leftover tags if not inserting
+        if (!tag.getBoolean(PENDING_INSERT_TAG)) {
+            if (tag.contains("inserting")) tag.remove("inserting");
+            if (tag.contains("GeckoLibID")) tag.remove("GeckoLibID");
+            cancelPendingInsert(tag);
+            return;
+        }
 
         if (!selected) {
             cancelPendingInsert(tag);
@@ -159,16 +172,25 @@ public class ArmorPlateItem extends Item implements GeoItem {
         tag.putInt("warborn_insert_delay", delay);
         if (delay > 0) return;
 
-        tag.remove("warborn_pending_insert");
+        tag.remove(PENDING_INSERT_TAG);
         tag.remove("warborn_insert_delay");
 
-        ProtectionTier tier = ProtectionTier.valueOf(tag.getString("InsertTier"));
-        MaterialType material = MaterialType.valueOf(tag.getString("InsertMaterial"));
-        float durability = tag.getFloat("InsertDurability");
+        ProtectionTier tier;
+        MaterialType material;
+        float durability;
+        try {
+            tier = ProtectionTier.valueOf(tag.getString("InsertTier"));
+            material = MaterialType.valueOf(tag.getString("InsertMaterial"));
+            durability = tag.getFloat("InsertDurability");
+        } catch (Exception e) {
+            LOGGER.warn("Failed to parse plate insert data: {}", tag);
+            cancelPendingInsert(tag);
+            return;
+        }
 
-        tag.remove("InsertDurability");
         tag.remove("InsertTier");
         tag.remove("InsertMaterial");
+        tag.remove("InsertDurability");
 
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
         if (chest.isEmpty() || !isPlateCompatible(chest)) return;
@@ -179,7 +201,6 @@ public class ArmorPlateItem extends Item implements GeoItem {
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
             boolean inserted = false;
 
-            // Only allow inserting if at least one slot is still free
             if (!cap.hasFrontPlate()) {
                 cap.insertFrontPlate(plate);
                 player.displayClientMessage(Component.translatable(KEY_MSG_FRONT_INSTALLED).withStyle(ChatFormatting.GREEN), true);

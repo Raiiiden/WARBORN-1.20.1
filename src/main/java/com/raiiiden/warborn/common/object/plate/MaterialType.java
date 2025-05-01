@@ -23,57 +23,33 @@ public class MaterialType {
             (damagePercent, baseProtection) -> baseProtection,
             Color.DEFAULT
     );
-    public static final MaterialType SOFT_KEVLAR = register("soft_kevlar", KEY_PREFIX_MATERIAL + "soft_kevlar", 220, 0.05f,
+    public static final MaterialType SOFT_KEVLAR = register("soft_kevlar", KEY_PREFIX_MATERIAL + "soft_kevlar", 53, 0.05f,
             (durability, damage) -> durability - damage,
-            (damagePercent, baseProtection) -> baseProtection * (1 - (damagePercent * 0.8f)),
+            (damagePercent, baseProtection) -> baseProtection, // no effect anymore
             Color.SOFT_KEVLAR
     );
-    public static final MaterialType STEEL = register("steel", KEY_PREFIX_MATERIAL + "steel", 750, -0.15f,
-            (durability, damage) -> durability - (damage * 0.1f),
-            (damagePercent, baseProtection) -> damagePercent < 0.7f
-                    ? baseProtection
-                    : baseProtection * (1 - ((damagePercent - 0.7f) * 3.0f)),
+
+    public static final MaterialType STEEL = register("steel", KEY_PREFIX_MATERIAL + "steel", 60, -0.15f,
+            (durability, damage) -> durability - damage,
+            (damagePercent, baseProtection) -> baseProtection,
             Color.STEEL
     );
-    public static final MaterialType CERAMIC = register("ceramic", KEY_PREFIX_MATERIAL + "ceramic", 600, -0.10f,
-            (durability, damage) -> {
-                float damagePercent = 1 - (durability / 600f);
-                return durability - (damage * (1.0f + damagePercent * 0.5f));
-            },
-            (damagePercent, baseProtection) -> {
-                if (damagePercent < 0.3f) return baseProtection;
-                else if (damagePercent < 0.5f) return baseProtection * 0.8f;
-                else if (damagePercent < 0.7f) return baseProtection * 0.5f;
-                else return baseProtection * 0.2f;
-            },
+
+    public static final MaterialType CERAMIC = register("ceramic", KEY_PREFIX_MATERIAL + "ceramic", 51, -0.10f,
+            (durability, damage) -> durability - damage,
+            (damagePercent, baseProtection) -> baseProtection,
             Color.CERAMIC
     );
-    public static final MaterialType POLYETHYLENE = register("polyethylene", KEY_PREFIX_MATERIAL + "polyethylene", 500, -0.05f,
-            (durability, damage) -> {
-                float damagePercent = 1 - (durability / 500f);
-                float multiplier = damagePercent < 0.4f ? 0.7f : 1.2f;
-                return durability - (damage * multiplier);
-            },
-            (damagePercent, baseProtection) -> {
-                if (damagePercent < 0.3f) return baseProtection;
-                else if (damagePercent < 0.5f) return baseProtection * 0.9f;
-                else if (damagePercent < 0.7f) return baseProtection * 0.7f;
-                else return baseProtection * 0.5f;
-            },
+
+    public static final MaterialType POLYETHYLENE = register("polyethylene", KEY_PREFIX_MATERIAL + "polyethylene", 68, -0.05f,
+            (durability, damage) -> durability - damage,
+            (damagePercent, baseProtection) -> baseProtection,
             Color.POLYETHYLENE
     );
-    public static final MaterialType COMPOSITE = register("composite", KEY_PREFIX_MATERIAL + "composite", 1200, -0.12f,
-            (durability, damage) -> {
-                float percent = 1 - (durability / 1200f);
-                if (percent < 0.3f) return durability - (damage * 1.2f);
-                else if (percent < 0.7f) return durability - (damage * 0.6f);
-                else return durability - (damage * 0.3f);
-            },
-            (damagePercent, baseProtection) -> {
-                if (damagePercent < 0.3f) return baseProtection;
-                else if (damagePercent < 0.7f) return baseProtection * (1 - ((damagePercent - 0.3f) * 0.25f));
-                else return Math.max(0.4f, baseProtection * (0.85f - ((damagePercent - 0.7f) * 1.5f)));
-            },
+
+    public static final MaterialType COMPOSITE = register("composite", KEY_PREFIX_MATERIAL + "composite", 94, -0.12f,
+            (durability, damage) -> durability - damage,
+            (damagePercent, baseProtection) -> baseProtection,
             Color.COMPOSITE
     );
 

@@ -45,12 +45,12 @@ public class DamageHandler {
 
                 // Apply plate damage
                 if (isFrontHit) {
-                    cap.damageFrontPlate(originalDamage / 3f);
+                    cap.damageFrontPlate(originalDamage);
                     LOGGER.info("Front plate absorbed {}% of {} damage. Remaining durability: {}/{}",
                             Math.round(damageReduction * 100), originalDamage,
                             plateHit.getCurrentDurability(), plateHit.getMaxDurability());
                 } else {
-                    cap.damageBackPlate(originalDamage / 3f);
+                    cap.damageBackPlate(originalDamage);
                     LOGGER.info("Back plate absorbed {}% of {} damage. Remaining durability: {}/{}",
                             Math.round(damageReduction * 100), originalDamage,
                             plateHit.getCurrentDurability(), plateHit.getMaxDurability());
