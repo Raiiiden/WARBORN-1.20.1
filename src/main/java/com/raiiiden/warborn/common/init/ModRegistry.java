@@ -25,7 +25,7 @@ public class ModRegistry {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
     //Armor Plates
     // Legacy plate - keeping for compatibility
-    public static final RegistryObject<ArmorPlateItem> ARMOR_PLATE = ITEMS.register("armor_plate",
+    public static final RegistryObject<ArmorPlateItem> STEEL_PLATE_LEVEL_III = ITEMS.register("steel_plate_level_iii",
             () -> new ArmorPlateItem(ProtectionTier.LEVEL_III, MaterialType.STEEL, new Item.Properties()));
     // New plate types with different materials and protection levels
     public static final RegistryObject<ArmorPlateItem> CERAMIC_PLATE_LEVEL_IV = ITEMS.register("ceramic_plate_level_iv",
@@ -234,7 +234,7 @@ public class ModRegistry {
                         // Armor Plates Start Here
                         // ----------------
 
-                        entries.accept(ARMOR_PLATE.get());
+                        entries.accept(STEEL_PLATE_LEVEL_III.get());
                         entries.accept(CERAMIC_PLATE_LEVEL_IV.get());
                         entries.accept(KEVLAR_PLATE_LEVEL_IIIA.get());
                         entries.accept(COMPOSITE_PLATE_LEVEL_IV.get());
@@ -251,7 +251,7 @@ public class ModRegistry {
     public static Item getPlateItem(ProtectionTier tier, MaterialType material) {
         // Lazy initialization of the plate registry mapping
         if (PLATE_REGISTRY.isEmpty()) {
-            PLATE_REGISTRY.put(ProtectionTier.LEVEL_III.name() + "_" + MaterialType.STEEL.name(), ARMOR_PLATE);
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_III.name() + "_" + MaterialType.STEEL.name(), STEEL_PLATE_LEVEL_III);
             PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.CERAMIC.name(), CERAMIC_PLATE_LEVEL_IV);
             PLATE_REGISTRY.put(ProtectionTier.LEVEL_IIIA.name() + "_" + MaterialType.SOFT_KEVLAR.name(), KEVLAR_PLATE_LEVEL_IIIA);
             PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.COMPOSITE.name(), COMPOSITE_PLATE_LEVEL_IV);
@@ -264,6 +264,6 @@ public class ModRegistry {
         }
 
         // If no exact match, return default plate
-        return ARMOR_PLATE.get();
+        return STEEL_PLATE_LEVEL_III.get();
     }
 }

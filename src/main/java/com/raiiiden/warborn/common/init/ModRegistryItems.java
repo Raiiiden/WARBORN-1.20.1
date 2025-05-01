@@ -13,7 +13,7 @@ public class ModRegistryItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
 
     // refactor this
-    public static final RegistryObject<ArmorPlateItem> ARMOR_PLATE = ITEMS.register("armor_plate",
+    public static final RegistryObject<ArmorPlateItem> STEEL_PLATE_LEVEL_III = ITEMS.register("steel_plate_level_iii",
             () -> new ArmorPlateItem(ProtectionTier.LEVEL_III, MaterialType.STEEL, new Item.Properties()));
 
     public static final RegistryObject<ArmorPlateItem> CERAMIC_PLATE_LEVEL_IV = ITEMS.register("ceramic_plate_level_iv",

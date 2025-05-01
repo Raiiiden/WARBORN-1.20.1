@@ -43,7 +43,7 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     protected ArmorPlateItem animatable;
 
     public WarbornPlateRenderer() {
-        super(new DefaultedItemGeoModel<>(new ResourceLocation(WARBORN.MODID, "armor_plate")));
+        super(new DefaultedItemGeoModel<>(new ResourceLocation(WARBORN.MODID, "steel_plate_level_iii")));
     }
 
     /* ------------------------------------------------------------------ */
