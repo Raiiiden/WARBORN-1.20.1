@@ -3,6 +3,7 @@ package com.raiiiden.warborn.client.renderer.item;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.raiiiden.warborn.WARBORN;
+import com.raiiiden.warborn.client.model.WarbornPlateModel;
 import com.raiiiden.warborn.common.item.ArmorPlateItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -43,7 +44,7 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     protected ArmorPlateItem animatable;
 
     public WarbornPlateRenderer() {
-        super(new DefaultedItemGeoModel<>(new ResourceLocation(WARBORN.MODID, "steel_plate_level_iii")));
+        super(new WarbornPlateModel());
     }
 
     /* ------------------------------------------------------------------ */
