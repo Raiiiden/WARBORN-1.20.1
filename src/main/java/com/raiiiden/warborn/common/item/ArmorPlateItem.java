@@ -22,6 +22,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -238,13 +240,25 @@ public class ArmorPlateItem extends Item implements GeoItem {
             }
         });
     }
-
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar reg) {
         reg.add(new AnimationController<>(this, CONTROLLER, 0, state -> {
+            ItemDisplayContext context = state.getData(DataTickets.ITEM_RENDER_PERSPECTIVE);
+
+            if (context == ItemDisplayContext.GUI || context == ItemDisplayContext.GROUND || context == ItemDisplayContext.FIXED) {
+                return PlayState.STOP;
+            }
+
+            ItemStack stack = state.getData(DataTickets.ITEMSTACK);
+
+            if (stack.hasTag() && stack.getTag().getBoolean("warborn_pending_insert")) {
+                state.setAnimation(INSERT_ANIMATION);
+                return PlayState.CONTINUE;
+            }
+
             state.setAnimation(IDLE_ANIMATION);
             return PlayState.CONTINUE;
-        }).triggerableAnim("use", INSERT_ANIMATION));
+        }));
     }
 
     @Override

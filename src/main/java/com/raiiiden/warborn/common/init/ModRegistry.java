@@ -34,6 +34,8 @@ public class ModRegistry {
             () -> new ArmorPlateItem(ProtectionTier.LEVEL_IIIA, MaterialType.SOFT_KEVLAR, new Item.Properties()));
     public static final RegistryObject<ArmorPlateItem> COMPOSITE_PLATE_LEVEL_IV = ITEMS.register("composite_plate_level_iv",
             () -> new ArmorPlateItem(ProtectionTier.LEVEL_IV, MaterialType.COMPOSITE, new Item.Properties()));
+    public static final RegistryObject<ArmorPlateItem> POLYETHYLENE_PLATE_LEVEL_III = ITEMS.register("polyethylene_plate_level_iii",
+            () -> new ArmorPlateItem(ProtectionTier.LEVEL_III, MaterialType.POLYETHYLENE, new Item.Properties()));
     //RU Armor
     public static final RegistryObject<WBArmorItem> RU_HELMET = ITEMS.register("ru_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
@@ -238,6 +240,7 @@ public class ModRegistry {
                         entries.accept(CERAMIC_PLATE_LEVEL_IV.get());
                         entries.accept(KEVLAR_PLATE_LEVEL_IIIA.get());
                         entries.accept(COMPOSITE_PLATE_LEVEL_IV.get());
+                        entries.accept(POLYETHYLENE_PLATE_LEVEL_III.get());
                     })
                     .build()
     );
