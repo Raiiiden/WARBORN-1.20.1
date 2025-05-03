@@ -258,6 +258,7 @@ public class ModRegistry {
             PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.CERAMIC.name(), CERAMIC_PLATE_LEVEL_IV);
             PLATE_REGISTRY.put(ProtectionTier.LEVEL_IIIA.name() + "_" + MaterialType.SOFT_KEVLAR.name(), KEVLAR_PLATE_LEVEL_IIIA);
             PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.COMPOSITE.name(), COMPOSITE_PLATE_LEVEL_IV);
+            PLATE_REGISTRY.put(ProtectionTier.LEVEL_III.name() + "_" + MaterialType.POLYETHYLENE.name(), POLYETHYLENE_PLATE_LEVEL_III);
         }
 
         // Look for exact match

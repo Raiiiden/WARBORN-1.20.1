@@ -3,14 +3,19 @@ package com.raiiiden.warborn.common.item;
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.renderer.item.WarbornPlateRenderer;
 import com.raiiiden.warborn.common.init.ModRegistry;
+import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import com.raiiiden.warborn.common.object.plate.MaterialType;
 import com.raiiiden.warborn.common.object.plate.Plate;
 import com.raiiiden.warborn.common.object.plate.ProtectionTier;
 import com.raiiiden.warborn.common.util.PlateTooltip;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +31,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,9 +48,13 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.Map;
+
 
 public class ArmorPlateItem extends Item implements GeoItem {
 
@@ -65,6 +76,9 @@ public class ArmorPlateItem extends Item implements GeoItem {
     private static final String KEY_MSG_FRONT_INSTALLED = MSG_PREFIX + "front_installed";
     private static final String KEY_MSG_BACK_INSTALLED = MSG_PREFIX + "back_installed";
     private static final String KEY_MSG_SLOTS_FULL = MSG_PREFIX + "slots_full";
+
+    private static final Map<UUID, ArmorPlateSound> activeSounds = new HashMap<>();
+
 
     private final ProtectionTier tier;
     private final MaterialType material;
@@ -113,7 +127,6 @@ public class ArmorPlateItem extends Item implements GeoItem {
             return InteractionResultHolder.pass(held);
         }
 
-        // Don’t play animation if both slots are full
         AtomicBoolean canInsert = new AtomicBoolean(false);
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
             if (!cap.hasFrontPlate() || !cap.hasBackPlate()) {
@@ -142,6 +155,18 @@ public class ArmorPlateItem extends Item implements GeoItem {
             tag.putString("InsertMaterial", material.getInternalName());
 
             this.triggerAnim(player, GeoItem.getOrAssignId(held, serverLevel), CONTROLLER, "use");
+        }
+
+        if (level.isClientSide && player instanceof Player) {
+            Player localPlayer = (Player) player;
+            UUID id = localPlayer.getUUID();
+
+            ArmorPlateSound prev = activeSounds.get(id);
+            if (prev != null) Minecraft.getInstance().getSoundManager().stop(prev);
+
+            ArmorPlateSound sound = new ArmorPlateSound(localPlayer, this);
+            activeSounds.put(id, sound);
+            Minecraft.getInstance().getSoundManager().play(sound);
         }
 
         return level.isClientSide
@@ -288,5 +313,44 @@ public class ArmorPlateItem extends Item implements GeoItem {
 
     public MaterialType getMaterial() {
         return material;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static class ArmorPlateSound extends AbstractTickableSoundInstance {
+        private final Player player;
+        private final Item trackedItem;
+
+        public ArmorPlateSound(Player player, Item trackedItem) {
+            super(ModSoundEvents.WARBORN_PLATE_INSERT.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
+            this.player = player;
+            this.trackedItem = trackedItem;
+            this.looping = false;
+            this.volume = 1.0f;
+            this.pitch = 1.0f;
+            this.x = player.getX();
+            this.y = player.getY();
+            this.z = player.getZ();
+        }
+
+        @Override
+        public void tick() {
+            if (!player.isAlive() || !isHoldingPlate(player)) {
+                this.stop();
+                activeSounds.remove(player.getUUID());
+            } else {
+                this.x = player.getX();
+                this.y = player.getY();
+                this.z = player.getZ();
+            }
+        }
+
+        private boolean isHoldingPlate(Player player) {
+            return player.getMainHandItem().is(trackedItem) || player.getOffhandItem().is(trackedItem);
+        }
+
+        @Override
+        public boolean canStartSilent() {
+            return false;
+        }
     }
 }

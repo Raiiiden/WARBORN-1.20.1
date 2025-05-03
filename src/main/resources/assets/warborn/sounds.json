@@ -28,5 +28,15 @@
             "pitch": 1.0
         }
         ]
+    },
+    "item.armor.warborn_plate_insert": {
+        "subtitle": "warborn.subtitle.armor_plate_insert",
+        "sounds": [
+            {
+                "name": "warborn:item/armor/warborn_plate_insert",
+                "volume": 1.0,
+                "pitch": 1.0
+            }
+        ]
     }
 }
