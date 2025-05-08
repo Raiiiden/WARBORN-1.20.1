@@ -32,7 +32,6 @@ public class ChestplateBundleHandler extends ItemStackHandler {
 
     @Override
     public @NotNull ItemStack getStackInSlot(int slot) {
-        loadFromItem(chestplate);
         return super.getStackInSlot(slot);
     }
 
