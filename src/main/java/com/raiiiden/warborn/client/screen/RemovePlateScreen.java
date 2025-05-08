@@ -1,17 +1,19 @@
 package com.raiiiden.warborn.client.screen;
 
+import com.raiiiden.warborn.common.item.ArmorPlateItem;
 import com.raiiiden.warborn.common.network.ModNetworking;
-import com.raiiiden.warborn.common.object.capability.PlateHolderCapability;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib.animatable.GeoItem;
 
 public class RemovePlateScreen extends Screen {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -44,11 +46,10 @@ public class RemovePlateScreen extends Screen {
             return;
         }
 
-        // Check if the action is valid before sending packet
         boolean canRemove = false;
         var capOpt = chest.getCapability(PlateHolderProvider.CAP);
         if (capOpt.isPresent()) {
-            PlateHolderCapability cap = capOpt.orElse(null);
+            var cap = capOpt.orElse(null);
             if (cap != null) {
                 if (front && cap.hasFrontPlate()) {
                     canRemove = true;
@@ -59,11 +60,33 @@ public class RemovePlateScreen extends Screen {
         }
 
         if (canRemove) {
-            // Send packet to server to handle the plate removal
             LOGGER.info("Sending remove plate packet to server: {}", front ? "front" : "back");
             ModNetworking.sendRemovePlatePacket(front);
+
+            ItemStack main = player.getMainHandItem();
+            ItemStack off = player.getOffhandItem();
+
+            if (main.getItem() instanceof ArmorPlateItem plateItem) {
+                ItemStack held = main;
+                CompoundTag tag = held.getOrCreateTag();
+
+                tag.putBoolean("warborn_pending_remove", true);
+                tag.putInt("warborn_remove_delay", 62);
+
+                long id = GeoItem.getId(held);
+                plateItem.triggerAnim(player, id, ArmorPlateItem.CONTROLLER, "remove");
+            } else if (off.getItem() instanceof ArmorPlateItem plateItem) {
+                ItemStack held = off;
+                CompoundTag tag = held.getOrCreateTag();
+
+                tag.putBoolean("warborn_pending_remove", true);
+                tag.putInt("warborn_remove_delay", 62);
+
+                long id = GeoItem.getId(held);
+                plateItem.triggerAnim(player, id, ArmorPlateItem.CONTROLLER, "remove");
+            }
+
         } else {
-            // Display message locally if can't remove
             String plateType = front ? "front" : "back";
             player.displayClientMessage(Component.literal("No " + plateType + " plate to remove."), true);
         }

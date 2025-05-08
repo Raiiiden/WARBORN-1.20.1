@@ -2,6 +2,7 @@ package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.renderer.item.WarbornPlateRenderer;
+import com.raiiiden.warborn.client.sound.WarbornClientSounds;
 import com.raiiiden.warborn.common.init.ModRegistry;
 import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
@@ -62,11 +63,16 @@ public class ArmorPlateItem extends Item implements GeoItem {
             RawAnimation.begin().thenPlay("animation.use");
     public static final RawAnimation IDLE_ANIMATION =
             RawAnimation.begin().thenLoop("animation.idle");
+    public static final RawAnimation REMOVE_ANIMATION =
+            RawAnimation.begin().thenPlay("animation.remove");
+    public static final RawAnimation SWAP_ANIMATION =
+            RawAnimation.begin().thenPlay("animation.swap");
+
     public static final TagKey<Item> PLATE_COMPATIBLE =
             ItemTags.create(new ResourceLocation(WARBORN.MODID, "plate_compatible"));
     private static final Logger LOGGER =
             LogManager.getLogger(WARBORN.MODID + "/ArmorPlateItem");
-    private static final String CONTROLLER = "controller";
+    public static final String CONTROLLER = "controller";
     public static final String PENDING_INSERT_TAG = "warborn_pending_insert";
 
     private static final String MSG_PREFIX = "message." + WARBORN.MODID + ".plate.";
@@ -149,7 +155,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
 
         if (level instanceof ServerLevel serverLevel) {
             tag.putBoolean(PENDING_INSERT_TAG, true);
-            tag.putInt("warborn_insert_delay", 60);
+            tag.putInt("warborn_insert_delay", 62);
             tag.putFloat("InsertDurability", currentDur);
             tag.putString("InsertTier", tier.name());
             tag.putString("InsertMaterial", material.getInternalName());
@@ -157,16 +163,8 @@ public class ArmorPlateItem extends Item implements GeoItem {
             this.triggerAnim(player, GeoItem.getOrAssignId(held, serverLevel), CONTROLLER, "use");
         }
 
-        if (level.isClientSide && player instanceof Player) {
-            Player localPlayer = (Player) player;
-            UUID id = localPlayer.getUUID();
-
-            ArmorPlateSound prev = activeSounds.get(id);
-            if (prev != null) Minecraft.getInstance().getSoundManager().stop(prev);
-
-            ArmorPlateSound sound = new ArmorPlateSound(localPlayer, this);
-            activeSounds.put(id, sound);
-            Minecraft.getInstance().getSoundManager().play(sound);
+        if (level.isClientSide) {
+            WarbornClientSounds.playArmorInsertSound(player, this);
         }
 
         return level.isClientSide
@@ -278,7 +276,10 @@ public class ArmorPlateItem extends Item implements GeoItem {
 
             state.setAnimation(IDLE_ANIMATION);
             return PlayState.CONTINUE;
-        }).triggerableAnim("use", INSERT_ANIMATION));
+        })
+                .triggerableAnim("use", INSERT_ANIMATION)
+                .triggerableAnim("remove", REMOVE_ANIMATION)
+        );
     }
 
     @Override
