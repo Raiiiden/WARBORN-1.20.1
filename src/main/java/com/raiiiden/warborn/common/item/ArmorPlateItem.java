@@ -279,6 +279,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
         })
                 .triggerableAnim("use", INSERT_ANIMATION)
                 .triggerableAnim("remove", REMOVE_ANIMATION)
+                .triggerableAnim("swap", SWAP_ANIMATION)
         );
     }
 

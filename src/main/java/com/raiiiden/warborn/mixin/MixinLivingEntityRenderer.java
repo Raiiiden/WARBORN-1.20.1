@@ -5,13 +5,17 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
+import com.raiiiden.warborn.common.item.WBArmorItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,7 +44,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
                             float red, float green, float blue, float alpha,
                             Operation<Void> original,
                             T entity) {
-        if (!wARBORN_1_20_1$isActive()) {
+        if (!wARBORN_1_20_1$isActive() || !wARBORN_1_20_1$isHelmetClosed()) {
             original.call(model, poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
             return;
         }
@@ -60,5 +64,19 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
         boolean tvgActive = ShaderRegistry.getInstance().isShaderActive(DVG_SHADERT_ID);
 
         return dvgActive || tvgActive;
+    }
+    /**
+     * Check if the player's helmet is closed
+     */
+    @Unique
+    private boolean wARBORN_1_20_1$isHelmetClosed() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return false;
+
+        ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
+        if (helmet.getItem() instanceof WBArmorItem helmetItem) {
+            return !helmetItem.isTopOpen(helmet);
+        }
+        return false;
     }
 }
