@@ -27,14 +27,18 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 @Mod.EventBusSubscriber(modid = "warborn", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientKeyEvents {
 
     private static Item lastHelmetItem = null;
     private static String lastVisionType = "";
 
-    private static final TagKey<Item> FACEPLATE_TAG =
-            TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "has_faceplate"));
+    public static final TagKey<Item> HAS_TOGGLE_TAG =
+            TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "has_toggle"));
+
     private static final TagKey<Item> BETA_7 =
             TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "is_beta7"));
 
@@ -68,7 +72,8 @@ public class ClientKeyEvents {
         if (ModKeybindings.TOGGLE_HELMET_TOP.consumeClick()) {
             ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
             if (helmet.getItem() instanceof WBArmorItem helmetItem) {
-                if (helmet.is(FACEPLATE_TAG)) {
+                // Used the new tag name here
+                if (helmet.is(HAS_TOGGLE_TAG)) {
                     boolean newState = !helmetItem.isTopOpen(helmet);
                     ModNetworking.sendToggleHelmetTop(newState);
 
@@ -83,7 +88,7 @@ public class ClientKeyEvents {
                     );
                 } else {
                     player.displayClientMessage(
-                            Component.literal("Not Waring Openable Helmet")
+                            Component.literal("Not Wearing Toggleable Helmet")
                                     .withStyle(ChatFormatting.RED),
                             true
                     );
@@ -127,7 +132,9 @@ public class ClientKeyEvents {
                     player.displayClientMessage(Component.literal("Vision Mode Disabled").withStyle(ChatFormatting.YELLOW), true);
                 }
             } else {
-                player.displayClientMessage(Component.literal("No appropriate helmet equipped").withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.literal("No appropriate helmet equipped")
+                                .withStyle(ChatFormatting.RED),
+                        true);
             }
         }
 
@@ -148,7 +155,6 @@ public class ClientKeyEvents {
 
         boolean isHelmetValid = HelmetVisionHandler.isAllowedHelmet(helmet);
 
-        // Helmet fully removed
         if (!isHelmetValid) {
             disableAllShaders(player);
             lastHelmetItem = null;
@@ -156,12 +162,10 @@ public class ClientKeyEvents {
             return;
         }
 
-        // Check for actual helmet swap (not damage/NBT)
         Item currentItem = helmet.getItem();
         String currentVision = HelmetVisionHandler.getActiveVisionType(helmet);
 
         if (lastHelmetItem != null && currentItem != lastHelmetItem) {
-            // Helmet changed → turn off old shader
             if (!lastVisionType.isEmpty()) {
                 ShaderRegistry.getInstance().setShaderEnabled(
                         HelmetVisionHandler.getShaderIdFromVisionType(lastVisionType), false
@@ -170,7 +174,6 @@ public class ClientKeyEvents {
             }
         }
 
-        // Update
         lastHelmetItem = currentItem;
         lastVisionType = currentVision;
     }

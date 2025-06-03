@@ -20,6 +20,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -50,6 +51,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static com.raiiiden.warborn.client.events.ClientKeyEvents.HAS_TOGGLE_TAG;
 
 public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public static final String TAG_GOGGLE = "goggle";
@@ -355,11 +358,17 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        if (!isAnimatedHelmet(this)) return; // Skip if not in list
-
         controllers.add(new AnimationController<>(this, "helmet_toggle", 0, state -> {
             ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-            if (stack == null || !stack.hasTag()) return PlayState.STOP;
+            Entity rawEntity = state.getData(DataTickets.ENTITY);
+
+            if (!(rawEntity instanceof LivingEntity entity) || entity instanceof ArmorStand) {
+                return PlayState.STOP;
+            }
+
+            if (stack == null || !stack.hasTag() || !stack.is(HAS_TOGGLE_TAG)) {
+                return PlayState.STOP;
+            }
 
             boolean open = stack.getOrCreateTag().getBoolean("helmet_top_open");
             String animationName = open ? "helmet_open" : "helmet_closed";

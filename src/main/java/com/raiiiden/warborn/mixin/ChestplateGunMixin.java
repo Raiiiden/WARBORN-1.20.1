@@ -34,27 +34,36 @@ public class ChestplateGunMixin {
     private void capturePlayerBeforeReload(LivingEntity shooter, ItemStack gunItem, CallbackInfoReturnable<Boolean> cir) {
         if (shooter instanceof Player player) {
             RELOADING_PLAYER.set(player);
-            LOGGER.info(" {} Reloading", player.getName().getString());
+            //LOGGER.info(" {} Reloading", player.getName().getString());
         }
     }
 
     @Inject(method = "canReload", at = @At("RETURN"), cancellable = true, remap = false)
     private void checkChestplateForAmmo(LivingEntity shooter, ItemStack gunItem, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) {
-            LOGGER.info("Reload already allowed, skipping chestplate check");
+            //LOGGER.info("Reload already allowed, skipping chestplate check");
             return;
         }
 
         if (!(shooter instanceof Player player)) return;
 
-        ItemStack chestplate = player.getInventory().getArmor(2);
-        if (!(chestplate.getItem() instanceof WBArmorItem) || !WBArmorItem.isChestplateItem(chestplate))
+        int current = ((AbstractGunItem)(Object)this).getCurrentAmmoCount(gunItem);
+        int max = com.tacz.guns.util.AttachmentDataUtils.getAmmoCountWithAttachment(
+                gunItem,
+                com.tacz.guns.api.TimelessAPI.getCommonGunIndex(((AbstractGunItem)(Object)this).getGunId(gunItem)).orElseThrow().getGunData()
+        );
+
+        if (current >= max) {
+            //LOGGER.info("Gun already full ({} / {})", current, max);
             return;
+        }
+
+        ItemStack chestplate = player.getInventory().getArmor(2);
+        if (!(chestplate.getItem() instanceof WBArmorItem) || !WBArmorItem.isChestplateItem(chestplate)) return;
 
         boolean hasAmmo = chestplate.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler -> {
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack stack = handler.getStackInSlot(i);
-                LOGGER.info("Slot {}: {}", i, stack);
                 if (stack.isEmpty()) continue;
                 if (stack.getItem() instanceof IAmmo iAmmo && iAmmo.isAmmoOfGun(gunItem, stack)) return true;
                 if (stack.getItem() instanceof IAmmoBox iBox && iBox.isAmmoBoxOfGun(gunItem, stack)) return true;
@@ -63,25 +72,23 @@ public class ChestplateGunMixin {
         }).orElse(false);
 
         if (hasAmmo) {
-            LOGGER.info("Found ammo in chestplate");
+            //LOGGER.info("Chestplate has ammo and gun not full");
             cir.setReturnValue(true);
-        } else {
-            LOGGER.info("No ammo found in chestplate");
         }
     }
 
-    @Inject(method = "findAndExtractInventoryAmmos", at = @At("RETURN"), cancellable = true, remap = false)
+    @Inject(method = "findAndExtractInventoryAmmo", at = @At("RETURN"), cancellable = true, remap = false)
     private void extractAmmoFromChestplate(IItemHandler itemHandler, ItemStack gunItem, int needAmmoCount,
                                            CallbackInfoReturnable<Integer> cir) {
 
         int alreadyFound = cir.getReturnValue();
         int remainingToFind = needAmmoCount - alreadyFound;
 
-        LOGGER.info("Ammo needed: {}", needAmmoCount);
-        LOGGER.info("Inventory provided: {}", alreadyFound);
+        //LOGGER.info("Ammo needed: {}", needAmmoCount);
+        //LOGGER.info("Inventory provided: {}", alreadyFound);
 
         if (remainingToFind <= 0) {
-            LOGGER.info("Ammo already full");
+            //LOGGER.info("Ammo already full");
             RELOADING_PLAYER.remove();
             return;
         }
@@ -93,7 +100,7 @@ public class ChestplateGunMixin {
 
         ItemStack chestplate = player.getInventory().getArmor(2);
         if (!(chestplate.getItem() instanceof WBArmorItem armor) || !WBArmorItem.isChestplateItem(chestplate)) {
-            LOGGER.info("Invalid or missing chestplate");
+            //LOGGER.info("Invalid or missing chestplate");
             return;
         }
 
@@ -103,7 +110,7 @@ public class ChestplateGunMixin {
 
             for (int i = 0; i < handler.getSlots() && remaining.value > 0; i++) {
                 ItemStack stack = handler.getStackInSlot(i);
-                LOGGER.info("Slot {}: {}", i, stack);
+                //LOGGER.info("Slot {}: {}", i, stack);
 
                 if (stack.isEmpty()) continue;
 
@@ -112,7 +119,7 @@ public class ChestplateGunMixin {
                     ItemStack extracted = handler.extractItem(i, toExtract, false);
                     found += extracted.getCount();
                     remaining.value -= extracted.getCount();
-                    LOGGER.info("Extracted {} IAmmo from slot {}", extracted.getCount(), i);
+                    //LOGGER.info("Extracted {} IAmmo from slot {}", extracted.getCount(), i);
                 }
 
                 if (stack.getItem() instanceof IAmmoBox iBox && iBox.isAmmoBoxOfGun(gunItem, stack)) {
@@ -124,7 +131,7 @@ public class ChestplateGunMixin {
                     }
                     found += extractCount;
                     remaining.value -= extractCount;
-                    LOGGER.info("Extracted {} from IAmmoBox in slot {}", extractCount, i);
+                    //LOGGER.info("Extracted {} from IAmmoBox in slot {}", extractCount, i);
                 }
             }
 
@@ -135,8 +142,8 @@ public class ChestplateGunMixin {
             return found;
         }).orElse(0);
 
-        LOGGER.info("Chestplate provided: {}", foundInChestplate);
-        LOGGER.info("Final total ammo returned: {}", alreadyFound + foundInChestplate);
+        //LOGGER.info("Chestplate provided: {}", foundInChestplate);
+        //LOGGER.info("Final total ammo returned: {}", alreadyFound + foundInChestplate);
 
         cir.setReturnValue(alreadyFound + foundInChestplate);
     }
