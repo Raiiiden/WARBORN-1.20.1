@@ -3,6 +3,7 @@ package com.raiiiden.warborn.client.renderer.item;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.raiiiden.warborn.WARBORN;
+import com.raiiiden.warborn.client.model.WarbornPlateModel;
 import com.raiiiden.warborn.common.item.ArmorPlateItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -25,7 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * First-person plate-insertion renderer that matches the “new” gun-renderer pattern.
+ * First-person plate-insertion renderer that matches the "new" gun-renderer pattern.
  */
 
 // TODO??? Add abstract class for this or make it extendable for future use? also smd
@@ -34,6 +35,7 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     private static final float SCALE_RECIPROCAL = 1f / 16f;
     private static final String LEFT_BONE = "left_hand";
     private static final String RIGHT_BONE = "right_hand";
+    private static final String NBT_INSERT = "inserting";
     private final Set<String> hiddenBones = new HashSet<>();
     public ItemDisplayContext transformType;
     protected boolean renderArms = false;
@@ -42,7 +44,7 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     protected ArmorPlateItem animatable;
 
     public WarbornPlateRenderer() {
-        super(new DefaultedItemGeoModel<>(new ResourceLocation(WARBORN.MODID, "armor_plate")));
+        super(new WarbornPlateModel());
     }
 
     public static void renderPartOverBone(ModelPart model, GeoBone bone, PoseStack stack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, float alpha) {
@@ -72,7 +74,14 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
                              MultiBufferSource buf, int light, int overlay) {
         this.transformType = ctx;
 
-        this.renderArms = ctx.firstPerson();
+        if (ctx.firstPerson()) {
+            this.renderArms = true;
+
+            if (stack.getTag() == null || !stack.getTag().contains(NBT_INSERT)) {
+                stack.getOrCreateTag().putBoolean(NBT_INSERT, true);
+            }
+
+        }
 
         super.renderByItem(stack, ctx, pose, buf, light, overlay);
     }
@@ -104,7 +113,6 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
         bone.setHidden(isArmProxy || hiddenBones.contains(name));
 
         if (this.transformType != null && this.transformType.firstPerson() && isArmProxy && renderArms) {
-
             Minecraft mc = Minecraft.getInstance();
             AbstractClientPlayer player = mc.player;
             if (player != null) {
@@ -147,5 +155,4 @@ public class WarbornPlateRenderer extends GeoItemRenderer<ArmorPlateItem> {
     public ResourceLocation getTextureLocation(ArmorPlateItem inst) {
         return super.getTextureLocation(inst);
     }
-
 }
