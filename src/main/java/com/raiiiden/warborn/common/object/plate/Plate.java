@@ -62,8 +62,10 @@ public class Plate {
     public float calculateDamageReduction(float incomingDamage) {
         if (isBroken()) return 0;
 
-        // Get base protection based on tier thresholds
+        float durabilityRatio = getCurrentDurability() / (float) getMaxDurability();
         float baseProtection;
+
+        // Get protection level based on thresholds
         if (incomingDamage < tier.getLowerThreshold()) {
             baseProtection = tier.getThresholdProtection();
         } else if (incomingDamage < tier.getUpperThreshold()) {
@@ -72,8 +74,13 @@ public class Plate {
             baseProtection = tier.getMinimalProtection();
         }
 
-        // Apply material-specific protection behavior
-        return material.calculateEffectiveProtection(currentDurability, maxDurability, baseProtection);
+        // Full protection until plate is almost broken
+        if (durabilityRatio >= 0.05f) {
+            return baseProtection;
+        } else {
+            // At <5% durability, scale down protection (e.g., 20% effectiveness)
+            return baseProtection * 0.2f;
+        }
     }
 
     public void damage(float damageAmount) {

@@ -65,10 +65,11 @@
 
   "item.warborn.tagilla_molot": "Tagilla Hammer",
 
-  "item.warborn.armor_plate": "Steel Plate (Level III)",
+  "item.warborn.steel_plate_level_iii": "Steel Plate (Level III)",
   "item.warborn.ceramic_plate_level_iv": "Ceramic Plate (Level IV)",
   "item.warborn.kevlar_plate_level_iiia": "Kevlar Plate (Level IIIA)",
   "item.warborn.composite_plate_level_iv": "Composite Plate (Level IV)",
+  "item.warborn.polyethylene_plate_level_iii": "Polyethylene Plate (Level III)",
 
   "material.warborn.default": "Default Material",
   "material.warborn.soft_kevlar": "Soft Kevlar",

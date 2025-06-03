@@ -15,6 +15,7 @@ public class ModSoundEvents {
     public static final RegistryObject<SoundEvent> WARBORN_ARMOR_EQUIP = registerSoundEvent("item.armor.warborn_equip");
     public static final RegistryObject<SoundEvent> WARBORN_ARMOR_BREAK = registerSoundEvent("item.armor.warborn_break");
     public static final RegistryObject<SoundEvent> WARBORN_NVG_TOGGLE = registerSoundEvent("item.armor.warborn_nvg_toggle");
+    public static final RegistryObject<SoundEvent> WARBORN_PLATE_INSERT = registerSoundEvent("item.armor.warborn_plate_insert");
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
         return SOUND_EVENTS.register(name, () -> {

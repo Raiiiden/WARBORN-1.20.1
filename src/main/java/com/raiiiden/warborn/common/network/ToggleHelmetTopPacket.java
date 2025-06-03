@@ -28,7 +28,7 @@ public class ToggleHelmetTopPacket {
 
             var helmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
             if (helmet.getItem() instanceof WBArmorItem WBArmorItem) {
-                WBArmorItem.setTopOpen(helmet, open); // You'll need this method in your item class
+                WBArmorItem.setTopOpen(helmet, open);
             }
         });
         ctx.get().setPacketHandled(true);

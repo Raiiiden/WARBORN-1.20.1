@@ -321,23 +321,12 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (isChestplateItem(stack) && player.isShiftKeyDown()) {
-            if (!level.isClientSide && stack.getTag() != null && stack.getTag().contains("Items")) {
-                ListTag items = stack.getTag().getList("Items", 10);
-                for (int i = 0; i < items.size(); i++) {
-                    player.drop(ItemStack.of(items.getCompound(i)), true);
-                }
-                stack.removeTagKey("Items");
-                playDropContentsSound(player);
-                return InteractionResultHolder.success(stack);
-            }
-        }
-
         EquipmentSlot slot = this.getEquipmentSlot();
-        if (player.getItemBySlot(slot).isEmpty()) {
-            player.setItemSlot(slot, stack.copy());
-            stack.setCount(0);
-            return InteractionResultHolder.success(stack);
+        ItemStack equipped = player.getItemBySlot(slot);
+
+        if (equipped.isEmpty()) {
+            player.setItemSlot(slot, stack.split(1));
+            return InteractionResultHolder.success(player.getItemInHand(hand));
         }
 
         return super.use(level, player, hand);
