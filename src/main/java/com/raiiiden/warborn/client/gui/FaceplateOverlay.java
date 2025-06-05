@@ -60,6 +60,10 @@ public class FaceplateOverlay {
             return;
         }
 
+        if (!(helmet.is(FACEPLATE_TAG) || helmet.is(BETA_7))) {
+            return;
+        }
+
 
         if (helmet.getItem() instanceof WBArmorItem WBArmorItem) {
             if (WBArmorItem.isTopOpen(helmet) && !helmet.is(BETA_7)) {
