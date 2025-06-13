@@ -136,6 +136,23 @@ public class ModItemRegistry {
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "insurgency_commander_shoulderpads"));
     public static final RegistryObject<Item> INSURGENCY_COMMANDER_LEGGINGS = ITEMS.register("insurgency_commander_leggings",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "insurgency_commander"));
+    //insurgency shturmovik
+    public static final RegistryObject<Item> INSURGENCY_SHTURMOVIK_HELMET = ITEMS.register("insurgency_shturmovik_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "insurgency_shturmovik"));
+    public static final RegistryObject<Item> INSURGENCY_SHTURMOVIK_CHESTPLATE = ITEMS.register("insurgency_shturmovik_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "insurgency_shturmovik"));
+    public static final RegistryObject<BackpackItem> INSURGENCY_SHTURMOVIK_BACKPACK = ITEMS.register("insurgency_shturmovik_backpack",
+            () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "insurgency_shturmovik_backpack"));
+    //soviet soldier
+    public static final RegistryObject<Item> SOVIET_SOLDIER_HELMET = ITEMS.register("soviet_soldier_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "soviet_soldier"));
+    public static final RegistryObject<Item> SOVIET_SOLDIER_CHESTPLATE = ITEMS.register("soviet_soldier_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "soviet_soldier"));
+    public static final RegistryObject<Item> SOVIET_SOLDIER_LEGGINGS = ITEMS.register("soviet_soldier_leggings",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "soviet_soldier"));
+    public static final RegistryObject<BackpackItem> SOVIET_SOLDIER_BACKPACK = ITEMS.register("soviet_soldier_backpack",
+            () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "soviet_soldier_backpack"));
+
     // ---------------
     // Weapons Start Here
     // ---------------
@@ -230,6 +247,17 @@ public class ModItemRegistry {
                         entries.accept(INSURGENCY_COMMANDER_CHESTPLATE.get());
                         entries.accept(INSURGENCY_COMMANDER_SHOULDERPADS.get());
                         entries.accept(INSURGENCY_COMMANDER_LEGGINGS.get());
+
+                        //insurgency shturmovik
+                        entries.accept(INSURGENCY_SHTURMOVIK_HELMET.get());
+                        entries.accept(INSURGENCY_SHTURMOVIK_CHESTPLATE.get());
+                        entries.accept(INSURGENCY_SHTURMOVIK_BACKPACK.get());
+
+                        //soviet soldier
+                        entries.accept(SOVIET_SOLDIER_HELMET.get());
+                        entries.accept(SOVIET_SOLDIER_CHESTPLATE.get());
+                        entries.accept(SOVIET_SOLDIER_LEGGINGS.get());
+                        entries.accept(SOVIET_SOLDIER_BACKPACK.get());
 
                         // ---------------
                         // Weapons Start Here

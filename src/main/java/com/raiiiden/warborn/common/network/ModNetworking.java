@@ -4,9 +4,12 @@ import com.raiiiden.warborn.WARBORN;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+
+import java.util.Optional;
 
 public class ModNetworking {
     private static final String VER = "1";
@@ -28,6 +31,8 @@ public class ModNetworking {
         PACKET_CHANNEL.registerMessage(id++, OpenBackpackPacket.class, OpenBackpackPacket::encode, OpenBackpackPacket::new, OpenBackpackPacket::handle);
         PACKET_CHANNEL.registerMessage(id++, RemovePlatePacket.class, RemovePlatePacket::encode, RemovePlatePacket::new, RemovePlatePacket::handle);
         PACKET_CHANNEL.registerMessage(id++, ToggleHelmetTopPacket.class, ToggleHelmetTopPacket::encode, ToggleHelmetTopPacket::new, ToggleHelmetTopPacket::handle);
+        PACKET_CHANNEL.registerMessage(id++, ServerboundNVGArmAnimationPacket.class, ServerboundNVGArmAnimationPacket::encode, ServerboundNVGArmAnimationPacket::new, ServerboundNVGArmAnimationPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        PACKET_CHANNEL.registerMessage(id++, ClientboundNVGArmAnimationPacket.class, ClientboundNVGArmAnimationPacket::encode, ClientboundNVGArmAnimationPacket::new, ClientboundNVGArmAnimationPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static <MSG> void sendToServer(MSG message) {

@@ -10,9 +10,7 @@
   "client": [
     "client.GunHudOverlayAccessor",
     "client.GunHudOverlayMixin",
-    "client.PlayerRendererMixin",
-    "client.ModelPartMixin",
-    "client.ItemInHandRendererMixin"
+    "client.PlayerModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

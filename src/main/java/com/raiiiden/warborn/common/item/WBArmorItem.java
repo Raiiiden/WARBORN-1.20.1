@@ -8,7 +8,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
@@ -52,7 +51,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.raiiiden.warborn.client.events.ClientKeyEvents.HAS_TOGGLE_TAG;
+import static com.raiiiden.warborn.client.event.ClientKeyEvents.HAS_TOGGLE_TAG;
 
 public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public static final String TAG_GOGGLE = "goggle";

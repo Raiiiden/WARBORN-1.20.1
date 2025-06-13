@@ -1,4 +1,4 @@
-package com.raiiiden.warborn.client.events;
+package com.raiiiden.warborn.client.event;
 
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.renderer.layer.WarbornBackpackLayer;

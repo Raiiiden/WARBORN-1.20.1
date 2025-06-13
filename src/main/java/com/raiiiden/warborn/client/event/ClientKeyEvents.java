@@ -1,4 +1,4 @@
-package com.raiiiden.warborn.client.events;
+package com.raiiiden.warborn.client.event;
 
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.screen.RemovePlateScreen;
@@ -8,6 +8,7 @@ import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.item.WBArmorItem;
 import com.raiiiden.warborn.common.item.BackpackItem;
 import com.raiiiden.warborn.common.network.ModNetworking;
+import com.raiiiden.warborn.common.network.ServerboundNVGArmAnimationPacket;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -26,9 +27,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "warborn", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientKeyEvents {
@@ -70,30 +68,7 @@ public class ClientKeyEvents {
         }
 
         if (ModKeybindings.TOGGLE_HELMET_TOP.consumeClick()) {
-            ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet.getItem() instanceof WBArmorItem helmetItem) {
-                // Used the new tag name here
-                if (helmet.is(HAS_TOGGLE_TAG)) {
-                    boolean newState = !helmetItem.isTopOpen(helmet);
-                    ModNetworking.sendToggleHelmetTop(newState);
-
-                    player.playSound(newState ?
-                                    SoundEvents.IRON_TRAPDOOR_OPEN : SoundEvents.IRON_TRAPDOOR_CLOSE,
-                            1.0F, 1.0F);
-
-                    player.displayClientMessage(
-                            Component.literal("Helmet Top " + (newState ? "Opened" : "Closed"))
-                                    .withStyle(ChatFormatting.GRAY),
-                            true
-                    );
-                } else {
-                    player.displayClientMessage(
-                            Component.literal("Not Wearing Toggleable Helmet")
-                                    .withStyle(ChatFormatting.RED),
-                            true
-                    );
-                }
-            }
+            ModNetworking.sendToServer(new ServerboundNVGArmAnimationPacket(true));
         }
 
         if (ModKeybindings.TOGGLE_SPECIAL_VISION.consumeClick()) {
