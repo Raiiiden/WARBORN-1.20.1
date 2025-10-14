@@ -1,20 +1,39 @@
 {
-  "credit": "Made with Blockbench",
-  "parent": "builtin/entity",
-  "texture_size": [
-    32,
-    32
-  ],
-  "display": {
-    "thirdperson_righthand": {
-      "translation": [
-        0.5,
-        -2,
-        3
-      ]
-    }
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "builtin/entity"
   },
-  "textures": {
-    "particle": "item/kevlar_plate_level_iiia"
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/kevlar_plate_level_iiia"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/kevlar_plate_level_iiia"
+      }
+    },
+    "fixed": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/kevlar_plate_level_iiia"
+      }
+    },
+    "thirdperson_righthand": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/kevlar_plate_level_iiia"
+      }
+    },
+    "thirdperson_lefthand": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/kevlar_plate_level_iiia"
+      }
+    }
   }
 }

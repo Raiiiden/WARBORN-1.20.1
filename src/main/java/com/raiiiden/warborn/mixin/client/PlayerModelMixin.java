@@ -19,64 +19,75 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerModel.class)
 public abstract class PlayerModelMixin<T extends LivingEntity> {
 
-    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
-    public void warborn$injectArmAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
-        if (!(entity instanceof Player player)) return;
+    @Inject(method = "setupAnim", at = @At("TAIL"), remap = true)
+    public void warborn$injectArmAnim(
+            T entity, float limbSwing, float limbSwingAmount,
+            float ageInTicks, float netHeadYaw, float headPitch,
+            CallbackInfo ci) {
 
+        if (!(entity instanceof Player player)) return;
         if (player == Minecraft.getInstance().cameraEntity &&
-                Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-            return;
-        }
+                Minecraft.getInstance().options.getCameraType().isFirstPerson()) return;
+
+        ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+        if (!helmet.is(ClientKeyEvents.HAS_TOGGLE_TAG)) return;
 
         int animTick = player.getPersistentData().getInt("NVG_ANIM_TICK");
         if (animTick <= 0) return;
 
-        PlayerModel<?> model = (PlayerModel<?>) (Object) this;
+        PlayerModel<?> model = (PlayerModel<?>)(Object)this;
 
+        // Save starting pose
         if (animTick == 1) {
             player.getPersistentData().putFloat("NVG_ANIM_START_X", model.leftArm.xRot);
             player.getPersistentData().putFloat("NVG_ANIM_START_Y", model.leftArm.yRot);
-            player.getPersistentData().putFloat("NVG_ANIM_START_Z", model.leftArm.zRot);
         }
 
         float startX = player.getPersistentData().getFloat("NVG_ANIM_START_X");
         float startY = player.getPersistentData().getFloat("NVG_ANIM_START_Y");
-        float startZ = player.getPersistentData().getFloat("NVG_ANIM_START_Z");
 
-        float duration = 8.0f;
-        float rawProgress = Math.min(animTick / duration, 1.0f);
-        float progress = rawProgress * rawProgress * (3 - 2 * rawProgress); // cubic easing
+        // Animation duration (full out-and-back)
+        final float duration = 16f;
+        float half = duration / 2f;
+        float progress;
 
-        float headPitchRadians = (float) Math.toRadians(headPitch);
-        float headYawRadians = (float) Math.toRadians(netHeadYaw);
-
-        float baseRot = -140.0f;
-
-        ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-        if (helmet.getItem() instanceof WBArmorItem helmetItem && helmet.is(ClientKeyEvents.HAS_TOGGLE_TAG)) {
-            if (helmetItem.isTopOpen(helmet)) {
-                baseRot = -180.0f;
-            }
+        // Progress goes from 0->1->0
+        if (animTick <= half) {
+            progress = animTick / half;
+        } else {
+            progress = (duration - animTick) / half;
         }
+        progress = cubicEase(progress);
 
-        float xRotTarget = headPitchRadians + (float) Math.toRadians(baseRot);
-        float yRotTarget = headYawRadians * 0.5f;
-        float zRotTarget = 0;
+        // Up/Down rotation
+        float baseRot = (helmet.getItem() instanceof WBArmorItem hi && hi.isTopOpen(helmet)) ? -160f : -130f;
+        float targetX = (float)Math.toRadians(headPitch + baseRot);
+        targetX = clamp(targetX, (float)Math.toRadians(-220), (float)Math.toRadians(130));
+        float newX = startX + (targetX - startX) * progress;
 
-        float xRot = lerp(progress, startX, xRotTarget);
-        float yRot = lerp(progress, startY, yRotTarget);
-        float zRot = lerp(progress, startZ, zRotTarget);
+        // Left/Right sway
+        float maxSway = 30f;
+        float targetY = (float)Math.toRadians(netHeadYaw * 0.5f);
+        targetY = clamp(targetY, (float)Math.toRadians(-maxSway), (float)Math.toRadians(maxSway));
+        float newY = startY + (targetY - startY) * progress;
 
-        model.leftArm.xRot = xRot;
-        model.leftArm.yRot = yRot;
-        model.leftArm.zRot = zRot;
+        // Z static
+        float newZ = 0f;
 
-        model.leftSleeve.xRot = xRot;
-        model.leftSleeve.yRot = yRot;
-        model.leftSleeve.zRot = zRot;
+        // Apply rotations
+        model.leftArm.xRot = newX;
+        model.leftArm.yRot = newY;
+        model.leftArm.zRot = newZ;
+        model.leftSleeve.xRot = newX;
+        model.leftSleeve.yRot = newY;
+        model.leftSleeve.zRot = newZ;
     }
 
-    private static float lerp(float t, float a, float b) {
-        return a + t * (b - a);
+    private static float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    private static float cubicEase(float t) {
+        return t * t * (3 - 2 * t);
     }
 }

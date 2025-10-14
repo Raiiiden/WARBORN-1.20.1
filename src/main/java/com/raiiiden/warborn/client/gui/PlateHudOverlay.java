@@ -10,20 +10,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 
-//TODO MAKE THIS SEXY
-@Mod.EventBusSubscriber(modid = WARBORN.MODID, value = Dist.CLIENT)
 public class PlateHudOverlay {
 
     private static final ResourceLocation PLATE_ICON = new ResourceLocation(WARBORN.MODID, "textures/gui/plate_icon.png");
     private static final Color BAR_BACKGROUND = new Color(26, 26, 42);
 
-    @SubscribeEvent
-    public static void renderOverlay(RenderGuiOverlayEvent.Post event) {
+    public static void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null || player.isCreative() || player.isSpectator()) return;
@@ -32,18 +26,11 @@ public class PlateHudOverlay {
         if (chest.isEmpty()) return;
 
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
-            GuiGraphics gui = event.getGuiGraphics();
-            int screenWidth = mc.getWindow().getGuiScaledWidth();
-            int screenHeight = mc.getWindow().getGuiScaledHeight();
-
-            // Plate icon (left of hotbar)
             int iconX = screenWidth / 2 - 110;
             int iconY = screenHeight - 20;
-            gui.blit(PLATE_ICON, iconX, iconY, 0, 0, 18, 18, 18, 18);
+            guiGraphics.blit(PLATE_ICON, iconX, iconY, 0, 0, 18, 18, 18, 18);
 
-            // Bars dynamically above health bar based on other overlays
             int barWidth = 36;
-            int barHeight = 2;
             int spacing = 4;
             int centerX = screenWidth / 2;
 
@@ -58,22 +45,21 @@ public class PlateHudOverlay {
 
             if (cap.hasFrontPlate()) {
                 Plate plate = cap.getFrontPlate();
-                drawPlateBar(gui, leftBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), plate.getMaterial().getColor());
+                drawPlateBar(guiGraphics, leftBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), plate.getMaterial().getColor());
             }
 
             if (cap.hasBackPlate()) {
                 Plate plate = cap.getBackPlate();
-                drawPlateBar(gui, rightBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), plate.getMaterial().getColor());
+                drawPlateBar(guiGraphics, rightBarX, barY, plate.getCurrentDurability(), plate.getMaxDurability(), plate.getMaterial().getColor());
             }
         });
     }
 
-    private static void drawPlateBar(GuiGraphics gui, int x, int y, float currentDurability, float maxDurability, Color fillColor) {
+    private static void drawPlateBar(GuiGraphics guiGraphics, int x, int y, float current, float max, Color color) {
         int width = 36;
         int height = 2;
-        int filled = (int) ((currentDurability / maxDurability) * width);
-
-        gui.fill(x, y, x + width, y + height, BAR_BACKGROUND.getARGB());
-        gui.fill(x, y, x + filled, y + height, fillColor.getARGB());
+        int filled = (int) ((current / max) * width);
+        guiGraphics.fill(x, y, x + width, y + height, BAR_BACKGROUND.getARGB());
+        guiGraphics.fill(x, y, x + filled, y + height, color.getARGB());
     }
 }

@@ -2,6 +2,7 @@ package com.raiiiden.warborn.client.shader;
 
 import com.raiiiden.warborn.common.item.WBArmorItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.PostPass;
 import net.minecraft.resources.ResourceLocation;
@@ -24,12 +25,10 @@ import java.util.function.Predicate;
 public class ShaderRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShaderRegistry.class);
 
-    //this is a singleton so we can just call it anywhere.
     private static final ShaderRegistry INSTANCE = new ShaderRegistry();
 
     private final Map<String, ShaderEntry> shaders = new HashMap<>();
-    private int lastWidth = -1;
-    private int lastHeight = -1;
+    private String currentActiveShader = null; // Track which shader is currently loaded
 
     public static ShaderRegistry getInstance() {
         return INSTANCE;
@@ -51,23 +50,10 @@ public class ShaderRegistry {
         }
     }
 
-    /**
-     * Get a set of all registered shader IDs
-     *
-     * @return Set of shader IDs
-     * <p>
-     * This is used to check if a shader is registered and active
-     */
     public Set<String> getRegisteredShaderIds() {
         return new HashSet<>(shaders.keySet());
     }
 
-    /**
-     * Check if a shader is currently active (both registered and its condition evaluates to true)
-     *
-     * @param id Unique identifier for the shader
-     * @return True if the shader is active, false otherwise
-     */
     public boolean isShaderActive(String id) {
         ShaderEntry entry = shaders.get(id);
         if (entry == null) {
@@ -77,12 +63,6 @@ public class ShaderRegistry {
         return (entry.activationCondition.test(Minecraft.getInstance()));
     }
 
-    /**
-     * Check if a shader is currently force enabled
-     *
-     * @param id Unique identifier for the shader
-     * @return True if the shader is force enabled, false otherwise
-     */
     public boolean isShaderForceEnabled(String id) {
         ShaderEntry entry = shaders.get(id);
         if (entry == null) {
@@ -92,38 +72,21 @@ public class ShaderRegistry {
         return Boolean.TRUE.equals(entry.forceEnabled);
     }
 
-    /**
-     * Force enable or disable a specific shader regardless of its condition
-     *
-     * @param id      Unique identifier for the shader
-     * @param enabled True to enable, false to disable
-     * @return true if shader exists and was updated, false if shader not found
-     */
     public boolean setShaderEnabled(String id, boolean enabled) {
         ShaderEntry entry = shaders.get(id);
         if (entry == null) return false;
 
         entry.forceEnabled = enabled;
 
-        // If disabling, clean up resources immediately
-        if (!enabled && entry.shader != null) {
-            entry.shader.close();
-            entry.shader = null;
+        // If disabling and this is the current shader, shut it down
+        if (!enabled && id.equals(currentActiveShader)) {
+            Minecraft.getInstance().gameRenderer.shutdownEffect();
+            currentActiveShader = null;
         }
 
         return true;
     }
 
-    // to be honest we could have used neoforge for this but I wanted to do it myself because more control...
-
-    /**
-     * Remove shaders whose IDs start with the given prefix
-     *
-     * @param prefix Prefix to match shader IDs
-     * @return number of shaders removed
-     * <p>
-     * This is useful for cleaning up temporary shaders or those that are no longer needed
-     */
     public int removeShadersByPrefix(String prefix) {
         List<String> toRemove = shaders.keySet().stream()
                 .filter(id -> id.startsWith(prefix))
@@ -136,15 +99,6 @@ public class ShaderRegistry {
         return toRemove.size();
     }
 
-    /**
-     * Registers a shader with the registry
-     *
-     * @param id                  Unique identifier for the shader
-     * @param shaderLocation      Resource location for the shader JSON
-     * @param activationCondition Predicate to determine when shader should be active
-     * @param configurer          Consumer to configure shader parameters when applied
-     * @return True if registration succeeded
-     */
     public boolean registerShader(String id, ResourceLocation shaderLocation,
                                   Predicate<Minecraft> activationCondition,
                                   Consumer<PostChain> configurer) {
@@ -156,100 +110,88 @@ public class ShaderRegistry {
         return true;
     }
 
-    /**
-     * Unregisters a shader from the registry
-     */
     public void unregisterShader(String id) {
         ShaderEntry entry = shaders.remove(id);
-        if (entry != null && entry.shader != null) {
-            entry.shader.close();
+        if (entry != null && id.equals(currentActiveShader)) {
+            Minecraft.getInstance().gameRenderer.shutdownEffect();
+            currentActiveShader = null;
         }
     }
 
-    // this is your stuff
-
     /**
-     * Process all active shaders
+     * Process all active shaders - NEW APPROACH using GameRenderer
      */
     public void processShaders() {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;
 
-        int width = mc.getWindow().getWidth();
-        int height = mc.getWindow().getHeight();
-        boolean resized = width != lastWidth || height != lastHeight;
-
-        if (resized) {
-            lastWidth = width;
-            lastHeight = height;
+        // Check helmet top state first
+        ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
+        if (helmet.getItem() instanceof WBArmorItem wbArmorItem) {
+            if (wbArmorItem.isTopOpen(helmet)) {
+                // Helmet open → disable all shaders
+                if (currentActiveShader != null) {
+                    mc.gameRenderer.shutdownEffect();
+                    currentActiveShader = null;
+                }
+                return;
+            }
         }
+
+        // Find the highest priority shader that should be active
+        String shaderToActivate = null;
+        ShaderEntry entryToActivate = null;
 
         for (Map.Entry<String, ShaderEntry> entry : shaders.entrySet()) {
             ShaderEntry shaderEntry = entry.getValue();
             String shaderId = entry.getKey();
 
-            // DEBUG STUFF
             boolean activatedByCondition = shaderEntry.activationCondition.test(mc);
             boolean forceDisabled = Boolean.FALSE.equals(shaderEntry.forceEnabled);
             boolean forceEnabled = Boolean.TRUE.equals(shaderEntry.forceEnabled);
 
             boolean shouldBeActive = (activatedByCondition && !forceDisabled) || forceEnabled;
 
-            if (shouldBeActive && shaderEntry.shader == null) {
-                LOGGER.info("Activating shader: {}", shaderId);
-                LOGGER.info("  - activatedByCondition: {}", activatedByCondition);
-                LOGGER.info("  - forceEnabled: {}", forceEnabled);
-                LOGGER.info("  - forceDisabled: {}", forceDisabled);
-            } else if (!shouldBeActive && shaderEntry.shader != null) {
-                LOGGER.info("Deactivating shader: {}", shaderId);
-            }
-
             if (shouldBeActive) {
-                if (shaderEntry.shader == null) {
-                    try {
-                        shaderEntry.shader = new PostChain(
-                                mc.textureManager,
-                                mc.getResourceManager(),
-                                mc.getMainRenderTarget(),
-                                shaderEntry.shaderLocation
-                        );
-                        shaderEntry.shader.resize(width, height);
-                    } catch (Exception e) {
-                        LOGGER.error("Failed to initialize shader: {}", entry.getKey());
-                        LOGGER.error(e.getMessage(), e);
-                        continue;
-                    }
-                }
+                shaderToActivate = shaderId;
+                entryToActivate = shaderEntry;
+                break; // Use first active shader found (you may want to add priority logic)
+            }
+        }
 
-                // adapt to resize, if needed
-                if (resized && shaderEntry.shader != null) {
-                    shaderEntry.shader.resize(width, height);
-                }
+        // Handle shader switching
+        if (shaderToActivate != null && !shaderToActivate.equals(currentActiveShader)) {
+            // Need to switch to a different shader
+            LOGGER.info("Switching to shader: {}", shaderToActivate);
 
+            GameRenderer gameRenderer = mc.gameRenderer;
+            gameRenderer.loadEffect(entryToActivate.shaderLocation);
+            currentActiveShader = shaderToActivate;
+
+            // Apply configurer after a short delay to ensure shader is loaded
+            PostChain currentEffect = gameRenderer.currentEffect();
+            if (currentEffect != null) {
                 try {
-                    // Before processing, check helmet top state
-                    if (mc.player != null) {
-                        ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
-                        if (helmet.getItem() instanceof WBArmorItem WBArmorItem) {
-                            if (WBArmorItem.isTopOpen(helmet)) {
-                                continue; // helmet open → skip rendering this shader frame
-                            }
-                        }
-                    }
-
-// actually apply shader if helmet is closed
-                    shaderEntry.configurer.accept(shaderEntry.shader);
-                    shaderEntry.shader.process(mc.getFrameTime());
-
-
-                    mc.getMainRenderTarget().bindWrite(false);
+                    entryToActivate.configurer.accept(currentEffect);
                 } catch (Exception e) {
-                    LOGGER.error("Failed to process shader: {}", entry.getKey());
-                    LOGGER.error(e.getMessage(), e);
+                    LOGGER.error("Failed to configure shader: {}", shaderToActivate, e);
                 }
-            } else if (shaderEntry.shader != null) {
-                shaderEntry.shader.close();
-                shaderEntry.shader = null;
+            }
+        } else if (shaderToActivate == null && currentActiveShader != null) {
+            // Need to disable current shader
+            LOGGER.info("Disabling shader: {}", currentActiveShader);
+            mc.gameRenderer.shutdownEffect();
+            currentActiveShader = null;
+        } else if (shaderToActivate != null && shaderToActivate.equals(currentActiveShader)) {
+            // Same shader is active, just update uniforms if needed
+            GameRenderer gameRenderer = mc.gameRenderer;
+            PostChain currentEffect = gameRenderer.currentEffect();
+            if (currentEffect != null && entryToActivate != null) {
+                try {
+                    entryToActivate.configurer.accept(currentEffect);
+                } catch (Exception e) {
+                    LOGGER.error("Failed to update shader uniforms: {}", shaderToActivate, e);
+                }
             }
         }
     }
@@ -261,8 +203,7 @@ public class ShaderRegistry {
         final ResourceLocation shaderLocation;
         final Predicate<Minecraft> activationCondition;
         final Consumer<PostChain> configurer;
-        PostChain shader;
-        Boolean forceEnabled = null; // null=use condition, true=force on, false=force off (for myself)
+        Boolean forceEnabled = null;
 
         ShaderEntry(ResourceLocation shaderLocation,
                     Predicate<Minecraft> activationCondition,
@@ -272,4 +213,4 @@ public class ShaderRegistry {
             this.configurer = configurer;
         }
     }
-} 
+}

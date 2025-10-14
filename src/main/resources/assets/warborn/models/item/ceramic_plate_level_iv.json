@@ -1,20 +1,27 @@
 {
-  "credit": "Made with Blockbench",
-  "parent": "builtin/entity",
-  "texture_size": [
-    32,
-    32
-  ],
-  "display": {
-    "thirdperson_righthand": {
-      "translation": [
-        0.5,
-        -2,
-        3
-      ]
-    }
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "builtin/entity"
   },
-  "textures": {
-    "particle": "item/ceramic_plate_level_iv"
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/ceramic_plate_level_iv"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/ceramic_plate_level_iv"
+      }
+    },
+    "fixed": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/ceramic_plate_level_iv"
+      }
+    }
   }
 }

@@ -153,6 +153,30 @@ public class ModItemRegistry {
     public static final RegistryObject<BackpackItem> SOVIET_SOLDIER_BACKPACK = ITEMS.register("soviet_soldier_backpack",
             () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "soviet_soldier_backpack"));
 
+    //SSO
+//    public static final RegistryObject<Item> SSO_SNIPER_LVL1_HELMET = ITEMS.register("sso_sniper_helmet",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "sso_sniper_lvl1"));
+//    public static final RegistryObject<Item> SSO_SNIPER_LVL1_CHESTPLATE = ITEMS.register("sso_sniper_chestplate",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "sso_sniper_lvl1"));
+//    public static final RegistryObject<Item> SSO_SNIPER_LVL1_LEGGINGS = ITEMS.register("sso_sniper_leggings",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "sso_sniper_lvl1"));
+//    public static final RegistryObject<Item> SSO_SNIPER_LVL2_HELMET = ITEMS.register("sso_sniper_helmet_2",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "sso_sniper_lvl2"));
+//    public static final RegistryObject<Item> SSO_SNIPER_LVL2_CHESTPLATE = ITEMS.register("sso_sniper_chestplate_2",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "sso_sniper_lvl2"));
+//    public static final RegistryObject<Item> SSO_SNIPER_LVL2_LEGGINGS = ITEMS.register("sso_sniper_leggings_2",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "sso_sniper_lvl2"));
+//    public static final RegistryObject<Item> SSO_SQUAD_LEADER_HELMET = ITEMS.register("sso_squad_leader_helmet",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "sso_squad_leader"));
+//    public static final RegistryObject<Item> SSO_SQUAD_LEADER_CHESTPLATE = ITEMS.register("sso_squad_leader_chestplate",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "sso_squad_leader"));
+//    public static final RegistryObject<Item> SSO_SQUAD_LEADER_LEGGINGS = ITEMS.register("sso_squad_leader_leggings",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "sso_squad_leader"));
+//    public static final RegistryObject<BackpackItem> SSO_SQUAD_LEADER_BACKPACK = ITEMS.register("sso_squad_leader_backpack",
+//            () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "sso_squad_leader_backpack"));
+//    public static final RegistryObject<Item> SSO_SHOULDERPADS = ITEMS.register("sso_shoulderpads",
+//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "sso_shoulderpads"));
+
     // ---------------
     // Weapons Start Here
     // ---------------
@@ -258,6 +282,19 @@ public class ModItemRegistry {
                         entries.accept(SOVIET_SOLDIER_CHESTPLATE.get());
                         entries.accept(SOVIET_SOLDIER_LEGGINGS.get());
                         entries.accept(SOVIET_SOLDIER_BACKPACK.get());
+
+//                        //sso
+//                        entries.accept(SSO_SNIPER_LVL1_HELMET.get());
+//                        entries.accept(SSO_SNIPER_LVL1_CHESTPLATE.get());
+//                        entries.accept(SSO_SNIPER_LVL1_LEGGINGS.get());
+////                        entries.accept(SSO_SNIPER_LVL2_HELMET.get());
+////                        entries.accept(SSO_SNIPER_LVL2_CHESTPLATE.get());
+////                        entries.accept(SSO_SNIPER_LVL2_LEGGINGS.get());
+//                        entries.accept(SSO_SQUAD_LEADER_HELMET.get());
+//                        entries.accept(SSO_SQUAD_LEADER_CHESTPLATE.get());
+//                        entries.accept(SSO_SQUAD_LEADER_LEGGINGS.get());
+//                        entries.accept(SSO_SQUAD_LEADER_BACKPACK.get());
+//                        entries.accept(SSO_SHOULDERPADS.get());
 
                         // ---------------
                         // Weapons Start Here
