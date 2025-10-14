@@ -87,14 +87,14 @@ public class BackpackItem extends ArmorItem implements GeoItem {
     private void equipToCurios(Player player, ItemStack stack) {
         CuriosApi.getCuriosInventory(player).ifPresent(curios -> {
             curios.getCurios().forEach((id, handler) -> {
-                if (!id.equals("back")) return;
+                if (!id.equals("backpack")) return;
 
                 for (int i = 0; i < handler.getSlots(); i++) {
                     if (handler.getStacks().getStackInSlot(i).isEmpty()) {
                         handler.getStacks().setStackInSlot(i, stack.copy());
                         stack.shrink(1);
                         player.displayClientMessage(
-                                Component.literal("Equipped backpack to Curios 'back' slot")
+                                Component.literal("Equipped backpack to Curios Backpack slot")
                                         .withStyle(ChatFormatting.GRAY),
                                 true
                         );

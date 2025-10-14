@@ -5,6 +5,10 @@
   "refmap": "warborn.refmap.json",
   "mixins": [
     "ChestplateGunMixin",
+    "ChestplateAmmoExtractorMixin",
+    "ModernKineticGunScriptAPIAccessor",
+    "ChestplateTickReloadHoldMixin",
+    "ChestplateAmmoPresenceMixin",
     "MixinLivingEntityRenderer"
   ],
   "client": [

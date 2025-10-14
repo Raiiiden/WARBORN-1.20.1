@@ -78,7 +78,9 @@ public class WarbornShaders {
 
     @SubscribeEvent
     public static void renderNVG(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
+        // Changed from AFTER_PARTICLES to AFTER_LEVEL to ensure hands are rendered first
+        // GameRenderer.loadEffect() will apply the shader after ALL rendering including hands
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL) return;
 
         ShaderRegistry.getInstance().processShaders();
     }

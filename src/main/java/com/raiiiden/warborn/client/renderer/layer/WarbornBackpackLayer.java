@@ -35,6 +35,13 @@ public class WarbornBackpackLayer<T extends LivingEntity, M extends HumanoidMode
             // Only render if:
             // 1. It's in the back slot
             // 2. The slot is visible (using the visible() method from SlotContext)
+            if (slotResult.slotContext().identifier().equals("backpack") &&
+                    slotResult.slotContext().visible()) {
+
+                renderBackpack(poseStack, bufferSource, packedLight, entity,
+                        (BackpackItem) slotResult.stack().getItem(),
+                        slotResult.stack());
+            }
             if (slotResult.slotContext().identifier().equals("back") &&
                     slotResult.slotContext().visible()) {
 
