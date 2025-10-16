@@ -74,6 +74,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
             LogManager.getLogger(WARBORN.MODID + "/ArmorPlateItem");
     public static final String CONTROLLER = "controller";
     public static final String PENDING_INSERT_TAG = "warborn_pending_insert";
+    public static final String PENDING_REMOVE_TAG = "warborn_pending_remove";
 
     private static final String MSG_PREFIX = "message." + WARBORN.MODID + ".plate.";
     private static final String KEY_MSG_MISSING_CHEST = MSG_PREFIX + "missing_chestplate";
@@ -84,7 +85,6 @@ public class ArmorPlateItem extends Item implements GeoItem {
     private static final String KEY_MSG_SLOTS_FULL = MSG_PREFIX + "slots_full";
 
     private static final Map<UUID, ArmorPlateSound> activeSounds = new HashMap<>();
-
 
     private final ProtectionTier tier;
     private final MaterialType material;
@@ -119,6 +119,10 @@ public class ArmorPlateItem extends Item implements GeoItem {
         ItemStack held = player.getItemInHand(hand);
         CompoundTag tag = held.getOrCreateTag();
 
+        if (tag.getBoolean(PENDING_INSERT_TAG)) {
+            return InteractionResultHolder.pass(held);
+        }
+
         if (chest.isEmpty()) {
             player.displayClientMessage(Component.translatable(KEY_MSG_MISSING_CHEST).withStyle(ChatFormatting.RED), true);
             return InteractionResultHolder.fail(held);
@@ -127,10 +131,6 @@ public class ArmorPlateItem extends Item implements GeoItem {
         if (!isPlateCompatible(chest)) {
             player.displayClientMessage(Component.translatable(KEY_MSG_INCOMPATIBLE_CHEST).withStyle(ChatFormatting.RED), true);
             return InteractionResultHolder.fail(held);
-        }
-
-        if (tag.getBoolean(PENDING_INSERT_TAG)) {
-            return InteractionResultHolder.pass(held);
         }
 
         AtomicBoolean canInsert = new AtomicBoolean(false);
@@ -155,7 +155,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
 
         if (level instanceof ServerLevel serverLevel) {
             tag.putBoolean(PENDING_INSERT_TAG, true);
-            tag.putInt("warborn_insert_delay", 62);
+            tag.putInt("warborn_insert_delay", 66);
             tag.putFloat("InsertDurability", currentDur);
             tag.putString("InsertTier", tier.name());
             tag.putString("InsertMaterial", material.getInternalName());
@@ -172,6 +172,15 @@ public class ArmorPlateItem extends Item implements GeoItem {
                 : InteractionResultHolder.consume(held);
     }
 
+    public void startRemoveAnimation(Player player, ItemStack held, boolean removeFront, ServerLevel serverLevel) {
+        CompoundTag tag = held.getOrCreateTag();
+        tag.putBoolean(PENDING_REMOVE_TAG, true);
+        tag.putInt("warborn_remove_delay", 55);
+        tag.putBoolean("warborn_remove_front", removeFront);
+
+        this.triggerAnim(player, GeoItem.getOrAssignId(held, serverLevel), CONTROLLER, "remove");
+    }
+
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (!(entity instanceof Player player)) return;
@@ -180,71 +189,105 @@ public class ArmorPlateItem extends Item implements GeoItem {
         CompoundTag tag = stack.getTag();
         if (tag == null) return;
 
-        // Clean up leftover tags if not inserting
-        if (!tag.getBoolean(PENDING_INSERT_TAG)) {
-            if (tag.contains("inserting")) tag.remove("inserting");
-            if (tag.contains("GeckoLibID")) tag.remove("GeckoLibID");
-            cancelPendingInsert(tag);
-            return;
-        }
-
-        if (!selected) {
-            cancelPendingInsert(tag);
-            return;
-        }
-
-        int delay = tag.getInt("warborn_insert_delay") - 1;
-        tag.putInt("warborn_insert_delay", delay);
-        if (delay > 0) return;
-
-        tag.remove(PENDING_INSERT_TAG);
-        tag.remove("warborn_insert_delay");
-
-        ProtectionTier tier;
-        MaterialType material;
-        float durability;
-        try {
-            tier = ProtectionTier.valueOf(tag.getString("InsertTier"));
-            material = MaterialType.valueOf(tag.getString("InsertMaterial"));
-            durability = tag.getFloat("InsertDurability");
-        } catch (Exception e) {
-            LOGGER.warn("Failed to parse plate insert data: {}", tag);
-            cancelPendingInsert(tag);
-            return;
-        }
-
-        tag.remove("InsertTier");
-        tag.remove("InsertMaterial");
-        tag.remove("InsertDurability");
-
-        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chest.isEmpty() || !isPlateCompatible(chest)) return;
-
-        Plate plate = new Plate(tier, material);
-        plate.setCurrentDurability(durability);
-
-        chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
-            boolean inserted = false;
-
-            if (!cap.hasFrontPlate()) {
-                cap.insertFrontPlate(plate);
-                player.displayClientMessage(Component.translatable(KEY_MSG_FRONT_INSTALLED).withStyle(ChatFormatting.GREEN), true);
-                inserted = true;
-            } else if (!cap.hasBackPlate()) {
-                cap.insertBackPlate(plate);
-                player.displayClientMessage(Component.translatable(KEY_MSG_BACK_INSTALLED).withStyle(ChatFormatting.GREEN), true);
-                inserted = true;
-            } else {
-                player.displayClientMessage(Component.translatable(KEY_MSG_SLOTS_FULL).withStyle(ChatFormatting.RED), true);
+        if (tag.getBoolean(PENDING_INSERT_TAG)) {
+            if (!selected) {
+                cancelPendingInsert(tag);
+                return;
             }
 
-            if (inserted && !player.isCreative()) {
-                stack.shrink(1);
+            int delay = tag.getInt("warborn_insert_delay") - 1;
+            tag.putInt("warborn_insert_delay", delay);
+            if (delay > 0) return;
+
+            tag.remove(PENDING_INSERT_TAG);
+            tag.remove("warborn_insert_delay");
+
+            ProtectionTier tier;
+            MaterialType material;
+            float durability;
+            try {
+                tier = ProtectionTier.valueOf(tag.getString("InsertTier"));
+                material = MaterialType.valueOf(tag.getString("InsertMaterial"));
+                durability = tag.getFloat("InsertDurability");
+            } catch (Exception e) {
+                LOGGER.warn("Failed to parse plate insert data: {}", tag);
+                cancelPendingInsert(tag);
+                return;
             }
-        });
+
+            tag.remove("InsertTier");
+            tag.remove("InsertMaterial");
+            tag.remove("InsertDurability");
+
+            ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+            if (chest.isEmpty() || !isPlateCompatible(chest)) return;
+
+            Plate plate = new Plate(tier, material);
+            plate.setCurrentDurability(durability);
+
+            chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
+                boolean inserted = false;
+
+                if (!cap.hasFrontPlate()) {
+                    cap.insertFrontPlate(plate);
+                    player.displayClientMessage(Component.translatable(KEY_MSG_FRONT_INSTALLED).withStyle(ChatFormatting.GREEN), true);
+                    inserted = true;
+                } else if (!cap.hasBackPlate()) {
+                    cap.insertBackPlate(plate);
+                    player.displayClientMessage(Component.translatable(KEY_MSG_BACK_INSTALLED).withStyle(ChatFormatting.GREEN), true);
+                    inserted = true;
+                }
+
+                if (inserted && !player.isCreative()) {
+                    stack.shrink(1);
+                }
+            });
+            return;
+        }
+
+        if (tag.getBoolean(PENDING_REMOVE_TAG)) {
+            int delay = tag.getInt("warborn_remove_delay") - 1;
+            tag.putInt("warborn_remove_delay", delay);
+            if (delay > 0) return;
+
+            tag.remove(PENDING_REMOVE_TAG);
+            tag.remove("warborn_remove_delay");
+
+            boolean removeFront = tag.getBoolean("warborn_remove_front");
+            tag.remove("warborn_remove_front");
+
+            ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+            if (chest.isEmpty() || !isPlateCompatible(chest)) return;
+
+            chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
+                if (removeFront && cap.hasFrontPlate()) {
+                    Plate plate = cap.getFrontPlate();
+                    if (plate != null) {
+                        ItemStack plateStack = ArmorPlateItem.createPlateWithHitsRemaining(plate.getTier(), plate.getMaterial(), (int) plate.getCurrentDurability());
+                        player.addItem(plateStack);
+                        cap.removeFrontPlate();
+                        player.displayClientMessage(Component.literal("Front plate removed").withStyle(ChatFormatting.GREEN), true);
+                    }
+                } else if (!removeFront && cap.hasBackPlate()) {
+                    Plate plate = cap.getBackPlate();
+                    if (plate != null) {
+                        ItemStack plateStack = ArmorPlateItem.createPlateWithHitsRemaining(plate.getTier(), plate.getMaterial(), (int) plate.getCurrentDurability());
+                        player.addItem(plateStack);
+                        cap.removeBackPlate();
+                        player.displayClientMessage(Component.literal("Back plate removed").withStyle(ChatFormatting.GREEN), true);
+                    }
+                }
+            });
+            return;
+        }
+
+        if (tag.contains("inserting")) tag.remove("inserting");
+        if (tag.contains("GeckoLibID")) tag.remove("GeckoLibID");
+        cancelPendingInsert(tag);
     }
+
     private void cancelPendingInsert(CompoundTag tag) {
-        tag.remove("warborn_pending_insert");
+        tag.remove(PENDING_INSERT_TAG);
         tag.remove("warborn_insert_delay");
         tag.remove("InsertDurability");
         tag.remove("InsertTier");
@@ -263,6 +306,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
             }
         });
     }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar reg) {
         reg.add(new AnimationController<>(this, CONTROLLER, 0, state -> {
@@ -271,8 +315,11 @@ public class ArmorPlateItem extends Item implements GeoItem {
                     if (context == ItemDisplayContext.GUI || context == ItemDisplayContext.GROUND || context == ItemDisplayContext.FIXED)
                         return PlayState.STOP;
 
-                    if (state.isCurrentAnimation(INSERT_ANIMATION))
+                    if (state.isCurrentAnimation(INSERT_ANIMATION) ||
+                            state.isCurrentAnimation(REMOVE_ANIMATION) ||
+                            state.isCurrentAnimation(SWAP_ANIMATION)) {
                         return PlayState.CONTINUE;
+                    }
 
                     state.setAnimation(IDLE_ANIMATION);
                     return PlayState.CONTINUE;

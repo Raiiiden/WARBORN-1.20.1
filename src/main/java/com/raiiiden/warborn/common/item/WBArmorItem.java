@@ -19,6 +19,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -67,7 +68,7 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     private final String armorType;
 
     public WBArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType) {
-        super(armorMaterial, type, properties.stacksTo(1));
+        super(armorMaterial, type, properties.defaultDurability(armorMaterial.getDurabilityForType(type)));
         this.armorType = armorType;
     }
 
@@ -122,9 +123,6 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return stack.getItem() instanceof net.minecraft.world.item.ArmorItem;
     }
 
-    /**
-     * Checks if a helmet has vision capabilities (has the goggle tag)
-     */
     public static boolean hasVisionCapability(ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
         if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.HELMET) return false;
@@ -147,9 +145,6 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                 stack.is(TagKey.create(Registries.ITEM, digitalTagId));
     }
 
-    /**
-     * Checks if the helmet has a specific vision mode
-     */
     public static boolean hasVisionMode(ItemStack stack, String visionTag) {
         if (!hasVisionCapability(stack)) return false;
 
@@ -164,16 +159,13 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return stack.is(TagKey.create(Registries.ITEM, tagId));
     }
 
-    /**
-     * Add a specific vision capability to a helmet
-     */
     public static void addVisionCapability(ItemStack stack, String visionTag) {
         if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return;
         if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.HELMET) return;
 
         CompoundTag tag = stack.getOrCreateTag();
-        tag.putBoolean(TAG_GOGGLE, true); // Base tag
-        tag.putBoolean(visionTag, true);  // Specific vision type
+        tag.putBoolean(TAG_GOGGLE, true);
+        tag.putBoolean(visionTag, true);
     }
 
     public static boolean isPlateCompatible(ItemStack stack) {
@@ -289,22 +281,28 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return isChestplateItem(stack) && getContents(stack).findAny().isPresent();
+        if (isChestplateItem(stack)) {
+            return getContents(stack).findAny().isPresent();
+        }
+        return super.isBarVisible(stack);
     }
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        if (!isChestplateItem(stack)) return super.getBarWidth(stack);
-
-        int total = getContents(stack).mapToInt(ItemStack::getCount).sum();
-        int max = MAX_SLOTS * MAX_STACK_SIZE;
-
-        return Math.min(13, 1 + (int) (12 * ((double) total / max)));
+        if (isChestplateItem(stack)) {
+            int total = getContents(stack).mapToInt(ItemStack::getCount).sum();
+            int max = MAX_SLOTS * MAX_STACK_SIZE;
+            return Math.min(13, 1 + (int) (12 * ((double) total / max)));
+        }
+        return super.getBarWidth(stack);
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return isChestplateItem(stack) ? BAR_COLOR : super.getBarColor(stack);
+        if (isChestplateItem(stack)) {
+            return BAR_COLOR;
+        }
+        return super.getBarColor(stack);
     }
 
     private void playRemoveOneSound(Entity entity) {
@@ -383,6 +381,22 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     public boolean isTopOpen(ItemStack stack) {
         return stack.getOrCreateTag().getBoolean("helmet_top_open");
+    }
+
+    @Override
+    public void curioTick(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
+        if (this.getArmorType().contains("shoulderpads")) {
+            java.util.UUID modifierId = java.util.UUID.nameUUIDFromBytes(("warborn:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
+            int defense = this.getMaterial().getDefenseForType(this.getType());
+            var armorAttr = livingEntity.getAttributes().getInstance(Attributes.ARMOR);
+
+            if (armorAttr != null) {
+                if (armorAttr.getModifier(modifierId) == null) {
+                    armorAttr.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(
+                            modifierId, "warborn:shoulderpads", defense, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION));
+                }
+            }
+        }
     }
 
     @Override

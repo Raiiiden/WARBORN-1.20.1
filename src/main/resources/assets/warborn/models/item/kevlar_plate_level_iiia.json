@@ -14,7 +14,7 @@
     "ground": {
       "parent": "minecraft:item/generated",
       "textures": {
-        "layer0": "warborn:item/icon/kevlar_plate_level_iiia"
+        "layer0": "warborn:item/icon/kevlar_plate"
       }
     },
     "fixed": {
@@ -26,13 +26,13 @@
     "thirdperson_righthand": {
       "parent": "minecraft:item/generated",
       "textures": {
-        "layer0": "warborn:item/icon/kevlar_plate_level_iiia"
+        "layer0": "warborn:item/icon/kevlar_plate"
       }
     },
     "thirdperson_lefthand": {
       "parent": "minecraft:item/generated",
       "textures": {
-        "layer0": "warborn:item/icon/kevlar_plate_level_iiia"
+        "layer0": "warborn:item/icon/kevlar_plate"
       }
     }
   }

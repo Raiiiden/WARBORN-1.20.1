@@ -19,10 +19,8 @@ import java.util.Map;
 
 public class ModItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
 
-    //creative tab
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
     //RU Armor
     public static final RegistryObject<WBArmorItem> RU_HELMET = ITEMS.register("ru_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
@@ -35,14 +33,15 @@ public class ModItemRegistry {
     public static final RegistryObject<WBArmorItem> MASHINEGUNNER_RU_CHESTPLATE = ITEMS.register("mashinegunner_ru_chestplate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "mashinegunner_ru"));
     public static final RegistryObject<WBArmorItem> RU_SHOULDERPADS = ITEMS.register("ru_shoulderpads",
-            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "mashinegunner_ru_shoulderpads"));
+            () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "mashinegunner_ru_shoulderpads"));
     public static final RegistryObject<WBArmorItem> SQUAD_LIDER_RU_CHESTPLATE = ITEMS.register("squad_lider_ru_chestplate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "squad_lider_ru"));
     public static final RegistryObject<BackpackItem> SQUAD_LIDER_RU_BACKPACK = ITEMS.register("squad_lider_ru_backpack",
             () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "squad_lider_ru_backpack"));
     public static final RegistryObject<BackpackItem> SHTURMOVIK_RU_BACKPACK = ITEMS.register("shturmovik_ru_backpack",
             () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "shturmovik_ru_backpack"));
-    //nato
+
+    //NATO
     public static final RegistryObject<WBArmorItem> NATO_SQAD_LEADER_HELMET = ITEMS.register("nato_sqad_leader_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "nato_sqad_leader"));
     public static final RegistryObject<WBArmorItem> NATO_SQAD_LEADER_CHESTPLATE = ITEMS.register("nato_sqad_leader_chestplate",
@@ -50,7 +49,7 @@ public class ModItemRegistry {
     public static final RegistryObject<BackpackItem> NATO_SQAD_LEADER_BACKPACK = ITEMS.register("nato_sqad_leader_backpack",
             () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_backpack"));
     public static final RegistryObject<WBArmorItem> NATO_SHOULDERPADS = ITEMS.register("nato_shoulderpads",
-            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads"));
+            () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads"));
     public static final RegistryObject<WBArmorItem> NATO_UKR_HELMET = ITEMS.register("nato_ukr_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "nato_ukr"));
     public static final RegistryObject<WBArmorItem> NATO_UKR_CHESTPLATE = ITEMS.register("nato_ukr_chestplate",
@@ -63,7 +62,8 @@ public class ModItemRegistry {
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik"));
     public static final RegistryObject<WBArmorItem> NATO_MG_CHESTPLATE = ITEMS.register("nato_mg_chestplate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_mg"));
-    //nato woodland
+
+    //NATO Woodland
     public static final RegistryObject<WBArmorItem> NATO_SQAD_LEADER_HELMET_WOODLAND = ITEMS.register("nato_sqad_leader_helmet_woodland",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "nato_sqad_leader_woodland"));
     public static final RegistryObject<WBArmorItem> NATO_SQAD_LEADER_CHESTPLATE_WOODLAND = ITEMS.register("nato_sqad_leader_chestplate_woodland",
@@ -71,7 +71,7 @@ public class ModItemRegistry {
     public static final RegistryObject<BackpackItem> NATO_SQAD_LEADER_BACKPACK_WOODLAND = ITEMS.register("nato_sqad_leader_backpack_woodland",
             () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_backpack_woodland"));
     public static final RegistryObject<WBArmorItem> NATO_SHOULDERPADS_WOODLAND = ITEMS.register("nato_shoulderpads_woodland",
-            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads_woodland"));
+            () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "nato_sqad_leader_shoulderpads_woodland"));
     public static final RegistryObject<WBArmorItem> NATO_UKR_HELMET_WOODLAND = ITEMS.register("nato_ukr_helmet_woodland",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "nato_ukr_woodland"));
     public static final RegistryObject<WBArmorItem> NATO_UKR_CHESTPLATE_WOODLAND = ITEMS.register("nato_ukr_chestplate_woodland",
@@ -84,7 +84,8 @@ public class ModItemRegistry {
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_shturmovik_woodland"));
     public static final RegistryObject<WBArmorItem> NATO_MG_CHESTPLATE_WOODLAND = ITEMS.register("nato_mg_chestplate_woodland",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "nato_mg_woodland"));
-    //beta7
+
+    //Beta7
     public static final RegistryObject<WBArmorItem> BETA7_NVG_HELMET = ITEMS.register("beta7_nvg_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg"));
     public static final RegistryObject<WBArmorItem> BETA7_HELMET = ITEMS.register("beta7_helmet",
@@ -94,7 +95,7 @@ public class ModItemRegistry {
     public static final RegistryObject<WBArmorItem> BETA7_LEGGINGS = ITEMS.register("beta7_leggings",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7"));
     public static final RegistryObject<WBArmorItem> BETA7_SHOULDERPADS = ITEMS.register("beta7_shoulderpads",
-            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
+            () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
     public static final RegistryObject<WBArmorItem> BETA7_NVG_HELMET_SLATE = ITEMS.register("beta7_nvg_helmet_slate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg_slate"));
     public static final RegistryObject<WBArmorItem> BETA7_HELMET_SLATE = ITEMS.register("beta7_helmet_slate",
@@ -104,7 +105,7 @@ public class ModItemRegistry {
     public static final RegistryObject<WBArmorItem> BETA7_LEGGINGS_SLATE = ITEMS.register("beta7_leggings_slate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7_slate"));
     public static final RegistryObject<WBArmorItem> BETA7_SHOULDERPADS_SLATE = ITEMS.register("beta7_shoulderpads_slate",
-            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_slate"));
+            () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_slate"));
     public static final RegistryObject<WBArmorItem> BETA7_NVG_HELMET_ASH = ITEMS.register("beta7_nvg_helmet_ash",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "beta7_nvg_ash"));
     public static final RegistryObject<WBArmorItem> BETA7_HELMET_ASH = ITEMS.register("beta7_helmet_ash",
@@ -114,36 +115,41 @@ public class ModItemRegistry {
     public static final RegistryObject<WBArmorItem> BETA7_LEGGINGS_ASH = ITEMS.register("beta7_leggings_ash",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7_ash"));
     public static final RegistryObject<WBArmorItem> BETA7_SHOULDERPADS_ASH = ITEMS.register("beta7_shoulderpads_ash",
-            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_ash"));
-    //killa
+            () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_ash"));
+
+    //Killa
     public static final RegistryObject<Item> KILLA_HELMET = ITEMS.register("killa_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "killa"));
     public static final RegistryObject<Item> KILLA_CHESTPLATE = ITEMS.register("killa_chestplate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "killa"));
-    //tagila
+
+    //Tagilla
     public static final RegistryObject<Item> TAGILLA_HELMET = ITEMS.register("tagilla_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "tagilla"));
     public static final RegistryObject<Item> TAGILLA_CHESTPLATE = ITEMS.register("tagilla_chestplate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "tagilla"));
     public static final RegistryObject<Item> TAGILLA_LEGGINGS = ITEMS.register("tagilla_leggings",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "tagilla"));
-    //insurgency commander
+
+    //Insurgency Commander
     public static final RegistryObject<Item> INSURGENCY_COMMANDER_HELMET = ITEMS.register("insurgency_commander_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "insurgency_commander"));
     public static final RegistryObject<Item> INSURGENCY_COMMANDER_CHESTPLATE = ITEMS.register("insurgency_commander_chestplate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "insurgency_commander"));
     public static final RegistryObject<Item> INSURGENCY_COMMANDER_SHOULDERPADS = ITEMS.register("insurgency_commander_shoulderpads",
-            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "insurgency_commander_shoulderpads"));
+            () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "insurgency_commander_shoulderpads"));
     public static final RegistryObject<Item> INSURGENCY_COMMANDER_LEGGINGS = ITEMS.register("insurgency_commander_leggings",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "insurgency_commander"));
-    //insurgency shturmovik
+
+    //Insurgency Shturmovik
     public static final RegistryObject<Item> INSURGENCY_SHTURMOVIK_HELMET = ITEMS.register("insurgency_shturmovik_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "insurgency_shturmovik"));
     public static final RegistryObject<Item> INSURGENCY_SHTURMOVIK_CHESTPLATE = ITEMS.register("insurgency_shturmovik_chestplate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "insurgency_shturmovik"));
     public static final RegistryObject<BackpackItem> INSURGENCY_SHTURMOVIK_BACKPACK = ITEMS.register("insurgency_shturmovik_backpack",
             () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "insurgency_shturmovik_backpack"));
-    //soviet soldier
+
+    //Soviet Soldier
     public static final RegistryObject<Item> SOVIET_SOLDIER_HELMET = ITEMS.register("soviet_soldier_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "soviet_soldier"));
     public static final RegistryObject<Item> SOVIET_SOLDIER_CHESTPLATE = ITEMS.register("soviet_soldier_chestplate",
@@ -153,42 +159,11 @@ public class ModItemRegistry {
     public static final RegistryObject<BackpackItem> SOVIET_SOLDIER_BACKPACK = ITEMS.register("soviet_soldier_backpack",
             () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "soviet_soldier_backpack"));
 
-    //SSO
-//    public static final RegistryObject<Item> SSO_SNIPER_LVL1_HELMET = ITEMS.register("sso_sniper_helmet",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "sso_sniper_lvl1"));
-//    public static final RegistryObject<Item> SSO_SNIPER_LVL1_CHESTPLATE = ITEMS.register("sso_sniper_chestplate",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "sso_sniper_lvl1"));
-//    public static final RegistryObject<Item> SSO_SNIPER_LVL1_LEGGINGS = ITEMS.register("sso_sniper_leggings",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "sso_sniper_lvl1"));
-//    public static final RegistryObject<Item> SSO_SNIPER_LVL2_HELMET = ITEMS.register("sso_sniper_helmet_2",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "sso_sniper_lvl2"));
-//    public static final RegistryObject<Item> SSO_SNIPER_LVL2_CHESTPLATE = ITEMS.register("sso_sniper_chestplate_2",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "sso_sniper_lvl2"));
-//    public static final RegistryObject<Item> SSO_SNIPER_LVL2_LEGGINGS = ITEMS.register("sso_sniper_leggings_2",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "sso_sniper_lvl2"));
-//    public static final RegistryObject<Item> SSO_SQUAD_LEADER_HELMET = ITEMS.register("sso_squad_leader_helmet",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "sso_squad_leader"));
-//    public static final RegistryObject<Item> SSO_SQUAD_LEADER_CHESTPLATE = ITEMS.register("sso_squad_leader_chestplate",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "sso_squad_leader"));
-//    public static final RegistryObject<Item> SSO_SQUAD_LEADER_LEGGINGS = ITEMS.register("sso_squad_leader_leggings",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "sso_squad_leader"));
-//    public static final RegistryObject<BackpackItem> SSO_SQUAD_LEADER_BACKPACK = ITEMS.register("sso_squad_leader_backpack",
-//            () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "sso_squad_leader_backpack"));
-//    public static final RegistryObject<Item> SSO_SHOULDERPADS = ITEMS.register("sso_shoulderpads",
-//            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "sso_shoulderpads"));
-
-    // ---------------
-    // Weapons Start Here
-    // ---------------
+    // Weapons
     public static final RegistryObject<Item> TAGILLA_MOLOT = ITEMS.register("tagilla_molot",
             () -> new WeaponItem(new Item.Properties().stacksTo(1).durability(500)));
-    // ----------------
-    // Armor Plates Start Here
-    // ----------------
-//    // Legacy plate - keeping for compatibility, now the default for getPlateItem
-//    public static final RegistryObject<ArmorPlateItem> ARMOR_PLATE = ITEMS.register("armor_plate",
-//            () -> new ArmorPlateItem(ProtectionTier.LEVEL_III, MaterialType.STEEL, new Item.Properties()));
 
+    // Armor Plates
     public static final RegistryObject<ArmorPlateItem> STEEL_PLATE_LEVEL_III = ITEMS.register("steel_plate_level_iii",
             () -> new ArmorPlateItem(ProtectionTier.LEVEL_III, MaterialType.STEEL, new Item.Properties()));
     public static final RegistryObject<ArmorPlateItem> CERAMIC_PLATE_LEVEL_IV = ITEMS.register("ceramic_plate_level_iv",
@@ -205,7 +180,6 @@ public class ModItemRegistry {
                     .title(Component.translatable("itemGroup.warborn_tab"))
                     .icon(() -> new ItemStack(RU_HELMET.get()))
                     .displayItems((enabledFeatures, entries) -> {
-                        //ru
                         entries.accept(RU_HELMET.get());
                         entries.accept(SHTURMOVIK_RU_CHESTPLATE.get());
                         entries.accept(SHTURMOVIK_RU_BACKPACK.get());
@@ -216,7 +190,6 @@ public class ModItemRegistry {
                         entries.accept(SQUAD_LIDER_RU_CHESTPLATE.get());
                         entries.accept(SQUAD_LIDER_RU_BACKPACK.get());
 
-                        //nato
                         entries.accept(NATO_SQAD_LEADER_HELMET.get());
                         entries.accept(NATO_SQAD_LEADER_CHESTPLATE.get());
                         entries.accept(NATO_SQAD_LEADER_BACKPACK.get());
@@ -228,7 +201,6 @@ public class ModItemRegistry {
                         entries.accept(NATO_SHTURMOVIK_CHESTPLATE.get());
                         entries.accept(NATO_MG_CHESTPLATE.get());
 
-                        //nato woodland
                         entries.accept(NATO_SQAD_LEADER_HELMET_WOODLAND.get());
                         entries.accept(NATO_SQAD_LEADER_CHESTPLATE_WOODLAND.get());
                         entries.accept(NATO_SQAD_LEADER_BACKPACK_WOODLAND.get());
@@ -240,7 +212,6 @@ public class ModItemRegistry {
                         entries.accept(NATO_SHTURMOVIK_CHESTPLATE_WOODLAND.get());
                         entries.accept(NATO_MG_CHESTPLATE_WOODLAND.get());
 
-                        //beta7
                         entries.accept(BETA7_NVG_HELMET.get());
                         entries.accept(BETA7_HELMET.get());
                         entries.accept(BETA7_CHESTPLATE.get());
@@ -257,56 +228,29 @@ public class ModItemRegistry {
                         entries.accept(BETA7_LEGGINGS_ASH.get());
                         entries.accept(BETA7_SHOULDERPADS_ASH.get());
 
-                        //killa
                         entries.accept(KILLA_HELMET.get());
                         entries.accept(KILLA_CHESTPLATE.get());
 
-                        //tagila
                         entries.accept(TAGILLA_HELMET.get());
                         entries.accept(TAGILLA_CHESTPLATE.get());
                         entries.accept(TAGILLA_LEGGINGS.get());
 
-                        //insurgency commander
                         entries.accept(INSURGENCY_COMMANDER_HELMET.get());
                         entries.accept(INSURGENCY_COMMANDER_CHESTPLATE.get());
                         entries.accept(INSURGENCY_COMMANDER_SHOULDERPADS.get());
                         entries.accept(INSURGENCY_COMMANDER_LEGGINGS.get());
 
-                        //insurgency shturmovik
                         entries.accept(INSURGENCY_SHTURMOVIK_HELMET.get());
                         entries.accept(INSURGENCY_SHTURMOVIK_CHESTPLATE.get());
                         entries.accept(INSURGENCY_SHTURMOVIK_BACKPACK.get());
 
-                        //soviet soldier
                         entries.accept(SOVIET_SOLDIER_HELMET.get());
                         entries.accept(SOVIET_SOLDIER_CHESTPLATE.get());
                         entries.accept(SOVIET_SOLDIER_LEGGINGS.get());
                         entries.accept(SOVIET_SOLDIER_BACKPACK.get());
 
-//                        //sso
-//                        entries.accept(SSO_SNIPER_LVL1_HELMET.get());
-//                        entries.accept(SSO_SNIPER_LVL1_CHESTPLATE.get());
-//                        entries.accept(SSO_SNIPER_LVL1_LEGGINGS.get());
-////                        entries.accept(SSO_SNIPER_LVL2_HELMET.get());
-////                        entries.accept(SSO_SNIPER_LVL2_CHESTPLATE.get());
-////                        entries.accept(SSO_SNIPER_LVL2_LEGGINGS.get());
-//                        entries.accept(SSO_SQUAD_LEADER_HELMET.get());
-//                        entries.accept(SSO_SQUAD_LEADER_CHESTPLATE.get());
-//                        entries.accept(SSO_SQUAD_LEADER_LEGGINGS.get());
-//                        entries.accept(SSO_SQUAD_LEADER_BACKPACK.get());
-//                        entries.accept(SSO_SHOULDERPADS.get());
-
-                        // ---------------
-                        // Weapons Start Here
-                        // ---------------
-
                         entries.accept(TAGILLA_MOLOT.get());
 
-                        // ----------------
-                        // Armor Plates Start Here
-                        // ----------------
-
-//                        entries.accept(ARMOR_PLATE.get());
                         entries.accept(STEEL_PLATE_LEVEL_III.get());
                         entries.accept(CERAMIC_PLATE_LEVEL_IV.get());
                         entries.accept(KEVLAR_PLATE_LEVEL_IIIA.get());
@@ -319,7 +263,6 @@ public class ModItemRegistry {
     private static final Map<String, RegistryObject<ArmorPlateItem>> PLATE_REGISTRY = new HashMap<>();
 
     public static Item getPlateItem(ProtectionTier tier, MaterialType material) {
-        // Initialize the plate registry if it's empty
         if (PLATE_REGISTRY.isEmpty()) {
             PLATE_REGISTRY.put(ProtectionTier.LEVEL_III.name() + "_" + MaterialType.STEEL.name(), STEEL_PLATE_LEVEL_III);
             PLATE_REGISTRY.put(ProtectionTier.LEVEL_IV.name() + "_" + MaterialType.CERAMIC.name(), CERAMIC_PLATE_LEVEL_IV);

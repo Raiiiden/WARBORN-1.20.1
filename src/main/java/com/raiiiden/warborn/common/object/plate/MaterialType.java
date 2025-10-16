@@ -23,31 +23,33 @@ public class MaterialType {
             (damagePercent, baseProtection) -> baseProtection,
             Color.DEFAULT
     );
-    public static final MaterialType SOFT_KEVLAR = register("soft_kevlar", KEY_PREFIX_MATERIAL + "soft_kevlar", 53, 0.05f,
+    // Replace all the MaterialType.register() calls with these halved values:
+
+    public static final MaterialType SOFT_KEVLAR = register("soft_kevlar", KEY_PREFIX_MATERIAL + "soft_kevlar", 51, -0.015f,
             (durability, damage) -> durability - damage,
-            (damagePercent, baseProtection) -> baseProtection, // no effect anymore
+            (damagePercent, baseProtection) -> baseProtection,
             Color.SOFT_KEVLAR
     );
 
-    public static final MaterialType STEEL = register("steel", KEY_PREFIX_MATERIAL + "steel", 60, -0.15f,
+    public static final MaterialType STEEL = register("steel", KEY_PREFIX_MATERIAL + "steel", 90, -0.075f,
             (durability, damage) -> durability - damage,
             (damagePercent, baseProtection) -> baseProtection,
             Color.STEEL
     );
 
-    public static final MaterialType CERAMIC = register("ceramic", KEY_PREFIX_MATERIAL + "ceramic", 51, -0.10f,
+    public static final MaterialType CERAMIC = register("ceramic", KEY_PREFIX_MATERIAL + "ceramic", 61, -0.05f,
             (durability, damage) -> durability - damage,
             (damagePercent, baseProtection) -> baseProtection,
             Color.CERAMIC
     );
 
-    public static final MaterialType POLYETHYLENE = register("polyethylene", KEY_PREFIX_MATERIAL + "polyethylene", 68, -0.05f,
+    public static final MaterialType POLYETHYLENE = register("polyethylene", KEY_PREFIX_MATERIAL + "polyethylene", 75, -0.025f,
             (durability, damage) -> durability - damage,
             (damagePercent, baseProtection) -> baseProtection,
             Color.POLYETHYLENE
     );
 
-    public static final MaterialType COMPOSITE = register("composite", KEY_PREFIX_MATERIAL + "composite", 94, -0.12f,
+    public static final MaterialType COMPOSITE = register("composite", KEY_PREFIX_MATERIAL + "composite", 124, -0.06f,
             (durability, damage) -> durability - damage,
             (damagePercent, baseProtection) -> baseProtection,
             Color.COMPOSITE

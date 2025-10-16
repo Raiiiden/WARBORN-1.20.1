@@ -14,13 +14,25 @@
     "ground": {
       "parent": "minecraft:item/generated",
       "textures": {
-        "layer0": "warborn:item/icon/steel_plate_level_iii"
+        "layer0": "warborn:item/icon/steel_plate"
       }
     },
     "fixed": {
       "parent": "minecraft:item/generated",
       "textures": {
         "layer0": "warborn:item/icon/steel_plate_level_iii"
+      }
+    },
+    "thirdperson_righthand": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/steel_plate"
+      }
+    },
+    "thirdperson_lefthand": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/steel_plate"
       }
     }
   }

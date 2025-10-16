@@ -16,7 +16,6 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = WARBORN.MODID)
 public class PlateSpeedHandler {
-    // we can be funny with the uuid
     private static final UUID PLATE_SPEED_MODIFIER_UUID = UUID.fromString("d10a0ceb-f815-4b8c-8b41-b7c3b8612891");
     private static final String PLATE_SPEED_MODIFIER_NAME = "Armor Plate Speed Modifier";
 
@@ -39,13 +38,11 @@ public class PlateSpeedHandler {
 
         chestplate.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
             float totalSpeedMod = 0.0F;
-            int plateCount = 0;
 
             if (cap.hasFrontPlate()) {
                 Plate frontPlate = cap.getFrontPlate();
                 if (frontPlate != null && !frontPlate.isBroken()) {
                     totalSpeedMod += frontPlate.getSpeedModifier();
-                    plateCount++;
                 }
             }
 
@@ -53,13 +50,11 @@ public class PlateSpeedHandler {
                 Plate backPlate = cap.getBackPlate();
                 if (backPlate != null && !backPlate.isBroken()) {
                     totalSpeedMod += backPlate.getSpeedModifier();
-                    plateCount++;
                 }
             }
 
-            if (plateCount > 0) {
-                float averageSpeedMod = totalSpeedMod / plateCount;
-                applySpeedModifier(player, averageSpeedMod);
+            if (Math.abs(totalSpeedMod) > 0.001f) {
+                applySpeedModifier(player, totalSpeedMod);
             } else {
                 removeSpeedModifier(player);
             }
@@ -69,17 +64,14 @@ public class PlateSpeedHandler {
     private static void applySpeedModifier(Player player, float speedModifier) {
         removeSpeedModifier(player);
 
-        // fck using floats everwhere
-        if (Math.abs(speedModifier) > 0.001f) {
-            AttributeModifier modifier = new AttributeModifier(
-                    PLATE_SPEED_MODIFIER_UUID,
-                    PLATE_SPEED_MODIFIER_NAME,
-                    speedModifier,
-                    AttributeModifier.Operation.MULTIPLY_TOTAL);
+        AttributeModifier modifier = new AttributeModifier(
+                PLATE_SPEED_MODIFIER_UUID,
+                PLATE_SPEED_MODIFIER_NAME,
+                speedModifier,
+                AttributeModifier.Operation.MULTIPLY_TOTAL);
 
-            player.getAttribute(Attributes.MOVEMENT_SPEED)
-                    .addTransientModifier(modifier);
-        }
+        player.getAttribute(Attributes.MOVEMENT_SPEED)
+                .addTransientModifier(modifier);
     }
 
     private static void removeSpeedModifier(Player player) {
@@ -89,4 +81,4 @@ public class PlateSpeedHandler {
                     .removeModifier(PLATE_SPEED_MODIFIER_UUID);
         }
     }
-} 
+}

@@ -30,7 +30,6 @@ public class Materials {
             0.1F,
             () -> Ingredient.of(Items.NETHERITE_INGOT)
     );
-    //TODO Add more armor materials
 
     public static final WarbornArmorMaterial WARBORN_PLATE = new WarbornArmorMaterial(
             "warborn_plate",
@@ -40,6 +39,23 @@ public class Materials {
                 map.put(ArmorItem.Type.CHESTPLATE, 6);
                 map.put(ArmorItem.Type.HELMET, 3);
                 map.put(ArmorItem.Type.BOOTS, 3);
+            }),
+            15,
+            ModSoundEvents.WARBORN_ARMOR_EQUIP,
+            ModSoundEvents.WARBORN_ARMOR_BREAK,
+            3.0F,
+            0.1F,
+            () -> Ingredient.of(Items.NETHERITE_INGOT)
+    );
+
+    public static final WarbornArmorMaterial WARBORN_SHOULDERPADS = new WarbornArmorMaterial(
+            "warborn_shoulderpads",
+            40,
+            Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.BOOTS, 0);
+                map.put(ArmorItem.Type.LEGGINGS, 0);
+                map.put(ArmorItem.Type.CHESTPLATE, 4);
+                map.put(ArmorItem.Type.HELMET, 0);
             }),
             15,
             ModSoundEvents.WARBORN_ARMOR_EQUIP,
@@ -101,10 +117,6 @@ public class Materials {
             return this.sound.get();
         }
 
-        /**
-         * Gets the sound to play when armor breaks.
-         * Note: This is a custom method not in vanilla ArmorMaterial.
-         */
         public SoundEvent getBreakSound() {
             return this.breakSound.get();
         }

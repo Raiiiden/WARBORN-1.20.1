@@ -25,9 +25,6 @@ public class WarbornShaders {
 
     private static final boolean DEBUG = false;
 
-    /**
-     * Check if NVG should be active for the current player
-     */
     private static boolean isNvgEnabled(Minecraft mc) {
         boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_NVG);
         if (active && DEBUG) {
@@ -36,9 +33,6 @@ public class WarbornShaders {
         return active;
     }
 
-    /**
-     * Check if simple NVG should be active
-     */
     private static boolean isSimpleNvgEnabled(Minecraft mc) {
         boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_SIMPLE_NVG);
         if (active && DEBUG) {
@@ -47,9 +41,6 @@ public class WarbornShaders {
         return active;
     }
 
-    /**
-     * Check if thermal vision should be active
-     */
     private static boolean isThermalEnabled(Minecraft mc) {
         boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_THERMAL);
         if (active && DEBUG) {
@@ -58,9 +49,6 @@ public class WarbornShaders {
         return active;
     }
 
-    /**
-     * Check if digital vision should be active
-     */
     private static boolean isDigitalEnabled(Minecraft mc) {
         boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_DIGITAL);
         if (active && DEBUG) {
@@ -69,25 +57,16 @@ public class WarbornShaders {
         return active;
     }
 
-    /**
-     * Used for shaders that are never automatically enabled
-     */
     private static boolean isNever(Minecraft minecraft) {
         return false;
     }
 
     @SubscribeEvent
     public static void renderNVG(RenderLevelStageEvent event) {
-        // Changed from AFTER_PARTICLES to AFTER_LEVEL to ensure hands are rendered first
-        // GameRenderer.loadEffect() will apply the shader after ALL rendering including hands
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL) return;
-
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
         ShaderRegistry.getInstance().processShaders();
     }
 
-    /**
-     * Initialize and register the NVG shader
-     */
     @Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientInit {
         @SubscribeEvent

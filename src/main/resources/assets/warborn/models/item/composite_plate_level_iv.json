@@ -14,13 +14,25 @@
     "ground": {
       "parent": "minecraft:item/generated",
       "textures": {
-        "layer0": "warborn:item/icon/composite_plate_level_iv"
+        "layer0": "warborn:item/icon/composite_plate"
       }
     },
     "fixed": {
       "parent": "minecraft:item/generated",
       "textures": {
         "layer0": "warborn:item/icon/composite_plate_level_iv"
+      }
+    },
+    "thirdperson_righthand": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/composite_plate"
+      }
+    },
+    "thirdperson_lefthand": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "warborn:item/icon/composite_plate"
       }
     }
   }
