@@ -6,13 +6,10 @@ import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import software.bernie.geckolib.animatable.GeoItem;
 
 public class RemovePlateScreen extends Screen {
 
@@ -39,8 +36,8 @@ public class RemovePlateScreen extends Screen {
         if (player == null) return;
 
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chest.isEmpty()) {
-            player.displayClientMessage(Component.literal("You must wear a chestplate."), true);
+        if (chest.isEmpty() || !ArmorPlateItem.isPlateCompatible(chest)) {
+            player.displayClientMessage(Component.literal("You must wear a compatible chestplate."), true);
             return;
         }
 
@@ -63,30 +60,8 @@ public class RemovePlateScreen extends Screen {
             return;
         }
 
-        ItemStack main = player.getMainHandItem();
-        ItemStack off = player.getOffhandItem();
-
-        ArmorPlateItem plateItem = null;
-        ItemStack held = null;
-
-        if (main.getItem() instanceof ArmorPlateItem) {
-            plateItem = (ArmorPlateItem) main.getItem();
-            held = main;
-        } else if (off.getItem() instanceof ArmorPlateItem) {
-            plateItem = (ArmorPlateItem) off.getItem();
-            held = off;
-        }
-
-        if (plateItem == null || held == null) {
-            player.displayClientMessage(Component.literal("Must hold an armor plate."), true);
-            return;
-        }
-
-        CompoundTag tag = held.getOrCreateTag();
-
-        if (tag.getBoolean("warborn_pending_remove")) {
-            return;
-        }
+        // NO LONGER REQUIRE HOLDING A PLATE!
+        // The phantom render system will handle visualization
 
         ModNetworking.sendRemovePlatePacket(front);
         this.onClose();

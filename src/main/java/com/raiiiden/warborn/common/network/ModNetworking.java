@@ -18,6 +18,8 @@ public class ModNetworking {
             () -> VER, VER::equals, VER::equals
     );
 
+    public static final SimpleChannel CHANNEL = PACKET_CHANNEL;
+
     public static void openBackpack(ItemStack backpackItem) {
         sendToServer(new OpenBackpackPacket(backpackItem));
     }
@@ -28,22 +30,50 @@ public class ModNetworking {
 
     public static void registerPackets() {
         var id = 0;
-        PACKET_CHANNEL.registerMessage(id++, OpenBackpackPacket.class, OpenBackpackPacket::encode, OpenBackpackPacket::new, OpenBackpackPacket::handle);
-        PACKET_CHANNEL.registerMessage(id++, RemovePlatePacket.class, RemovePlatePacket::encode, RemovePlatePacket::new, RemovePlatePacket::handle);
-        PACKET_CHANNEL.registerMessage(id++, ToggleHelmetTopPacket.class, ToggleHelmetTopPacket::encode, ToggleHelmetTopPacket::new, ToggleHelmetTopPacket::handle);
-        PACKET_CHANNEL.registerMessage(id++, ServerboundNVGArmAnimationPacket.class, ServerboundNVGArmAnimationPacket::encode, ServerboundNVGArmAnimationPacket::new, ServerboundNVGArmAnimationPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-        PACKET_CHANNEL.registerMessage(id++, ClientboundNVGArmAnimationPacket.class, ClientboundNVGArmAnimationPacket::encode, ClientboundNVGArmAnimationPacket::new, ClientboundNVGArmAnimationPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        PACKET_CHANNEL.registerMessage(id++, OpenBackpackPacket.class,
+                OpenBackpackPacket::encode,
+                OpenBackpackPacket::new,
+                OpenBackpackPacket::handle);
+
+        PACKET_CHANNEL.registerMessage(id++, RemovePlatePacket.class,
+                RemovePlatePacket::encode,
+                RemovePlatePacket::new,
+                RemovePlatePacket::handle);
+
+        PACKET_CHANNEL.registerMessage(id++, ToggleHelmetTopPacket.class,
+                ToggleHelmetTopPacket::encode,
+                ToggleHelmetTopPacket::new,
+                ToggleHelmetTopPacket::handle);
+
+        PACKET_CHANNEL.registerMessage(id++, ServerboundNVGArmAnimationPacket.class,
+                ServerboundNVGArmAnimationPacket::encode,
+                ServerboundNVGArmAnimationPacket::new,
+                ServerboundNVGArmAnimationPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        PACKET_CHANNEL.registerMessage(id++, ClientboundNVGArmAnimationPacket.class,
+                ClientboundNVGArmAnimationPacket::encode,
+                ClientboundNVGArmAnimationPacket::new,
+                ClientboundNVGArmAnimationPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        PACKET_CHANNEL.registerMessage(id++, ClientboundPhantomPlatePacket.class,
+                ClientboundPhantomPlatePacket::encode,
+                ClientboundPhantomPlatePacket::new,
+                ClientboundPhantomPlatePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static <MSG> void sendToServer(MSG message) {
         PACKET_CHANNEL.sendToServer(message);
     }
 
-    protected static <MSG> void sendToPlayer(MSG message, ServerPlayer serverPlayer) {
+    public static <MSG> void sendToPlayer(MSG message, ServerPlayer serverPlayer) {
         PACKET_CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), message);
     }
 
-    protected static <MSG> void sendToClients(MSG message) {
+    public static <MSG> void sendToClients(MSG message) {
         PACKET_CHANNEL.send(PacketDistributor.ALL.noArg(), message);
     }
 

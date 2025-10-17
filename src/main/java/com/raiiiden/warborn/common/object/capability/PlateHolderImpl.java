@@ -80,13 +80,13 @@ public class PlateHolderImpl implements PlateHolderCapability {
     @Override
     public void insertFrontPlate(Plate plate) {
         writePlate("FrontPlate", plate);
-        LOGGER.info("Inserted front plate: {} {}", plate.getTier(), plate.getMaterial());
+        // LOGGER.info("Inserted front plate: {} {}", plate.getTier(), plate.getMaterial());
     }
 
     @Override
     public void insertBackPlate(Plate plate) {
         writePlate("BackPlate", plate);
-        LOGGER.info("Inserted back plate: {} {}", plate.getTier(), plate.getMaterial());
+        // LOGGER.info("Inserted back plate: {} {}", plate.getTier(), plate.getMaterial());
     }
 
     @Override
@@ -112,12 +112,12 @@ public class PlateHolderImpl implements PlateHolderCapability {
     @Override
     public void removeFrontPlate() {
         writePlate("FrontPlate", null);
-        LOGGER.info("Front plate removed.");
+        // LOGGER.info("Front plate removed.");
     }
 
     @Override
     public void removeBackPlate() {
         writePlate("BackPlate", null);
-        LOGGER.info("Back plate removed.");
+        // LOGGER.info("Back plate removed.");
     }
 }
