@@ -622,9 +622,10 @@
 					]
 				},
 				{
-					"name": "bone3",
+					"name": "bone6",
 					"parent": "bone2",
 					"pivot": [-0.03949, 30.40115, -6.28557],
+					"rotation": [-90, 0, 0],
 					"cubes": [
 						{
 							"origin": [-0.95, 35.38046, -9.57199],
@@ -722,7 +723,7 @@
 					"pivot": [0, 24, 0]
 				},
 				{
-					"name": "bone6",
+					"name": "bone4",
 					"parent": "armorBody",
 					"pivot": [0, -0.75, 0],
 					"cubes": [
@@ -944,7 +945,7 @@
 				},
 				{
 					"name": "bone8",
-					"parent": "bone6",
+					"parent": "bone4",
 					"pivot": [3, 16.55, -3.6875],
 					"cubes": [
 						{

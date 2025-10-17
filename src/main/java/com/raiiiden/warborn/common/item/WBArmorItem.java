@@ -19,6 +19,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
@@ -48,6 +49,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -385,19 +387,34 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
-        if (this.getArmorType().contains("shoulderpads")) {
-            java.util.UUID modifierId = java.util.UUID.nameUUIDFromBytes(("warborn:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
-            int defense = this.getMaterial().getDefenseForType(this.getType());
-            var armorAttr = livingEntity.getAttributes().getInstance(Attributes.ARMOR);
+        if (!this.getArmorType().contains("shoulderpads")) return;
 
-            if (armorAttr != null) {
-                if (armorAttr.getModifier(modifierId) == null) {
-                    armorAttr.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(
-                            modifierId, "warborn:shoulderpads", defense, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION));
-                }
-            }
+        var armorAttr = livingEntity.getAttributes().getInstance(Attributes.ARMOR);
+        if (armorAttr == null) return;
+
+        UUID modifierId = UUID.nameUUIDFromBytes(("warborn:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
+
+        // Make sure no duplicate modifier exists
+        if (armorAttr.getModifier(modifierId) == null) {
+            int defense = this.getMaterial().getDefenseForType(this.getType());
+            armorAttr.addTransientModifier(new AttributeModifier(
+                    modifierId, "warborn:shoulderpads", defense, AttributeModifier.Operation.ADDITION));
         }
     }
+    @Override
+    public void onUnequip(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
+        if (!this.getArmorType().contains("shoulderpads")) return;
+
+        var armorAttr = livingEntity.getAttributes().getInstance(Attributes.ARMOR);
+        if (armorAttr == null) return;
+
+        UUID modifierId = UUID.nameUUIDFromBytes(("warborn:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
+
+        if (armorAttr.getModifier(modifierId) != null) {
+            armorAttr.removeModifier(modifierId);
+        }
+    }
+
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

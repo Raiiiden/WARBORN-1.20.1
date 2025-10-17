@@ -1,6 +1,7 @@
 package com.raiiiden.warborn.common.network;
 
 import com.raiiiden.warborn.client.renderer.PhantomPlateRenderManager;
+import com.raiiiden.warborn.client.sound.WarbornClientSounds;
 import com.raiiiden.warborn.common.object.plate.MaterialType;
 import com.raiiiden.warborn.common.object.plate.Plate;
 import com.raiiiden.warborn.common.object.plate.ProtectionTier;
@@ -95,6 +96,7 @@ public class ClientboundPhantomPlatePacket {
 
                     // Trigger the remove animation client-side
                     plateItem.triggerAnim(mc.player, geckoId, com.raiiiden.warborn.common.item.ArmorPlateItem.CONTROLLER, "remove");
+                    WarbornClientSounds.playArmorRemoveSound(mc.player, plateItem);
                 }
 
             } catch (IllegalArgumentException e) {

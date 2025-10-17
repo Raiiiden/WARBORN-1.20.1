@@ -92,12 +92,8 @@ public class PhantomPlateRenderManager {
         // Only render in main hand
         if (hand != InteractionHand.MAIN_HAND) return false;
 
-        // Check if player is actually holding a plate - if so, use normal rendering
-        ItemStack held = player.getMainHandItem();
-        if (!held.isEmpty() && held.getItem() instanceof com.raiiiden.warborn.common.item.ArmorPlateItem) {
-            return false;
-        }
-
+        // ALWAYS override with phantom when active, even if holding a plate
+        // This ensures the correct plate model is shown during removal
         return true;
     }
 

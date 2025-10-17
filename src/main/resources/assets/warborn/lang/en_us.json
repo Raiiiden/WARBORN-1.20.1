@@ -67,9 +67,14 @@
   "item.warborn.insurgency_shturmovik_backpack": "Insurgency Shturmovik Backpack",
 
   "item.warborn.soviet_soldier_helmet": "Soviet Soldier Helmet",
-    "item.warborn.soviet_soldier_chestplate": "Soviet Soldier Chestplate",
-    "item.warborn.soviet_soldier_leggings": "Soviet Soldier Leggings",
+  "item.warborn.soviet_soldier_chestplate": "Soviet Soldier Chestplate",
+  "item.warborn.soviet_soldier_leggings": "Soviet Soldier Leggings",
   "item.warborn.soviet_soldier_backpack": "Soviet Soldier Backpack",
+
+  "item.warborn.sso_squad_leader_helmet": "SSO Squad Leader Helmet",
+  "item.warborn.sso_squad_leader_chestplate": "SSO Squad Leader Chestplate",
+  "item.warborn.sso_squad_leader_leggings": "SSO Squad Leader Leggings",
+
 
   "item.warborn.tagilla_molot": "Tagilla Hammer",
 
@@ -116,6 +121,9 @@
   "tooltip.warborn.vest.front": "Front: %s %s",
   "tooltip.warborn.vest.back": "Back: %s %s",
   "tooltip.warborn.vest.speed": "Speed Effect: %s",
+
+  "curios.identifier.shoulderpads": "Shoulderpads",
+  "curios.identifier.backpack": "Backpack",
 
   "menu.warborn.backpack": "Backpack"
 }

@@ -38,5 +38,15 @@
                 "pitch": 1.0
             }
         ]
+    },
+    "item.armor.warborn_plate_remove": {
+        "subtitle": "warborn.subtitle.armor_plate_remove",
+        "sounds": [
+          {
+            "name": "warborn:item/armor/warborn_plate_remove",
+            "volume": 1.0,
+            "pitch": 1.0
+          }
+        ]
     }
 }

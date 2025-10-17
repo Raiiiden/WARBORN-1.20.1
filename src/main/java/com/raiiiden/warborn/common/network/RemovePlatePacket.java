@@ -37,6 +37,27 @@ public class RemovePlatePacket {
 
             if (chest.isEmpty() || !ArmorPlateItem.isPlateCompatible(chest)) return;
 
+            // Check if player is already processing an insert or remove operation
+            if (player.getPersistentData().getBoolean("warborn_processing_removal") ||
+                    player.getPersistentData().getBoolean("warborn_processing_insert")) {
+                player.displayClientMessage(
+                        net.minecraft.network.chat.Component.literal("Please wait for current operation to complete")
+                                .withStyle(net.minecraft.ChatFormatting.YELLOW),
+                        true
+                );
+                return;
+            }
+
+            // Check if any held plate has pending operations
+            if (main.hasTag() && (main.getTag().getBoolean(ArmorPlateItem.PENDING_INSERT_TAG) ||
+                    main.getTag().getBoolean(ArmorPlateItem.PENDING_REMOVE_TAG))) {
+                return;
+            }
+            if (off.hasTag() && (off.getTag().getBoolean(ArmorPlateItem.PENDING_INSERT_TAG) ||
+                    off.getTag().getBoolean(ArmorPlateItem.PENDING_REMOVE_TAG))) {
+                return;
+            }
+
             // Get the plate that will be removed
             Plate plateToRemove = chest.getCapability(PlateHolderProvider.CAP).map(cap ->
                     packet.front ? cap.getFrontPlate() : cap.getBackPlate()
@@ -44,37 +65,45 @@ public class RemovePlatePacket {
 
             if (plateToRemove == null) return;
 
-            boolean isHoldingPlate = false;
-            ItemStack heldStack = null;
+            // Mark that we're processing a removal
+            player.getPersistentData().putBoolean("warborn_processing_removal", true);
+
+            // Animation duration: 55 ticks for animation + buffer
+            int animationDuration = 55;
+
+            // ALWAYS send phantom render packet to client with the CORRECT plate
+            ClientboundPhantomPlatePacket phantomPacket = new ClientboundPhantomPlatePacket(
+                    plateToRemove,
+                    animationDuration,
+                    player.getUUID()
+            );
+
+            ModNetworking.PACKET_CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> player),
+                    phantomPacket
+            );
 
             // Check if player is holding a plate item
-            if (main.getItem() instanceof ArmorPlateItem plateItem) {
-                plateItem.startRemoveAnimation(player, main, packet.front, serverLevel);
+            boolean isHoldingPlate = false;
+            ItemStack heldPlate = null;
+
+            if (main.getItem() instanceof ArmorPlateItem) {
                 isHoldingPlate = true;
-                heldStack = main;
-            } else if (off.getItem() instanceof ArmorPlateItem plateItem) {
-                plateItem.startRemoveAnimation(player, off, packet.front, serverLevel);
+                heldPlate = main;
+            } else if (off.getItem() instanceof ArmorPlateItem) {
                 isHoldingPlate = true;
-                heldStack = off;
+                heldPlate = off;
             }
 
-            // If NOT holding a plate, create phantom render and temporary animation
-            if (!isHoldingPlate) {
-                // Animation duration: 55 ticks for animation + some buffer
-                int animationDuration = 55; // Extended to ensure full animation visibility
-
-                // Send phantom render packet to client
-                ClientboundPhantomPlatePacket phantomPacket = new ClientboundPhantomPlatePacket(
-                        plateToRemove,
-                        animationDuration,
-                        player.getUUID()
-                );
-
-                ModNetworking.PACKET_CHANNEL.send(
-                        PacketDistributor.PLAYER.with(() -> player),
-                        phantomPacket
-                );
-
+            // If holding a plate, trigger the animation on it (for server-side tracking)
+            // but the CLIENT will render the phantom plate instead
+            if (isHoldingPlate && heldPlate != null) {
+                if (heldPlate.getItem() instanceof ArmorPlateItem plateItem) {
+                    plateItem.startRemoveAnimation(player, heldPlate, packet.front, serverLevel);
+                }
+            }
+            // If NOT holding a plate, use server-side temporary plate for processing
+            else {
                 // Create a temporary plate stack with proper NBT for removal animation
                 ItemStack tempPlate = ArmorPlateItem.createPlateWithHitsRemaining(
                         plateToRemove.getTier(),
@@ -96,10 +125,8 @@ public class RemovePlatePacket {
                     plateItem.startRemoveAnimation(player, tempPlate, packet.front, serverLevel);
                 }
 
-                // Store the temp plate in a temporary slot for processing
-                // We'll use a custom tag on the player to track this
+                // Store the temp plate for server-side processing
                 player.getPersistentData().put("warborn_temp_plate", tempPlate.save(new CompoundTag()));
-                player.getPersistentData().putBoolean("warborn_processing_removal", true);
             }
         });
 

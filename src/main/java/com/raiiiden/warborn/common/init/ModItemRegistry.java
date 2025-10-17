@@ -6,6 +6,7 @@ import com.raiiiden.warborn.common.object.plate.MaterialType;
 import com.raiiiden.warborn.common.object.plate.ProtectionTier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -159,6 +160,15 @@ public class ModItemRegistry {
     public static final RegistryObject<BackpackItem> SOVIET_SOLDIER_BACKPACK = ITEMS.register("soviet_soldier_backpack",
             () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "soviet_soldier_backpack"));
 
+    //SSO
+    public static final RegistryObject<Item> SSO_SQUAD_LEADER_HELMET = ITEMS.register("sso_squad_leader_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"sso_squad_leader"));
+    public static final RegistryObject<Item> SSO_SQUAD_LEADER_CHESTPLATE = ITEMS.register("sso_squad_leader_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"sso_squad_leader"));
+    public static final RegistryObject<Item> SSO_SQUAD_LEADER_LEGGINGS = ITEMS.register("sso_squad_leader_leggings",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(),"sso_squad_leader"));
+
+
     // Weapons
     public static final RegistryObject<Item> TAGILLA_MOLOT = ITEMS.register("tagilla_molot",
             () -> new WeaponItem(new Item.Properties().stacksTo(1).durability(500)));
@@ -248,6 +258,10 @@ public class ModItemRegistry {
                         entries.accept(SOVIET_SOLDIER_CHESTPLATE.get());
                         entries.accept(SOVIET_SOLDIER_LEGGINGS.get());
                         entries.accept(SOVIET_SOLDIER_BACKPACK.get());
+
+                        entries.accept(SSO_SQUAD_LEADER_HELMET.get());
+                        entries.accept(SSO_SQUAD_LEADER_CHESTPLATE.get());
+                        entries.accept(SSO_SQUAD_LEADER_LEGGINGS.get());
 
                         entries.accept(TAGILLA_MOLOT.get());
 

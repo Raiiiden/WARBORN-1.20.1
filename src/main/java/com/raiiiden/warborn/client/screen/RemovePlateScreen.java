@@ -60,9 +60,6 @@ public class RemovePlateScreen extends Screen {
             return;
         }
 
-        // NO LONGER REQUIRE HOLDING A PLATE!
-        // The phantom render system will handle visualization
-
         ModNetworking.sendRemovePlatePacket(front);
         this.onClose();
     }

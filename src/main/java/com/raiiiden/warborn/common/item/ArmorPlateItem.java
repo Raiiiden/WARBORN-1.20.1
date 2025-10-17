@@ -119,8 +119,23 @@ public class ArmorPlateItem extends Item implements GeoItem {
         ItemStack held = player.getItemInHand(hand);
         CompoundTag tag = held.getOrCreateTag();
 
+        // Check if already pending insert
         if (tag.getBoolean(PENDING_INSERT_TAG)) {
             return InteractionResultHolder.pass(held);
+        }
+
+        // Check if there's any pending remove operation on THIS item
+        if (tag.getBoolean(PENDING_REMOVE_TAG)) {
+            player.displayClientMessage(Component.literal("Please wait for removal to complete")
+                    .withStyle(ChatFormatting.YELLOW), true);
+            return InteractionResultHolder.fail(held);
+        }
+
+        // Check if player is processing ANY operation (comprehensive check)
+        if (!level.isClientSide && hasAnyPendingOperations(player)) {
+            player.displayClientMessage(Component.literal("Please wait for current operation to complete")
+                    .withStyle(ChatFormatting.YELLOW), true);
+            return InteractionResultHolder.fail(held);
         }
 
         if (chest.isEmpty()) {
@@ -154,6 +169,9 @@ public class ArmorPlateItem extends Item implements GeoItem {
         }
 
         if (level instanceof ServerLevel serverLevel) {
+            // Mark that we're processing an insert
+            player.getPersistentData().putBoolean("warborn_processing_insert", true);
+
             tag.putBoolean(PENDING_INSERT_TAG, true);
             tag.putInt("warborn_insert_delay", 66);
             tag.putFloat("InsertDurability", currentDur);
@@ -179,6 +197,9 @@ public class ArmorPlateItem extends Item implements GeoItem {
         tag.putBoolean("warborn_remove_front", removeFront);
 
         this.triggerAnim(player, GeoItem.getOrAssignId(held, serverLevel), CONTROLLER, "remove");
+        if (player.level().isClientSide) {
+            WarbornClientSounds.playArmorRemoveSound(player, this);
+        }
     }
 
     @Override
@@ -192,6 +213,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
         if (tag.getBoolean(PENDING_INSERT_TAG)) {
             if (!selected) {
                 cancelPendingInsert(tag);
+                player.getPersistentData().remove("warborn_processing_insert");
                 return;
             }
 
@@ -212,6 +234,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
             } catch (Exception e) {
                 LOGGER.warn("Failed to parse plate insert data: {}", tag);
                 cancelPendingInsert(tag);
+                player.getPersistentData().remove("warborn_processing_insert");
                 return;
             }
 
@@ -220,7 +243,10 @@ public class ArmorPlateItem extends Item implements GeoItem {
             tag.remove("InsertDurability");
 
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-            if (chest.isEmpty() || !isPlateCompatible(chest)) return;
+            if (chest.isEmpty() || !isPlateCompatible(chest)) {
+                player.getPersistentData().remove("warborn_processing_insert");
+                return;
+            }
 
             Plate plate = new Plate(tier, material);
             plate.setCurrentDurability(durability);
@@ -242,6 +268,9 @@ public class ArmorPlateItem extends Item implements GeoItem {
                     stack.shrink(1);
                 }
             });
+
+            // Clear the processing flag after successful insert
+            player.getPersistentData().remove("warborn_processing_insert");
             return;
         }
 
@@ -257,7 +286,10 @@ public class ArmorPlateItem extends Item implements GeoItem {
             tag.remove("warborn_remove_front");
 
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-            if (chest.isEmpty() || !isPlateCompatible(chest)) return;
+            if (chest.isEmpty() || !isPlateCompatible(chest)) {
+                player.getPersistentData().remove("warborn_processing_removal");
+                return;
+            }
 
             chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
                 if (removeFront && cap.hasFrontPlate()) {
@@ -278,6 +310,9 @@ public class ArmorPlateItem extends Item implements GeoItem {
                     }
                 }
             });
+
+            // Clear the processing flag after successful removal
+            player.getPersistentData().remove("warborn_processing_removal");
             return;
         }
 
@@ -401,5 +436,39 @@ public class ArmorPlateItem extends Item implements GeoItem {
         public boolean canStartSilent() {
             return false;
         }
+    }
+    // Add this static helper method to ArmorPlateItem class
+
+    /**
+     * Checks if the player has any pending plate operations (insert or remove)
+     * on ANY plate item in their inventory
+     */
+    public static boolean hasAnyPendingOperations(Player player) {
+        // Check player persistent data flags
+        if (player.getPersistentData().getBoolean("warborn_processing_removal") ||
+                player.getPersistentData().getBoolean("warborn_processing_insert")) {
+            return true;
+        }
+
+        // Check all inventory slots for pending operations
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.getItem() instanceof ArmorPlateItem && stack.hasTag()) {
+                CompoundTag tag = stack.getTag();
+                if (tag.getBoolean(PENDING_INSERT_TAG) || tag.getBoolean(PENDING_REMOVE_TAG)) {
+                    return true;
+                }
+            }
+        }
+
+        // Check offhand
+        ItemStack offhand = player.getOffhandItem();
+        if (offhand.getItem() instanceof ArmorPlateItem && offhand.hasTag()) {
+            CompoundTag tag = offhand.getTag();
+            if (tag.getBoolean(PENDING_INSERT_TAG) || tag.getBoolean(PENDING_REMOVE_TAG)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
