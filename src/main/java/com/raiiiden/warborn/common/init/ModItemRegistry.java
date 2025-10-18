@@ -168,6 +168,27 @@ public class ModItemRegistry {
     public static final RegistryObject<Item> SSO_SQUAD_LEADER_LEGGINGS = ITEMS.register("sso_squad_leader_leggings",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(),"sso_squad_leader"));
 
+    public static final RegistryObject<Item> SSO_SOLDIER_HELMET = ITEMS.register("sso_soldier_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"sso_soldier"));
+    public static final RegistryObject<Item> SSO_SOLDIER_CHESTPLATE = ITEMS.register("sso_soldier_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"sso_soldier"));
+    public static final RegistryObject<Item> SSO_SOLDIER_LEGGINGS = ITEMS.register("sso_soldier_leggings",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(),"sso_soldier"));
+    public static final RegistryObject<BackpackItem> SSO_SOLDIER_BACKPACK = ITEMS.register("sso_soldier_backpack",
+            () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "sso_soldier_backpack"));
+
+    public static final RegistryObject<Item> SSO_MACHINE_GUNNER_HELMET = ITEMS.register("sso_machine_gunner_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"sso_machine_gunner"));
+    public static final RegistryObject<Item> SSO_MACHINE_GUNNER_CHESTPLATE = ITEMS.register("sso_machine_gunner_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"sso_machine_gunner"));
+    public static final RegistryObject<Item> SSO_MACHINE_GUNNER_LEGGINGS = ITEMS.register("sso_machine_gunner_leggings",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(),"sso_machine_gunner"));
+    public static final RegistryObject<BackpackItem> SSO_MACHINE_GUNNER_BACKPACK = ITEMS.register("sso_machine_gunner_backpack",
+            () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "sso_machine_gunner_backpack"));
+    public static final RegistryObject<Item> SSO_SHOULDERPADS = ITEMS.register("sso_shoulderpads",
+            () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "sso_shoulderpads"));
+
+
 
     // Weapons
     public static final RegistryObject<Item> TAGILLA_MOLOT = ITEMS.register("tagilla_molot",
@@ -262,6 +283,15 @@ public class ModItemRegistry {
                         entries.accept(SSO_SQUAD_LEADER_HELMET.get());
                         entries.accept(SSO_SQUAD_LEADER_CHESTPLATE.get());
                         entries.accept(SSO_SQUAD_LEADER_LEGGINGS.get());
+                        entries.accept(SSO_SOLDIER_HELMET.get());
+                        entries.accept(SSO_SOLDIER_CHESTPLATE.get());
+                        entries.accept(SSO_SOLDIER_LEGGINGS.get());
+                        entries.accept(SSO_SOLDIER_BACKPACK.get());
+                        entries.accept(SSO_MACHINE_GUNNER_HELMET.get());
+                        entries.accept(SSO_MACHINE_GUNNER_CHESTPLATE.get());
+                        entries.accept(SSO_MACHINE_GUNNER_LEGGINGS.get());
+                        entries.accept(SSO_SHOULDERPADS.get());
+                        entries.accept(SSO_MACHINE_GUNNER_BACKPACK.get());
 
                         entries.accept(TAGILLA_MOLOT.get());
 

@@ -74,6 +74,15 @@
   "item.warborn.sso_squad_leader_helmet": "SSO Squad Leader Helmet",
   "item.warborn.sso_squad_leader_chestplate": "SSO Squad Leader Chestplate",
   "item.warborn.sso_squad_leader_leggings": "SSO Squad Leader Leggings",
+  "item.warborn.sso_soldier_helmet": "SSO Soldier Helmet",
+  "item.warborn.sso_soldier_chestplate": "SSO Soldier Chestplate",
+  "item.warborn.sso_soldier_leggings": "SSO Soldier Leggings",
+  "item.warborn.sso_soldier_backpack": "SSO Soldier Backpack",
+  "item.warborn.sso_machine_gunner_helmet": "SSO Machine Gunner Helmet",
+  "item.warborn.sso_machine_gunner_chestplate": "SSO Machine Gunner Chestplate",
+  "item.warborn.sso_machine_gunner_leggings": "SSO Machine Gunner Leggings",
+  "item.warborn.sso_machine_gunner_backpack": "SSO Machine Gunner Backpack",
+  "item.warborn.sso_shoulderpads": "SSO Shoulderpads",
 
 
   "item.warborn.tagilla_molot": "Tagilla Hammer",
