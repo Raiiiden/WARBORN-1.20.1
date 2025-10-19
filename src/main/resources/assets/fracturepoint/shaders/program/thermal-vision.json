@@ -5,7 +5,7 @@
     "dstrgb": "1-srcalpha"
   },
   "vertex": "blit",
-  "fragment": "warborn:thermal-vision",
+  "fragment": "fracturepoint:thermal-vision",
   "attributes": [
     "Position"
   ],

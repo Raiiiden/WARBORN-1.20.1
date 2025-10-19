@@ -5,7 +5,7 @@
     "dstrgb": "1-srcalpha"
   },
   "vertex": "blit",
-  "fragment": "warborn:digital-white-vision",
+  "fragment": "fracturepoint:digital-white-vision",
   "attributes": ["Position"],
   "samplers": [
     { "name": "DiffuseSampler" },

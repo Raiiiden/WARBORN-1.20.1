@@ -68,7 +68,7 @@ public class HelmetVisionHandler {
 
         if (helmet.isEmpty() || !(helmet.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
 
-        ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionType);
+        ResourceLocation tagId = new ResourceLocation("fracturepoint", "has_" + visionType);
         boolean hasTag = helmet.is(TagKey.create(Registries.ITEM, tagId));
 
         if (DEBUG_MODE && hasTag) {

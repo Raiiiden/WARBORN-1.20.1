@@ -134,11 +134,11 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
             return true;
         }
 
-        ResourceLocation goggleTagId = new ResourceLocation("warborn", "has_" + TAG_GOGGLE);
-        ResourceLocation nvgTagId = new ResourceLocation("warborn", "has_" + TAG_NVG);
-        ResourceLocation simpleNvgTagId = new ResourceLocation("warborn", "has_" + TAG_SIMPLE_NVG);
-        ResourceLocation thermalTagId = new ResourceLocation("warborn", "has_" + TAG_THERMAL);
-        ResourceLocation digitalTagId = new ResourceLocation("warborn", "has_" + TAG_DIGITAL);
+        ResourceLocation goggleTagId = new ResourceLocation("fracturepoint", "has_" + TAG_GOGGLE);
+        ResourceLocation nvgTagId = new ResourceLocation("fracturepoint", "has_" + TAG_NVG);
+        ResourceLocation simpleNvgTagId = new ResourceLocation("fracturepoint", "has_" + TAG_SIMPLE_NVG);
+        ResourceLocation thermalTagId = new ResourceLocation("fracturepoint", "has_" + TAG_THERMAL);
+        ResourceLocation digitalTagId = new ResourceLocation("fracturepoint", "has_" + TAG_DIGITAL);
 
         return stack.is(TagKey.create(Registries.ITEM, goggleTagId)) ||
                 stack.is(TagKey.create(Registries.ITEM, nvgTagId)) ||
@@ -157,7 +157,7 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
         if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
 
-        ResourceLocation tagId = new ResourceLocation("warborn", "has_" + visionTag);
+        ResourceLocation tagId = new ResourceLocation("fracturepoint", "has_" + visionTag);
         return stack.is(TagKey.create(Registries.ITEM, tagId));
     }
 
@@ -392,13 +392,13 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         var armorAttr = livingEntity.getAttributes().getInstance(Attributes.ARMOR);
         if (armorAttr == null) return;
 
-        UUID modifierId = UUID.nameUUIDFromBytes(("warborn:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
+        UUID modifierId = UUID.nameUUIDFromBytes(("fracturepoint:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
 
         // Make sure no duplicate modifier exists
         if (armorAttr.getModifier(modifierId) == null) {
             int defense = this.getMaterial().getDefenseForType(this.getType());
             armorAttr.addTransientModifier(new AttributeModifier(
-                    modifierId, "warborn:shoulderpads", defense, AttributeModifier.Operation.ADDITION));
+                    modifierId, "fracturepoint:shoulderpads", defense, AttributeModifier.Operation.ADDITION));
         }
     }
     @Override
@@ -408,7 +408,7 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         var armorAttr = livingEntity.getAttributes().getInstance(Attributes.ARMOR);
         if (armorAttr == null) return;
 
-        UUID modifierId = UUID.nameUUIDFromBytes(("warborn:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
+        UUID modifierId = UUID.nameUUIDFromBytes(("fracturepoint:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
 
         if (armorAttr.getModifier(modifierId) != null) {
             armorAttr.removeModifier(modifierId);

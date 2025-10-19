@@ -5,7 +5,7 @@
     "dstrgb": "1-srcalpha"
   },
   "vertex": "blit",
-  "fragment": "warborn:simple-night-vision",
+  "fragment": "fracturepoint:simple-night-vision",
   "attributes": [
     "Position"
   ],
