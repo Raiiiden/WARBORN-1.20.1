@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "fracturepoint:nato_helmet",
+    "fracturepoint:nato_helmet_woodland",
+    "fracturepoint:beta7_nvg_helmet",
+    "fracturepoint:beta7_nvg_helmet_slate",
+    "fracturepoint:beta7_nvg_helmet_ash",
+    "fracturepoint:nato_sqad_leader_helmet",
+    "fracturepoint:nato_sqad_leader_helmet_woodland",
+    "fracturepoint:nato_ukr_helmet",
+    "fracturepoint:nato_ukr_helmet_woodland",
+    "fracturepoint:insurgency_shturmovik_helmet",
+    "fracturepoint:sso_squad_leader_helmet"
+  ]
+} 

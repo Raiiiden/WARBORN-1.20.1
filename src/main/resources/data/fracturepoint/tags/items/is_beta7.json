@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "fracturepoint:beta7_helmet",
+    "fracturepoint:beta7_nvg_helmet",
+    "fracturepoint:beta7_helmet_slate",
+    "fracturepoint:beta7_nvg_helmet_slate",
+    "fracturepoint:beta7_helmet_ash",
+    "fracturepoint:beta7_nvg_helmet_ash"
+  ]
+} 

@@ -1,4 +1,3 @@
-// TOUCHED: NEW
 package com.raiiiden.warborn.mixin;
 
 import com.raiiiden.warborn.common.item.WBArmorItem;

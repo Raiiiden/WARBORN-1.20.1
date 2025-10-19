@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:netherite_chestplate",
+    "fracturepoint:shturmovik_ru_chestplate",
+    "fracturepoint:shturmovikv2_chestplate",
+    "fracturepoint:razvetchik_chestplate",
+    "fracturepoint:mashinegunner_ru_chestplate",
+    "fracturepoint:squad_lider_ru_chestplate",
+    "fracturepoint:nato_sqad_leader_chestplate",
+    "fracturepoint:nato_ukr_chestplate",
+    "fracturepoint:nato_shturmovik2_chestplate",
+    "fracturepoint:nato_shturmovik_chestplate",
+    "fracturepoint:nato_mg_chestplate",
+    "fracturepoint:nato_sqad_leader_chestplate_woodland",
+    "fracturepoint:nato_ukr_chestplate_woodland",
+    "fracturepoint:nato_shturmovik2_chestplate_woodland",
+    "fracturepoint:nato_shturmovik_chestplate_woodland",
+    "fracturepoint:nato_mg_chestplate_woodland",
+    "fracturepoint:beta7_chestplate",
+    "fracturepoint:beta7_chestplate_slate",
+    "fracturepoint:beta7_chestplate_ash",
+    "fracturepoint:killa_chestplate",
+    "fracturepoint:tagilla_chestplate",
+    "fracturepoint:insurgency_commander_chestplate",
+    "fracturepoint:insurgency_shturmovik_chestplate",
+    "fracturepoint:soviet_soldier_chestplate",
+    "fracturepoint:sso_squad_leader_chestplate",
+    "fracturepoint:sso_soldier_chestplate",
+    "fracturepoint:sso_machine_gunner_chestplate",
+    "fracturepoint:fsb_soldier_chestplate"
+  ]
+} 

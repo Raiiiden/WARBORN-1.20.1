@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "fracturepoint:item/squad_lider_ru_chestplate"
+  }
+}

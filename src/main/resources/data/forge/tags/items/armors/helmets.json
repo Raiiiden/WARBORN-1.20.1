@@ -1,20 +1,20 @@
 {
   "replace": false,
   "values": [
-    "warborn:ru_helmet",
-    "warborn:nato_sqad_leader_helmet",
-    "warborn:nato_ukr_helmet",
-    "warborn:nato_helmet",
-    "warborn:nato_sqad_leader_helmet_woodland",
-    "warborn:nato_ukr_helmet_woodland",
-    "warborn:nato_helmet_woodland",
-    "warborn:beta7_nvg_helmet",
-    "warborn:beta7_helmet",
-    "warborn:beta7_nvg_helmet_slate",
-    "warborn:beta7_helmet_slate",
-    "warborn:beta7_nvg_helmet_ash",
-    "warborn:beta7_helmet_ash",
-    "warborn:killa_helmet",
-    "warborn:tagilla_helmet"
+    "fracturepoint:ru_helmet",
+    "fracturepoint:nato_sqad_leader_helmet",
+    "fracturepoint:nato_ukr_helmet",
+    "fracturepoint:nato_helmet",
+    "fracturepoint:nato_sqad_leader_helmet_woodland",
+    "fracturepoint:nato_ukr_helmet_woodland",
+    "fracturepoint:nato_helmet_woodland",
+    "fracturepoint:beta7_nvg_helmet",
+    "fracturepoint:beta7_helmet",
+    "fracturepoint:beta7_nvg_helmet_slate",
+    "fracturepoint:beta7_helmet_slate",
+    "fracturepoint:beta7_nvg_helmet_ash",
+    "fracturepoint:beta7_helmet_ash",
+    "fracturepoint:killa_helmet",
+    "fracturepoint:tagilla_helmet"
   ]
 }

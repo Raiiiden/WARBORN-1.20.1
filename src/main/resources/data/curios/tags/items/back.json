@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
-    "warborn:squad_lider_ru_backpack",
-    "warborn:nato_sqad_leader_backpack",
-    "warborn:shturmovik_ru_backpack",
-    "warborn:nato_sqad_leader_backpack_woodland",
-    "warborn:insurgency_shturmovik_backpack",
-    "warborn:soviet_soldier_backpack",
-    "warborn:sso_soldier_backpack",
-    "warborn:sso_machine_gunner_backpack"
+    "fracturepoint:squad_lider_ru_backpack",
+    "fracturepoint:nato_sqad_leader_backpack",
+    "fracturepoint:shturmovik_ru_backpack",
+    "fracturepoint:nato_sqad_leader_backpack_woodland",
+    "fracturepoint:insurgency_shturmovik_backpack",
+    "fracturepoint:soviet_soldier_backpack",
+    "fracturepoint:sso_soldier_backpack",
+    "fracturepoint:sso_machine_gunner_backpack"
   ]
 }

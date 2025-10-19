@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#warborn:has_nvg",
-    "#warborn:has_simple_nvg",
-    "#warborn:has_thermal",
-    "#warborn:has_digital"
-  ]
-} 

@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "warborn:item/sso_machine_gunner_helmet"
-  }
-}

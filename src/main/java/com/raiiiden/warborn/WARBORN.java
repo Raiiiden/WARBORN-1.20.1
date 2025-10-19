@@ -19,7 +19,7 @@ import software.bernie.geckolib.GeckoLib;
 
 @Mod(WARBORN.MODID)
 public class WARBORN {
-    public static final String MODID = "warborn";
+    public static final String MODID = "fracturepoint";
     public static final Logger LOGGER = LogManager.getLogger();
 
     public WARBORN() {

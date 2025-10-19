@@ -3,6 +3,7 @@ package com.raiiiden.warborn.client.event;
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.renderer.layer.WarbornBackpackLayer;
 import com.raiiiden.warborn.client.renderer.layer.WarbornShoulderpadsLayer;
+import com.raiiiden.warborn.client.renderer.layer.WarbornUniformLayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,6 +24,7 @@ public class ClientModEvents {
             if (renderer instanceof PlayerRenderer playerRenderer) {
                 playerRenderer.addLayer(new WarbornBackpackLayer<>(playerRenderer));
                 playerRenderer.addLayer(new WarbornShoulderpadsLayer<>(playerRenderer));
+                playerRenderer.addLayer(new WarbornUniformLayer<>(playerRenderer));
             }
         }
     }

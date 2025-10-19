@@ -1,0 +1,27 @@
+{
+  "targets": [
+    "swap"
+  ],
+  "passes": [
+    {
+      "name": "fracturepoint:simple-night-vision",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [
+        {
+          "name": "NoiseSampler",
+          "id": "fracturepoint:noise",
+          "width": 512,
+          "height": 512,
+          "bilinear": false
+        }
+      ],
+      "uniforms": []
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

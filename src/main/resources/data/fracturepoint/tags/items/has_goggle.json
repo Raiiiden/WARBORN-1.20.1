@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#fracturepoint:has_nvg",
+    "#fracturepoint:has_simple_nvg",
+    "#fracturepoint:has_thermal",
+    "#fracturepoint:has_digital"
+  ]
+} 

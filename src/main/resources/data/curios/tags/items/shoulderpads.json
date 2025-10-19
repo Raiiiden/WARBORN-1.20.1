@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
-    "warborn:ru_shoulderpads",
-    "warborn:nato_shoulderpads",
-    "warborn:nato_shoulderpads_woodland",
-    "warborn:beta7_shoulderpads",
-    "warborn:beta7_shoulderpads_slate",
-    "warborn:beta7_shoulderpads_ash",
-    "warborn:insurgency_commander_shoulderpads",
-    "warborn:sso_shoulderpads"
+    "fracturepoint:ru_shoulderpads",
+    "fracturepoint:nato_shoulderpads",
+    "fracturepoint:nato_shoulderpads_woodland",
+    "fracturepoint:beta7_shoulderpads",
+    "fracturepoint:beta7_shoulderpads_slate",
+    "fracturepoint:beta7_shoulderpads_ash",
+    "fracturepoint:insurgency_commander_shoulderpads",
+    "fracturepoint:sso_shoulderpads"
   ]
 }

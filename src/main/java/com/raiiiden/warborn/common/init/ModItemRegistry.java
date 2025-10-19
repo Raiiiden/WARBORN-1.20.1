@@ -188,6 +188,15 @@ public class ModItemRegistry {
     public static final RegistryObject<Item> SSO_SHOULDERPADS = ITEMS.register("sso_shoulderpads",
             () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "sso_shoulderpads"));
 
+    public static final RegistryObject<Item> FSB_SOLDIER_HELMET = ITEMS.register("fsb_soldier_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"fsb_soldier"));
+    public static final RegistryObject<Item> FSB_UNIFORM = ITEMS.register("fsb_uniform",
+            () -> new WBArmorItem(Materials.WARBORN_UNIFORM, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"fsb_uniform"));
+    public static final RegistryObject<Item> FSB_SOLDIER_CHESTPLATE = ITEMS.register("fsb_soldier_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"fsb_soldier"));
+    public static final RegistryObject<Item> FSB_LEGGINGS = ITEMS.register("fsb_leggings",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(),"fsb_soldier"));
+
 
 
     // Weapons
@@ -292,6 +301,11 @@ public class ModItemRegistry {
                         entries.accept(SSO_MACHINE_GUNNER_LEGGINGS.get());
                         entries.accept(SSO_SHOULDERPADS.get());
                         entries.accept(SSO_MACHINE_GUNNER_BACKPACK.get());
+
+                        entries.accept(FSB_SOLDIER_HELMET.get());
+                        entries.accept(FSB_UNIFORM.get());
+                        entries.accept(FSB_SOLDIER_CHESTPLATE.get());
+                        entries.accept(FSB_LEGGINGS.get());
 
                         entries.accept(TAGILLA_MOLOT.get());
 

@@ -13,12 +13,12 @@ issueTrackerURL="https://github.com/Raiiiden/WARBORN/issues" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
-modId="warborn" #mandatory
+modId="fracturepoint" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 version="${mod_version}" #mandatory
  # A display name for the mod
  
-displayName="Warborn" #mandatory
+displayName="Fracture Point" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 updateJSONURL="https://raw.githubusercontent.com/Lothrazar/ForgeTemplate/trunk/1.20/update.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI # replace with your website
@@ -27,13 +27,13 @@ displayURL="https://www.curseforge.com/minecraft/mc-mods/_curseslug_"
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="" #optional
 # A text field displayed in the mod UI
-credits="Thanks to the original author for the models" #optional
+credits="Thank you to contibuters like Active Radar and our Artist Roncvit" #optional
 # A text field displayed in the mod UI
 authors="${mod_authors}" #optional
 # The description text for the mod (multi line!) (#mandatory)
 
 description='''
-Warborn by ${mod_authors}
+Fracture Point by ${mod_authors}
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.warborn]] #optional

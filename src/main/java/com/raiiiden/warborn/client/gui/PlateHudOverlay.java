@@ -41,7 +41,8 @@ public class PlateHudOverlay {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
         chest.getCapability(PlateHolderProvider.CAP).ifPresent(cap -> {
-            int iconX = screenWidth / 2 - 110;
+            boolean hasOffhand = !player.getItemBySlot(EquipmentSlot.OFFHAND).isEmpty();
+            int iconX = screenWidth / 2 - 110 - (hasOffhand ? 30 : 0);
             int iconY = screenHeight - 20;
             guiGraphics.blit(PLATE_ICON, iconX, iconY, 0, 0, 18, 18, 18, 18);
 
