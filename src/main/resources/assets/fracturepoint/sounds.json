@@ -3,7 +3,7 @@
     "subtitle": "warborn.subtitle.armor_equip",
     "sounds": [
       {
-        "name": "warborn:item/armor/warborn_equip",
+        "name": "fracturepoint:item/armor/warborn_equip",
         "volume": 1.0,
         "pitch": 1.0
       }

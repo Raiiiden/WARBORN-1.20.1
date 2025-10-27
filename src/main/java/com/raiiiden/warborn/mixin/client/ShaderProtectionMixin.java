@@ -23,7 +23,7 @@ public abstract class ShaderProtectionMixin {
         if (effect == null) return;
 
         String effectName = effect.getName();
-        if (effectName == null || !effectName.contains("warborn")) return;
+        if (effectName == null || !effectName.contains("fracturepoint")) return;
 
         ShaderRegistry.getInstance().onExternalShutdownAttempt();
         ci.cancel();
@@ -36,7 +36,7 @@ public abstract class ShaderProtectionMixin {
         if (effect == null) return;
 
         String effectName = effect.getName();
-        if (effectName == null || !effectName.contains("warborn")) return;
+        if (effectName == null || !effectName.contains("fracturepoint")) return;
 
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 

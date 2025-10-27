@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class Materials {
     public static final WarbornArmorMaterial WARBORN_ARMOR = new WarbornArmorMaterial(
-            "warborn",
+            "fracturepoint",
             40,
             Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, 3);

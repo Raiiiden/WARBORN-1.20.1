@@ -67,9 +67,12 @@
   "item.fracturepoint.insurgency_shturmovik_backpack": "Insurgency Shturmovik Backpack",
 
   "item.fracturepoint.soviet_soldier_helmet": "Soviet Soldier Helmet",
+  "item.fracturepoint.soviet_uniform": "Soviet Uniform",
   "item.fracturepoint.soviet_soldier_chestplate": "Soviet Soldier Chestplate",
-  "item.fracturepoint.soviet_soldier_leggings": "Soviet Soldier Leggings",
+  "item.fracturepoint.soviet_leggings": "Soviet Leggings",
   "item.fracturepoint.soviet_soldier_backpack": "Soviet Soldier Backpack",
+  "item.fracturepoint.soviet_officer_helmet": "Soviet Officer Helmet",
+  "item.fracturepoint.soviet_officer_chestplate": "Soviet Officer Chestplate",
 
   "item.fracturepoint.sso_squad_leader_helmet": "SSO Squad Leader Helmet",
   "item.fracturepoint.sso_squad_leader_chestplate": "SSO Squad Leader Chestplate",

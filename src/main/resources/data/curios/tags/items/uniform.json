@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "fracturepoint:fsb_uniform"
+    "fracturepoint:fsb_uniform",
+    "fracturepoint:soviet_uniform"
   ]
 }
