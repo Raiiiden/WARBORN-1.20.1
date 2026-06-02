@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class Materials {
     public static final WarbornArmorMaterial WARBORN_ARMOR = new WarbornArmorMaterial(
-            "fracturepoint",
+            "warborn_armor",
             40,
             Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, 3);
@@ -66,12 +66,28 @@ public class Materials {
     );
     public static final WarbornArmorMaterial WARBORN_UNIFORM = new WarbornArmorMaterial(
             "warborn_uniform",
-            40,
+            10,
             Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, 0);
                 map.put(ArmorItem.Type.LEGGINGS, 0);
                 map.put(ArmorItem.Type.CHESTPLATE, 1);
                 map.put(ArmorItem.Type.HELMET, 0);
+            }),
+            15,
+            ModSoundEvents.WARBORN_ARMOR_EQUIP,
+            ModSoundEvents.WARBORN_ARMOR_BREAK,
+            3.0F,
+            0.1F,
+            () -> Ingredient.of(Items.NETHERITE_INGOT)
+    );
+    public static final WarbornArmorMaterial WARBORN_HEADGEAR = new WarbornArmorMaterial(
+            "warborn_headgear",
+            10,
+            Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.BOOTS, 0);
+                map.put(ArmorItem.Type.LEGGINGS, 0);
+                map.put(ArmorItem.Type.CHESTPLATE, 0);
+                map.put(ArmorItem.Type.HELMET, 1);
             }),
             15,
             ModSoundEvents.WARBORN_ARMOR_EQUIP,

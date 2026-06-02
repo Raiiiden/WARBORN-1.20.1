@@ -22,6 +22,12 @@ public class ModItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WARBORN.MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WARBORN.MODID);
 
+    // Backpack upgrades
+    public static final RegistryObject<BackpackUpgradeItem> BACKPACK_UPGRADE_TIER2 = ITEMS.register("backpack_upgrade_tier2",
+            () -> new BackpackUpgradeItem(2, new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<BackpackUpgradeItem> BACKPACK_UPGRADE_TIER3 = ITEMS.register("backpack_upgrade_tier3",
+            () -> new BackpackUpgradeItem(3, new Item.Properties().stacksTo(1)));
+
     //RU Armor
     public static final RegistryObject<WBArmorItem> RU_HELMET = ITEMS.register("ru_helmet",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "shturmovik_ru"));
@@ -93,8 +99,12 @@ public class ModItemRegistry {
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(), "beta7"));
     public static final RegistryObject<WBArmorItem> BETA7_CHESTPLATE = ITEMS.register("beta7_chestplate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7"));
+    public static final RegistryObject<WBArmorItem> BETA7_UNIFORM = ITEMS.register("beta7_uniform",
+            () -> new WBArmorItem(Materials.WARBORN_UNIFORM, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_uniform"));
     public static final RegistryObject<WBArmorItem> BETA7_LEGGINGS = ITEMS.register("beta7_leggings",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7"));
+    public static final RegistryObject<WBArmorItem> BETA7_BOOTS = ITEMS.register("beta7_boots",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.BOOTS, new Item.Properties(), "beta7"));
     public static final RegistryObject<WBArmorItem> BETA7_SHOULDERPADS = ITEMS.register("beta7_shoulderpads",
             () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads"));
     public static final RegistryObject<WBArmorItem> BETA7_NVG_HELMET_SLATE = ITEMS.register("beta7_nvg_helmet_slate",
@@ -105,6 +115,8 @@ public class ModItemRegistry {
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_slate"));
     public static final RegistryObject<WBArmorItem> BETA7_LEGGINGS_SLATE = ITEMS.register("beta7_leggings_slate",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7_slate"));
+    public static final RegistryObject<WBArmorItem> BETA7_BOOTS_SLATE = ITEMS.register("beta7_boots_slate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7_slate"));
     public static final RegistryObject<WBArmorItem> BETA7_SHOULDERPADS_SLATE = ITEMS.register("beta7_shoulderpads_slate",
             () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_slate"));
     public static final RegistryObject<WBArmorItem> BETA7_NVG_HELMET_ASH = ITEMS.register("beta7_nvg_helmet_ash",
@@ -114,6 +126,8 @@ public class ModItemRegistry {
     public static final RegistryObject<WBArmorItem> BETA7_CHESTPLATE_ASH = ITEMS.register("beta7_chestplate_ash",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(), "beta7_ash"));
     public static final RegistryObject<WBArmorItem> BETA7_LEGGINGS_ASH = ITEMS.register("beta7_leggings_ash",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7_ash"));
+    public static final RegistryObject<WBArmorItem> BETA7_BOOTS_ASH = ITEMS.register("beta7_boots_ash",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(), "beta7_ash"));
     public static final RegistryObject<WBArmorItem> BETA7_SHOULDERPADS_ASH = ITEMS.register("beta7_shoulderpads_ash",
             () -> new WBArmorItem(Materials.WARBORN_SHOULDERPADS, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "beta7_shoulderpads_ash"));
@@ -202,8 +216,51 @@ public class ModItemRegistry {
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"fsb_soldier"));
     public static final RegistryObject<Item> FSB_LEGGINGS = ITEMS.register("fsb_leggings",
             () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(),"fsb_soldier"));
+    public static final RegistryObject<Item> FSB_SQUAD_LEADER_HELMET = ITEMS.register("fsb_squad_leader_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"fsb_squad_leader"));
+    public static final RegistryObject<Item> FSB_SQUAD_LEADER_CHESTPLATE = ITEMS.register("fsb_squad_leader_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"fsb_squad_leader"));
+    public static final RegistryObject<Item> FSB_MACHINE_GUNNER_HELMET = ITEMS.register("fsb_machine_gunner_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"fsb_machine_gunner"));
+    public static final RegistryObject<Item> FSB_MACHINE_GUNNER_CHESTPLATE = ITEMS.register("fsb_machine_gunner_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"fsb_machine_gunner"));
+    public static final RegistryObject<Item> FSB_VKPO_CAP = ITEMS.register("fsb_vkpo_cap",
+            () -> new WBArmorItem(Materials.WARBORN_HEADGEAR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"fsb_vkpo_cap"));
+    public static final RegistryObject<Item> FSB_PANAMA = ITEMS.register("fsb_panama",
+            () -> new WBArmorItem(Materials.WARBORN_HEADGEAR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"fsb_panama"));
 
+    public static final RegistryObject<Item> RATNIK_HELMET = ITEMS.register("ratnik_helmet",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"ratnik"));
+    public static final RegistryObject<Item> RATNIK_PMK4 = ITEMS.register("ratnik_pmk-4",
+            () -> new WBArmorItem(Materials.WARBORN_HEADGEAR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties(),"ratnik_pmk-4"));
+    public static final RegistryObject<Item> RATNIK_UNIFORM = ITEMS.register("ratnik_uniform",
+            () -> new WBArmorItem(Materials.WARBORN_UNIFORM, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"ratnik_uniform"));
+    public static final RegistryObject<Item> RATNIK_UNIFORM_VARIANT = ITEMS.register("ratnik_uniform_variant",
+            () -> new WBArmorItem(Materials.WARBORN_UNIFORM, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"ratnik_uniform_variant"));
+    public static final RegistryObject<Item> RATNIK_CHESTPLATE = ITEMS.register("ratnik_chestplate",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"ratnik"));
+    public static final RegistryObject<Item> RATNIK_CHESTPLATE_VARIANT = ITEMS.register("ratnik_chestplate_variant",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties(),"ratnik_variant"));
+    public static final RegistryObject<Item> RATNIK_LEGGINGS = ITEMS.register("ratnik_leggings",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties(),"ratnik_uniform"));
+    public static final RegistryObject<BackpackItem> RATNIK_BACKPACK = ITEMS.register("ratnik_backpack",
+            () -> new BackpackItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1), "ratnik_backpack"));
+    public static final RegistryObject<Item> RATNIK_BOOTS = ITEMS.register("ratnik_boots",
+            () -> new WBArmorItem(Materials.WARBORN_ARMOR, net.minecraft.world.item.ArmorItem.Type.BOOTS, new Item.Properties(),"ratnik_uniform"));
 
+    // NVG Battery
+    public static final RegistryObject<NVGBatteryItem> NVG_BATTERY = ITEMS.register("nvg_battery",
+            NVGBatteryItem::new);
+
+    // Goggles
+    public static final RegistryObject<GogglesItem> NVG_GOGGLES = ITEMS.register("nvg_goggles",
+            () -> new GogglesItem(WBArmorItem.TAG_NVG));
+    public static final RegistryObject<GogglesItem> SIMPLE_NVG_GOGGLES = ITEMS.register("simple_nvg_goggles",
+            () -> new GogglesItem(WBArmorItem.TAG_SIMPLE_NVG));
+    public static final RegistryObject<GogglesItem> THERMAL_GOGGLES = ITEMS.register("thermal_goggles",
+            () -> new GogglesItem(WBArmorItem.TAG_THERMAL));
+    public static final RegistryObject<GogglesItem> DIGITAL_GOGGLES = ITEMS.register("digital_goggles",
+            () -> new GogglesItem(WBArmorItem.TAG_DIGITAL));
 
     // Weapons
     public static final RegistryObject<Item> TAGILLA_MOLOT = ITEMS.register("tagilla_molot",
@@ -220,6 +277,16 @@ public class ModItemRegistry {
             () -> new ArmorPlateItem(ProtectionTier.LEVEL_IV, MaterialType.COMPOSITE, new Item.Properties()));
     public static final RegistryObject<ArmorPlateItem> POLYETHYLENE_PLATE_LEVEL_III = ITEMS.register("polyethylene_plate_level_iii",
             () -> new ArmorPlateItem(ProtectionTier.LEVEL_III, MaterialType.POLYETHYLENE, new Item.Properties()));
+
+    // Syringes
+    public static final RegistryObject<SyringeItem> PROPITAL = ITEMS.register("propital",
+            () -> new SyringeItem(new Item.Properties(), SyringeType.PROPITAL));
+    public static final RegistryObject<SyringeItem> CURE = ITEMS.register("cure",
+            () -> new SyringeItem(new Item.Properties(), SyringeType.CURE));
+
+    // Phantom items (never in player inventory, used only for first-person animations)
+    public static final RegistryObject<NVGHandItem> NVG_HAND_ITEM = ITEMS.register("nvg_hand",
+            () -> new NVGHandItem(new Item.Properties()));
 
     public static final RegistryObject<CreativeModeTab> WARBORN_TAB = CREATIVE_MODE_TABS.register("warborn_tab",
             () -> CreativeModeTab.builder()
@@ -261,17 +328,21 @@ public class ModItemRegistry {
                         entries.accept(BETA7_NVG_HELMET.get());
                         entries.accept(BETA7_HELMET.get());
                         entries.accept(BETA7_CHESTPLATE.get());
+                        entries.accept(BETA7_UNIFORM.get());
                         entries.accept(BETA7_LEGGINGS.get());
+                        entries.accept(BETA7_BOOTS.get());
                         entries.accept(BETA7_SHOULDERPADS.get());
                         entries.accept(BETA7_NVG_HELMET_SLATE.get());
                         entries.accept(BETA7_HELMET_SLATE.get());
                         entries.accept(BETA7_CHESTPLATE_SLATE.get());
                         entries.accept(BETA7_LEGGINGS_SLATE.get());
+                        entries.accept(BETA7_BOOTS_SLATE.get());
                         entries.accept(BETA7_SHOULDERPADS_SLATE.get());
                         entries.accept(BETA7_NVG_HELMET_ASH.get());
                         entries.accept(BETA7_HELMET_ASH.get());
                         entries.accept(BETA7_CHESTPLATE_ASH.get());
                         entries.accept(BETA7_LEGGINGS_ASH.get());
+                        entries.accept(BETA7_BOOTS_ASH.get());
                         entries.accept(BETA7_SHOULDERPADS_ASH.get());
 
                         entries.accept(KILLA_HELMET.get());
@@ -315,6 +386,22 @@ public class ModItemRegistry {
                         entries.accept(FSB_UNIFORM.get());
                         entries.accept(FSB_SOLDIER_CHESTPLATE.get());
                         entries.accept(FSB_LEGGINGS.get());
+                        entries.accept(FSB_SQUAD_LEADER_HELMET.get());
+                        entries.accept(FSB_SQUAD_LEADER_CHESTPLATE.get());
+                        entries.accept(FSB_MACHINE_GUNNER_HELMET.get());
+                        entries.accept(FSB_MACHINE_GUNNER_CHESTPLATE.get());
+                        entries.accept(FSB_VKPO_CAP.get());
+                        entries.accept(FSB_PANAMA.get());
+
+                        entries.accept(RATNIK_HELMET.get());
+                        entries.accept(RATNIK_PMK4.get());
+                        entries.accept(RATNIK_UNIFORM.get());
+                        entries.accept(RATNIK_UNIFORM_VARIANT.get());
+                        entries.accept(RATNIK_CHESTPLATE.get());
+                        entries.accept(RATNIK_CHESTPLATE_VARIANT.get());
+                        entries.accept(RATNIK_BACKPACK.get());
+                        entries.accept(RATNIK_LEGGINGS.get());
+                        entries.accept(RATNIK_BOOTS.get());
 
                         entries.accept(TAGILLA_MOLOT.get());
 
@@ -323,6 +410,15 @@ public class ModItemRegistry {
                         entries.accept(KEVLAR_PLATE_LEVEL_IIIA.get());
                         entries.accept(COMPOSITE_PLATE_LEVEL_IV.get());
                         entries.accept(POLYETHYLENE_PLATE_LEVEL_III.get());
+
+                        entries.accept(PROPITAL.get());
+                        entries.accept(CURE.get());
+
+                        entries.accept(NVG_BATTERY.get());
+                        entries.accept(NVG_GOGGLES.get());
+                        entries.accept(SIMPLE_NVG_GOGGLES.get());
+                        entries.accept(THERMAL_GOGGLES.get());
+                        entries.accept(DIGITAL_GOGGLES.get());
                     })
                     .build()
     );

@@ -13,6 +13,8 @@
     "fracturepoint:insurgency_commander_helmet",
     "fracturepoint:insurgency_shturmovik_helmet",
     "fracturepoint:sso_squad_leader_helmet",
-    "fracturepoint:sso_machine_gunner_helmet"
+    "fracturepoint:sso_machine_gunner_helmet",
+    "fracturepoint:fsb_squad_leader_helmet",
+    "fracturepoint:fsb_machine_gunner_helmet"
   ]
 }

@@ -3,6 +3,8 @@ package com.raiiiden.warborn.common.item;
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
+import com.raiiiden.warborn.common.object.capability.NVGBatteryStorage;
+import com.raiiiden.warborn.common.util.BatteryDisplayCache;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,7 +14,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -63,9 +66,12 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public static final String TAG_THERMAL = "thermal";
     public static final String TAG_DIGITAL = "digital";
     public static final TagKey<Item> PLATE_COMPATIBLE = ItemTags.create(new ResourceLocation("warborn", "plate_compatible"));
+    // Helmets with this tag have goggle mounting points and can accept goggle + battery items
+    public static final TagKey<Item> CAN_HAVE_GOGGLES = TagKey.create(Registries.ITEM, new ResourceLocation("fracturepoint", "can_have_goggles"));
     private static final int MAX_STACK_SIZE = 100;
     private static final int MAX_SLOTS = 4;
-    private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
+    public static final String TAG_INSERTED_BATTERY = "InsertedNVGBattery";
+    public static final String TAG_INSERTED_GOGGLES  = "InsertedGoggles";
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final String armorType;
 
@@ -125,49 +131,18 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return stack.getItem() instanceof net.minecraft.world.item.ArmorItem;
     }
 
+    /** Returns true if this helmet currently has goggles installed in the goggle slot. */
     public static boolean hasVisionCapability(ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
         if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.HELMET) return false;
-
-        CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(TAG_GOGGLE)) {
-            return true;
-        }
-
-        ResourceLocation goggleTagId = new ResourceLocation("fracturepoint", "has_" + TAG_GOGGLE);
-        ResourceLocation nvgTagId = new ResourceLocation("fracturepoint", "has_" + TAG_NVG);
-        ResourceLocation simpleNvgTagId = new ResourceLocation("fracturepoint", "has_" + TAG_SIMPLE_NVG);
-        ResourceLocation thermalTagId = new ResourceLocation("fracturepoint", "has_" + TAG_THERMAL);
-        ResourceLocation digitalTagId = new ResourceLocation("fracturepoint", "has_" + TAG_DIGITAL);
-
-        return stack.is(TagKey.create(Registries.ITEM, goggleTagId)) ||
-                stack.is(TagKey.create(Registries.ITEM, nvgTagId)) ||
-                stack.is(TagKey.create(Registries.ITEM, simpleNvgTagId)) ||
-                stack.is(TagKey.create(Registries.ITEM, thermalTagId)) ||
-                stack.is(TagKey.create(Registries.ITEM, digitalTagId));
+        return hasInsertedGoggles(stack);
     }
 
+    /** Returns true if goggles are installed and their visionType matches the given tag. */
     public static boolean hasVisionMode(ItemStack stack, String visionTag) {
-        if (!hasVisionCapability(stack)) return false;
-
-        CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(visionTag)) {
-            return true;
-        }
-
-        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
-
-        ResourceLocation tagId = new ResourceLocation("fracturepoint", "has_" + visionTag);
-        return stack.is(TagKey.create(Registries.ITEM, tagId));
-    }
-
-    public static void addVisionCapability(ItemStack stack, String visionTag) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return;
-        if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.HELMET) return;
-
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putBoolean(TAG_GOGGLE, true);
-        tag.putBoolean(visionTag, true);
+        ItemStack goggles = getInsertedGoggles(stack);
+        if (goggles.isEmpty()) return false;
+        return goggles.getItem() instanceof GogglesItem g && g.getVisionType().equals(visionTag);
     }
 
     public static boolean isPlateCompatible(ItemStack stack) {
@@ -176,6 +151,62 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
         return stack.is(PLATE_COMPATIBLE);
     }
+
+    // ── Goggle Slot Helpers ──────────────────────────────────────────────────────
+
+    /** Returns true if this helmet has goggle mount points (static tag). */
+    public static boolean canHaveGoggles(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        return stack.is(CAN_HAVE_GOGGLES);
+    }
+
+    public static ItemStack getInsertedGoggles(ItemStack helmet) {
+        CompoundTag tag = helmet.getTag();
+        if (tag == null || !tag.contains(TAG_INSERTED_GOGGLES)) return ItemStack.EMPTY;
+        return ItemStack.of(tag.getCompound(TAG_INSERTED_GOGGLES));
+    }
+
+    public static void setInsertedGoggles(ItemStack helmet, ItemStack goggles) {
+        if (goggles.isEmpty()) {
+            CompoundTag tag = helmet.getTag();
+            if (tag != null) tag.remove(TAG_INSERTED_GOGGLES);
+        } else {
+            CompoundTag gogglesTag = new CompoundTag();
+            goggles.save(gogglesTag);
+            helmet.getOrCreateTag().put(TAG_INSERTED_GOGGLES, gogglesTag);
+        }
+    }
+
+    public static boolean hasInsertedGoggles(ItemStack helmet) {
+        CompoundTag tag = helmet.getTag();
+        return tag != null && tag.contains(TAG_INSERTED_GOGGLES);
+    }
+
+    // ── NVG Battery Slot Helpers ────────────────────────────────────────────────
+
+    public static ItemStack getInsertedBattery(ItemStack helmet) {
+        CompoundTag tag = helmet.getTag();
+        if (tag == null || !tag.contains(TAG_INSERTED_BATTERY)) return ItemStack.EMPTY;
+        return ItemStack.of(tag.getCompound(TAG_INSERTED_BATTERY));
+    }
+
+    public static void setInsertedBattery(ItemStack helmet, ItemStack battery) {
+        if (battery.isEmpty()) {
+            CompoundTag tag = helmet.getTag();
+            if (tag != null) tag.remove(TAG_INSERTED_BATTERY);
+        } else {
+            CompoundTag batteryTag = new CompoundTag();
+            battery.save(batteryTag);
+            helmet.getOrCreateTag().put(TAG_INSERTED_BATTERY, batteryTag);
+        }
+    }
+
+    public static boolean hasInsertedBattery(ItemStack helmet) {
+        CompoundTag tag = helmet.getTag();
+        return tag != null && tag.contains(TAG_INSERTED_BATTERY);
+    }
+
+    // ────────────────────────────────────────────────────────────────────────────
 
     private static boolean isAnimatedHelmet(WBArmorItem item) {
         Set<String> animatedHelmets = Set.of("insurgency_commander", "beta7_nvg", "beta7_nvg_ash", "beta7_nvg_slate", "nato_sqad_leader", "nato_sqad_leader_woodland", "nato_ukr", "nato_ukr_woodland", "killa", "tagilla");
@@ -188,9 +219,42 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     @Override
-    public boolean overrideStackedOnOther(ItemStack chestplate, Slot slot, ClickAction action, Player player) {
-        if (!(chestplate.getItem() instanceof WBArmorItem) || !isChestplateItem(chestplate)) return false;
+    public boolean overrideStackedOnOther(ItemStack heldStack, Slot slot, ClickAction action, Player player) {
+        if (!(heldStack.getItem() instanceof WBArmorItem)) return false;
         if (action != ClickAction.SECONDARY) return false;
+
+        // ── NVG helmet: goggle + battery slot interaction ────────────────────
+        if (canHaveGoggles(heldStack)) {
+            ItemStack slotItem = slot.getItem();
+            if (slotItem.isEmpty()) {
+                if (player.isShiftKeyDown()) {
+                    if (hasInsertedBattery(heldStack)) {
+                        slot.set(getInsertedBattery(heldStack));
+                        setInsertedBattery(heldStack, ItemStack.EMPTY);
+                        playRemoveOneSound(player);
+                        return true;
+                    }
+                    if (hasInsertedGoggles(heldStack)) {
+                        slot.set(getInsertedGoggles(heldStack));
+                        setInsertedGoggles(heldStack, ItemStack.EMPTY);
+                        playRemoveOneSound(player);
+                        return true;
+                    }
+                }
+            } else if (slotItem.getItem() instanceof GogglesItem && !hasInsertedGoggles(heldStack)) {
+                setInsertedGoggles(heldStack, slotItem.split(1));
+                playInsertSound(player);
+                return true;
+            } else if (slotItem.getItem() instanceof NVGBatteryItem && !hasInsertedBattery(heldStack)) {
+                setInsertedBattery(heldStack, slotItem.split(1));
+                playInsertSound(player);
+                return true;
+            }
+        }
+
+        if (!isChestplateItem(heldStack)) return false;
+        // ─ chestplate bundle interaction below ───────────────────────────────
+        ItemStack chestplate = heldStack;
 
         ItemStack slotStack = slot.getItem();
 
@@ -233,9 +297,40 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     @Override
-    public boolean overrideOtherStackedOnMe(ItemStack chestplate, ItemStack itemBeingMoved, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        if (!(chestplate.getItem() instanceof WBArmorItem) || !isChestplateItem(chestplate)) return false;
+    public boolean overrideOtherStackedOnMe(ItemStack slotStack, ItemStack carried, Slot slot, ClickAction action, Player player, SlotAccess access) {
+        if (!(slotStack.getItem() instanceof WBArmorItem)) return false;
         if (action != ClickAction.SECONDARY || !slot.allowModification(player)) return false;
+
+        // ── NVG helmet: goggle + battery slot interaction ────────────────────
+        if (canHaveGoggles(slotStack)) {
+            if (carried.isEmpty()) {
+                if (hasInsertedBattery(slotStack)) {
+                    access.set(getInsertedBattery(slotStack));
+                    setInsertedBattery(slotStack, ItemStack.EMPTY);
+                    playRemoveOneSound(player);
+                    return true;
+                }
+                if (hasInsertedGoggles(slotStack)) {
+                    access.set(getInsertedGoggles(slotStack));
+                    setInsertedGoggles(slotStack, ItemStack.EMPTY);
+                    playRemoveOneSound(player);
+                    return true;
+                }
+            } else if (carried.getItem() instanceof GogglesItem && !hasInsertedGoggles(slotStack)) {
+                setInsertedGoggles(slotStack, carried.split(1));
+                playInsertSound(player);
+                return true;
+            } else if (carried.getItem() instanceof NVGBatteryItem && !hasInsertedBattery(slotStack)) {
+                setInsertedBattery(slotStack, carried.split(1));
+                playInsertSound(player);
+                return true;
+            }
+        }
+
+        if (!isChestplateItem(slotStack)) return false;
+        // ─ chestplate bundle interaction below ───────────────────────────────
+        ItemStack chestplate = slotStack;
+        ItemStack itemBeingMoved = carried;
 
         if (itemBeingMoved.isEmpty()) {
             removeItem(chestplate).ifPresent(removed -> {
@@ -270,7 +365,43 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     }
 
     @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        if (canHaveGoggles(stack)) {
+            ItemStack goggles = getInsertedGoggles(stack);
+            if (goggles.isEmpty()) {
+                tooltip.add(Component.literal("Goggles: Not installed").withStyle(ChatFormatting.GRAY));
+            } else if (goggles.getItem() instanceof GogglesItem g) {
+                String typeName = switch (g.getVisionType()) {
+                    case TAG_NVG -> "Night Vision";
+                    case TAG_SIMPLE_NVG -> "Simple Night Vision";
+                    case TAG_THERMAL -> "Thermal Vision";
+                    case TAG_DIGITAL -> "Digital Vision";
+                    default -> g.getVisionType();
+                };
+                tooltip.add(Component.literal("Goggles: " + typeName).withStyle(ChatFormatting.GREEN));
+            }
+            ItemStack battery = getInsertedBattery(stack);
+            if (battery.isEmpty()) {
+                tooltip.add(Component.literal("Battery: Not installed").withStyle(ChatFormatting.GRAY));
+            } else {
+                int energy = BatteryDisplayCache.isActive()
+                        ? BatteryDisplayCache.get()
+                        : NVGBatteryStorage.readEnergy(battery);
+                int max = NVGBatteryStorage.MAX_CAPACITY;
+                ChatFormatting color = energy > max / 4 ? ChatFormatting.GREEN : ChatFormatting.RED;
+                tooltip.add(Component.literal("Battery: " + energy + " / " + max + " RF").withStyle(color));
+            }
+        }
+    }
+
+    @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+        if (canHaveGoggles(stack)) {
+            // Always show exactly 2 slots (goggles + battery), even when empty
+            return Optional.of(new HelmetSlotTooltip(getInsertedGoggles(stack), getInsertedBattery(stack)));
+        }
+
         if (!isChestplateItem(stack)) return Optional.empty();
 
         List<ItemStack> contents = getContents(stack).limit(MAX_SLOTS).toList();
@@ -279,32 +410,6 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
 
         int totalWeight = contents.stream().mapToInt(ItemStack::getCount).sum();
         return Optional.of(new BundleTooltip(result, totalWeight));
-    }
-
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        if (isChestplateItem(stack)) {
-            return getContents(stack).findAny().isPresent();
-        }
-        return super.isBarVisible(stack);
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        if (isChestplateItem(stack)) {
-            int total = getContents(stack).mapToInt(ItemStack::getCount).sum();
-            int max = MAX_SLOTS * MAX_STACK_SIZE;
-            return Math.min(13, 1 + (int) (12 * ((double) total / max)));
-        }
-        return super.getBarWidth(stack);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        if (isChestplateItem(stack)) {
-            return BAR_COLOR;
-        }
-        return super.getBarColor(stack);
     }
 
     private void playRemoveOneSound(Entity entity) {
@@ -341,7 +446,7 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private GeoArmorRenderer<?> renderer;
+            private WarbornGenericArmorRenderer renderer;
 
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack,
@@ -350,6 +455,7 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                     this.renderer = new WarbornGenericArmorRenderer(WBArmorItem.this);
                 }
                 this.renderer.prepForRender(entity, stack, slot, original);
+                this.renderer.applySlimArmScaleIfNeeded(entity); // <-- slim arm fix
                 return this.renderer;
             }
         });

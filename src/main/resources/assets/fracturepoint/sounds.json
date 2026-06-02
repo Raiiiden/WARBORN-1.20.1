@@ -19,34 +19,44 @@
       }
     ]
   },
-    "item.armor.warborn_nvg_toggle": {
-        "subtitle": "warborn.subtitle.nvg_toggle",
-        "sounds": [
-        {
-            "name": "fracturepoint:item/armor/warborn_nvg_toggle",
-            "volume": 1.0,
-            "pitch": 1.0
-        }
-        ]
-    },
-    "item.armor.warborn_plate_insert": {
-        "subtitle": "warborn.subtitle.armor_plate_insert",
-        "sounds": [
-            {
-                "name": "fracturepoint:item/armor/warborn_plate_insert",
-                "volume": 1.0,
-                "pitch": 1.0
-            }
-        ]
-    },
-    "item.armor.warborn_plate_remove": {
-        "subtitle": "warborn.subtitle.armor_plate_remove",
-        "sounds": [
-          {
-            "name": "fracturepoint:item/armor/warborn_plate_remove",
-            "volume": 1.0,
-            "pitch": 1.0
-          }
-        ]
-    }
+  "item.armor.warborn_nvg_toggle": {
+    "subtitle": "warborn.subtitle.nvg_toggle",
+    "sounds": [
+      {
+        "name": "fracturepoint:item/armor/warborn_nvg_toggle",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "item.armor.warborn_plate_insert": {
+    "subtitle": "warborn.subtitle.armor_plate_insert",
+    "sounds": [
+      {
+        "name": "fracturepoint:item/armor/warborn_plate_insert",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "item.armor.warborn_plate_remove": {
+    "subtitle": "warborn.subtitle.armor_plate_remove",
+    "sounds": [
+      {
+        "name": "fracturepoint:item/armor/warborn_plate_remove",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "item.syringe.warborn_syringe_use": {
+    "subtitle": "warborn.subtitle.syringe_use",
+    "sounds": [
+      {
+        "name": "fracturepoint:item/syringe/warborn_syringe_use",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  }
 }

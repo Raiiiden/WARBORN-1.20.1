@@ -37,6 +37,7 @@ public class WarbornUniformLayer<T extends LivingEntity, M extends HumanoidModel
                 WarbornGenericArmorRenderer uniformRenderer = new WarbornGenericArmorRenderer(uniformItem);
                 this.getParentModel().copyPropertiesTo(uniformRenderer);
                 uniformRenderer.prepForRender(entity, itemStack, EquipmentSlot.CHEST, uniformRenderer);
+                uniformRenderer.applySlimArmScaleIfNeeded(entity);
                 uniformRenderer.renderToBuffer(
                         poseStack,
                         bufferSource.getBuffer(RenderType.armorCutoutNoCull(uniformRenderer.getTextureLocation(uniformItem))),

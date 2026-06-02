@@ -9,6 +9,7 @@ public class WarbornCommonConfig {
     public static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> HELMETS_WITH_NVG;
     public static final ForgeConfigSpec.BooleanValue ENABLE_FACEPLATE_OVERLAY;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> CURE_CANCELED_EFFECTS;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -32,6 +33,16 @@ public class WarbornCommonConfig {
         ENABLE_FACEPLATE_OVERLAY = builder
                 .comment("Enable faceplate overlay cutout for helmets with the faceplate tag")
                 .define("enable_faceplate_overlay", false);
+
+
+        CURE_CANCELED_EFFECTS = builder
+                .comment("Effects that are removed while Cure is active")
+                .defineListAllowEmpty(
+                        "cure_canceled_effects",
+                        List.of("minecraft:poison", "minecraft:wither"),
+                        obj -> obj instanceof String
+                );
+
 
         SPEC = builder.build();
     }

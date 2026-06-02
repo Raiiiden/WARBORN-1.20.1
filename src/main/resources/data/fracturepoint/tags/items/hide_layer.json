@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "fracturepoint:beta7_leggings",
+    "fracturepoint:beta7_leggings_slate",
+    "fracturepoint:beta7_leggings_ash",
+    "fracturepoint:insurgency_commander_leggings",
+    "fracturepoint:soviet_leggings",
+    "fracturepoint:sso_squad_leader_leggings",
+    "fracturepoint:sso_soldier_leggings",
+    "fracturepoint:sso_machine_gunner_leggings",
+    "fracturepoint:fsb_leggings",
+    "fracturepoint:ratnik_leggings",
+    "fracturepoint:soviet_uniform",
+    "fracturepoint:fsb_uniform",
+    "fracturepoint:ratnik_uniform",
+    "fracturepoint:ratnik_uniform_variant"
+  ]
+}

@@ -5,6 +5,7 @@ import com.raiiiden.warborn.client.renderer.item.WarbornPlateRenderer;
 import com.raiiiden.warborn.client.sound.WarbornClientSounds;
 import com.raiiiden.warborn.common.init.ModItemRegistry;
 import com.raiiiden.warborn.common.init.ModSoundEvents;
+import com.raiiiden.warborn.common.network.*;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import com.raiiiden.warborn.common.object.plate.MaterialType;
 import com.raiiiden.warborn.common.object.plate.Plate;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.network.chat.Component;
@@ -119,20 +121,17 @@ public class ArmorPlateItem extends Item implements GeoItem {
         ItemStack held = player.getItemInHand(hand);
         CompoundTag tag = held.getOrCreateTag();
 
-        // Check if already pending insert
         if (tag.getBoolean(PENDING_INSERT_TAG)) {
             return InteractionResultHolder.pass(held);
         }
 
-        // Check if there's any pending remove operation on THIS item
         if (tag.getBoolean(PENDING_REMOVE_TAG)) {
             player.displayClientMessage(Component.literal("Please wait for removal to complete")
                     .withStyle(ChatFormatting.YELLOW), true);
             return InteractionResultHolder.fail(held);
         }
 
-        // Check if player is processing ANY operation (comprehensive check)
-        if (!level.isClientSide && hasAnyPendingOperations(player)) {
+        if (hasAnyPendingOperations(player)) {
             player.displayClientMessage(Component.literal("Please wait for current operation to complete")
                     .withStyle(ChatFormatting.YELLOW), true);
             return InteractionResultHolder.fail(held);
@@ -169,7 +168,6 @@ public class ArmorPlateItem extends Item implements GeoItem {
         }
 
         if (level instanceof ServerLevel serverLevel) {
-            // Mark that we're processing an insert
             player.getPersistentData().putBoolean("warborn_processing_insert", true);
 
             tag.putBoolean(PENDING_INSERT_TAG, true);
@@ -179,10 +177,8 @@ public class ArmorPlateItem extends Item implements GeoItem {
             tag.putString("InsertMaterial", material.getInternalName());
 
             this.triggerAnim(player, GeoItem.getOrAssignId(held, serverLevel), CONTROLLER, "use");
-        }
 
-        if (level.isClientSide) {
-            WarbornClientSounds.playArmorInsertSound(player, this);
+            ModNetworking.sendToPlayer(new PlayWarbornSoundPacket(PlayWarbornSoundPacket.SoundType.ARMOR_INSERT), (ServerPlayer) player);
         }
 
         return level.isClientSide
@@ -197,8 +193,9 @@ public class ArmorPlateItem extends Item implements GeoItem {
         tag.putBoolean("warborn_remove_front", removeFront);
 
         this.triggerAnim(player, GeoItem.getOrAssignId(held, serverLevel), CONTROLLER, "remove");
-        if (player.level().isClientSide) {
-            WarbornClientSounds.playArmorRemoveSound(player, this);
+
+        if (player instanceof ServerPlayer sp) {
+            ModNetworking.sendToPlayer(new PlayWarbornSoundPacket(PlayWarbornSoundPacket.SoundType.ARMOR_REMOVE), sp);
         }
     }
 
@@ -212,7 +209,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
 
         if (tag.getBoolean(PENDING_INSERT_TAG)) {
             if (!selected) {
-                cancelPendingInsert(tag);
+                cancelPendingInsert(tag, player);  // CHANGED: Now accepts player parameter
                 player.getPersistentData().remove("warborn_processing_insert");
                 return;
             }
@@ -233,7 +230,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
                 durability = tag.getFloat("InsertDurability");
             } catch (Exception e) {
                 LOGGER.warn("Failed to parse plate insert data: {}", tag);
-                cancelPendingInsert(tag);
+                cancelPendingInsert(tag, player);  // CHANGED: Now accepts player parameter
                 player.getPersistentData().remove("warborn_processing_insert");
                 return;
             }
@@ -269,12 +266,17 @@ public class ArmorPlateItem extends Item implements GeoItem {
                 }
             });
 
-            // Clear the processing flag after successful insert
             player.getPersistentData().remove("warborn_processing_insert");
             return;
         }
 
         if (tag.getBoolean(PENDING_REMOVE_TAG)) {
+            if (!selected) {  // ADDED: Cancel if not selected
+                cancelPendingRemove(tag, player);
+                player.getPersistentData().remove("warborn_processing_removal");
+                return;
+            }
+
             int delay = tag.getInt("warborn_remove_delay") - 1;
             tag.putInt("warborn_remove_delay", delay);
             if (delay > 0) return;
@@ -311,22 +313,38 @@ public class ArmorPlateItem extends Item implements GeoItem {
                 }
             });
 
-            // Clear the processing flag after successful removal
             player.getPersistentData().remove("warborn_processing_removal");
             return;
         }
 
         if (tag.contains("inserting")) tag.remove("inserting");
         if (tag.contains("GeckoLibID")) tag.remove("GeckoLibID");
-        cancelPendingInsert(tag);
+        cancelPendingInsert(tag, player);  // CHANGED: Now accepts player parameter
     }
 
-    private void cancelPendingInsert(CompoundTag tag) {
+    private void cancelPendingInsert(CompoundTag tag, Player player) {
+        boolean wasPending = tag.getBoolean(PENDING_INSERT_TAG);
         tag.remove(PENDING_INSERT_TAG);
         tag.remove("warborn_insert_delay");
         tag.remove("InsertDurability");
         tag.remove("InsertTier");
         tag.remove("InsertMaterial");
+
+        // Send packet to client to stop insert sound
+        if (wasPending && player instanceof ServerPlayer serverPlayer) {
+            ModNetworking.sendToPlayer(new StopWarbornSoundPacket(StopWarbornSoundPacket.SoundType.ARMOR_INSERT), serverPlayer);
+        }
+    }
+    private void cancelPendingRemove(CompoundTag tag, Player player) {
+        boolean wasPending = tag.getBoolean(PENDING_REMOVE_TAG);
+        tag.remove(PENDING_REMOVE_TAG);
+        tag.remove("warborn_remove_delay");
+        tag.remove("warborn_remove_front");
+
+        // Send packet to client to stop remove sound
+        if (wasPending && player instanceof ServerPlayer serverPlayer) {
+            ModNetworking.sendToPlayer(new StopWarbornSoundPacket(StopWarbornSoundPacket.SoundType.ARMOR_REMOVE), serverPlayer);
+        }
     }
 
     @Override
@@ -378,8 +396,13 @@ public class ArmorPlateItem extends Item implements GeoItem {
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         CompoundTag tag = oldStack.getTag();
-        if (tag != null && tag.getBoolean("warborn_pending_insert")) {
-            cancelPendingInsert(tag);
+        if (tag != null && tag.getBoolean(PENDING_INSERT_TAG)) {
+            // The inventoryTick will handle sending the packet when selected becomes false
+            tag.remove(PENDING_INSERT_TAG);
+            tag.remove("warborn_insert_delay");
+            tag.remove("InsertDurability");
+            tag.remove("InsertTier");
+            tag.remove("InsertMaterial");
         }
         return slotChanged || oldStack.getItem() != newStack.getItem();
     }

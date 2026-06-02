@@ -63,6 +63,42 @@ public class ModNetworking {
                 ClientboundPhantomPlatePacket::new,
                 ClientboundPhantomPlatePacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        PACKET_CHANNEL.registerMessage(id++, BackpackScrollPacket.class,
+                BackpackScrollPacket::encode,
+                BackpackScrollPacket::new,
+                BackpackScrollPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        PACKET_CHANNEL.registerMessage(id++, PlayWarbornSoundPacket.class,
+                PlayWarbornSoundPacket::encode,
+                PlayWarbornSoundPacket::new,
+                PlayWarbornSoundPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        PACKET_CHANNEL.registerMessage(id++, StopWarbornSoundPacket.class,
+                StopWarbornSoundPacket::encode,
+                StopWarbornSoundPacket::new,
+                StopWarbornSoundPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        PACKET_CHANNEL.registerMessage(id++, ServerboundNVGTogglePacket.class,
+                ServerboundNVGTogglePacket::encode,
+                ServerboundNVGTogglePacket::new,
+                ServerboundNVGTogglePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        PACKET_CHANNEL.registerMessage(id++, ClientboundNVGBatteryEmptyPacket.class,
+                ClientboundNVGBatteryEmptyPacket::encode,
+                ClientboundNVGBatteryEmptyPacket::new,
+                ClientboundNVGBatteryEmptyPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        PACKET_CHANNEL.registerMessage(id++, ClientboundBatteryUpdatePacket.class,
+                ClientboundBatteryUpdatePacket::encode,
+                ClientboundBatteryUpdatePacket::new,
+                ClientboundBatteryUpdatePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static <MSG> void sendToServer(MSG message) {
@@ -79,5 +115,8 @@ public class ModNetworking {
 
     public static void sendToggleHelmetTop(boolean open) {
         sendToServer(new ToggleHelmetTopPacket(open));
+    }
+    public static void sendBackpackScroll(int scrollRow) {
+        sendToServer(new BackpackScrollPacket(scrollRow));
     }
 }

@@ -4,14 +4,13 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "fracturepoint.refmap.json",
   "mixins": [
-    "ChestplateGunMixin",
-    "ChestplateAmmoExtractorMixin",
+    "ChestplateGunItemMixin",
     "ModernKineticGunScriptAPIAccessor",
-    "ChestplateTickReloadHoldMixin",
-    "ChestplateAmmoPresenceMixin",
+    "ChestplateScriptAPIMixin",
     "MixinLivingEntityRenderer"
   ],
   "client": [
+    "client.ChestplateClientStateMachineMixin",
     "client.GunHudOverlayAccessor",
     "client.GunHudOverlayMixin",
     "client.PlayerModelMixin",
