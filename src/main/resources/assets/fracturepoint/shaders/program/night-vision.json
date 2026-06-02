@@ -23,7 +23,7 @@
     { "name": "BlurDir",            "type": "float", "count": 2, "values": [1.0, 1.0] },
     { "name": "ColorModulate",      "type": "float", "count": 4, "values": [0.4, 1.0, 0.4, 1.0] },
     { "name": "Time",               "type": "float", "count": 1, "values": [1.0] },
-    { "name": "NoiseAmplification", "type": "float", "count": 1, "values": [0.6] },
+    { "name": "NoiseAmplification", "type": "float", "count": 1, "values": [0.4] },
     { "name": "IntensityAdjust",    "type": "float", "count": 1, "values": [4.0] },
     { "name": "RedValue",           "type": "float", "count": 1, "values": [0.2] },
     { "name": "GreenValue",         "type": "float", "count": 1, "values": [1.0] },

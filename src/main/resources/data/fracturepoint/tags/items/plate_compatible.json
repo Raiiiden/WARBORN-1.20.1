@@ -29,6 +29,10 @@
     "fracturepoint:sso_squad_leader_chestplate",
     "fracturepoint:sso_soldier_chestplate",
     "fracturepoint:sso_machine_gunner_chestplate",
-    "fracturepoint:fsb_soldier_chestplate"
+    "fracturepoint:fsb_soldier_chestplate",
+    "fracturepoint:fsb_squad_leader_chestplate",
+    "fracturepoint:fsb_machine_gunner_chestplate",
+    "fracturepoint:ratnik_chestplate",
+    "fracturepoint:ratnik_chestplate_variant"
   ]
 } 

@@ -1,11 +1,13 @@
 package com.raiiiden.warborn.common.network;
 
+import com.raiiiden.warborn.common.item.BackpackItem;
 import com.raiiiden.warborn.common.object.BackpackMenu;
 import com.raiiiden.warborn.common.object.capability.BackpackItemStackHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -41,17 +43,15 @@ public class OpenBackpackPacket {
             if (actualBackpack.isEmpty()) return;
 
             actualBackpack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-                if (handler instanceof BackpackItemStackHandler backpackHandler) {
-                    if (backpackHandler.isUninitialized()) {
-                        LOGGER.warn("Backpack capability is uninitialized (0 slots). Open manually once to sync NBT.");
-                    }
+                if (handler instanceof BackpackItemStackHandler) {
+                    // capability always initialized — no action needed
                 }
             });
 
             NetworkHooks.openScreen(player, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
-                    return Component.translatable("menu.warborn.backpack");
+                    return Component.translatable("menu.fracturepoint.backpack");
                 }
 
                 @Override
@@ -64,37 +64,40 @@ public class OpenBackpackPacket {
         ctx.get().setPacketHandled(true);
     }
 
-    private static ItemStack findActualBackpack(ServerPlayer player, ItemStack packetBackpack) {
-        // Main inventory
+    private static ItemStack findActualBackpack(ServerPlayer player, ItemStack ignored) {
+
+        // Chest slot
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (BackpackItem.isBackpackItem(chest)) {
+            return chest;
+        }
+
+        // Inventory
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
-            if (ItemStack.isSameItemSameTags(stack, packetBackpack)) {
+            if (BackpackItem.isBackpackItem(stack)) {
                 return stack;
             }
         }
 
-        // Armor slots
-        for (ItemStack stack : player.getArmorSlots()) {
-            if (ItemStack.isSameItemSameTags(stack, packetBackpack)) {
-                return stack;
-            }
-        }
+        // Curios
+        CuriosApi.getCuriosInventory(player).ifPresent(curios -> {
+            // handled below
+        });
 
-        // Curios slots
-        LazyOptional<ICuriosItemHandler> curiosOpt = CuriosApi.getCuriosInventory(player);
+        var curiosOpt = CuriosApi.getCuriosInventory(player);
         if (curiosOpt.isPresent()) {
-            ICuriosItemHandler curios = curiosOpt.resolve().get();
-            for (var entry : curios.getCurios().entrySet()) {
-                var handler = entry.getValue();
-                for (int i = 0; i < handler.getStacks().getSlots(); i++) {
-                    ItemStack stack = handler.getStacks().getStackInSlot(i);
-                    if (ItemStack.isSameItemSameTags(stack, packetBackpack)) {
+            var curios = curiosOpt.resolve().get();
+            for (var entry : curios.getCurios().values()) {
+                var stacks = entry.getStacks();
+                for (int i = 0; i < stacks.getSlots(); i++) {
+                    ItemStack stack = stacks.getStackInSlot(i);
+                    if (BackpackItem.isBackpackItem(stack)) {
                         return stack;
                     }
                 }
             }
         }
-
         return ItemStack.EMPTY;
     }
 

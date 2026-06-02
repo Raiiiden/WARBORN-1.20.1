@@ -36,20 +36,24 @@
   "item.fracturepoint.beta7_nvg_helmet": "Beta 7 NVG Helmet",
   "item.fracturepoint.beta7_helmet": "Beta 7 Helmet",
   "item.fracturepoint.beta7_chestplate": "Beta 7 Chestplate",
+  "item.fracturepoint.beta7_uniform": "Beta 7 Uniform",
   "item.fracturepoint.beta7_shoulderpads": "Beta 7 Shoulderpads",
   "item.fracturepoint.beta7_leggings": "Beta 7 Leggings",
+  "item.fracturepoint.beta7_boots": "Beta 7 Boots",
 
   "item.fracturepoint.beta7_nvg_helmet_slate": "Beta 7 NVG Helmet (Slate)",
   "item.fracturepoint.beta7_helmet_slate": "Beta 7 Helmet (Slate)",
   "item.fracturepoint.beta7_chestplate_slate": "Beta 7 Chestplate (Slate)",
   "item.fracturepoint.beta7_shoulderpads_slate": "Beta 7 Shoulderpads (Slate)",
   "item.fracturepoint.beta7_leggings_slate": "Beta 7 Leggings (Slate)",
+  "item.fracturepoint.beta7_boots_slate": "Beta 7 Boots (Slate)",
 
   "item.fracturepoint.beta7_nvg_helmet_ash": "Beta 7 NVG Helmet (Ash)",
   "item.fracturepoint.beta7_helmet_ash": "Beta 7 Helmet (Ash)",
   "item.fracturepoint.beta7_chestplate_ash": "Beta 7 Chestplate (Ash)",
   "item.fracturepoint.beta7_shoulderpads_ash": "Beta 7 Shoulderpads (Ash)",
   "item.fracturepoint.beta7_leggings_ash": "Beta 7 Leggings (Ash)",
+  "item.fracturepoint.beta7_boots_ash": "Beta 7 Boots (Ash)",
 
   "item.fracturepoint.killa_helmet": "Killa Helmet",
   "item.fracturepoint.killa_chestplate": "Killa Chestplate",
@@ -88,9 +92,25 @@
   "item.fracturepoint.sso_shoulderpads": "SSO Shoulderpads",
 
   "item.fracturepoint.fsb_soldier_helmet": "FSB Soldier Helmet",
-  "item.fracturepoint.fsb_uniform": "FSB Soldier Helmet",
+  "item.fracturepoint.fsb_uniform": "FSB Uniform",
   "item.fracturepoint.fsb_soldier_chestplate": "FSB Soldier Chestplate",
   "item.fracturepoint.fsb_leggings": "FSB Leggings",
+  "item.fracturepoint.fsb_squad_leader_helmet": "FSB Squad Leader Helmet",
+  "item.fracturepoint.fsb_squad_leader_chestplate": "FSB Squad Leader Chestplate",
+  "item.fracturepoint.fsb_machine_gunner_helmet": "FSB Machine Gunner Helmet",
+  "item.fracturepoint.fsb_machine_gunner_chestplate": "FSB Machine Gunner Chestplate",
+  "item.fracturepoint.fsb_vkpo_cap": "FSB VKPO Cap",
+  "item.fracturepoint.fsb_panama": "FSB Panama",
+
+  "item.fracturepoint.ratnik_helmet": "Ratnik Helmet",
+  "item.fracturepoint.ratnik_pmk-4": "PMK-4",
+  "item.fracturepoint.ratnik_uniform": "Ratnik Uniform",
+  "item.fracturepoint.ratnik_uniform_variant": "Ratnik Uniform (Variant)",
+  "item.fracturepoint.ratnik_chestplate": "Ratnik Chestplate",
+  "item.fracturepoint.ratnik_chestplate_variant": "Ratnik Chestplate (Variant)",
+  "item.fracturepoint.ratnik_backpack": "Ratnik Backpack",
+  "item.fracturepoint.ratnik_leggings": "Ratnik Leggings",
+  "item.fracturepoint.ratnik_boots": "Ratnik Boots",
 
 
   "item.fracturepoint.tagilla_molot": "Tagilla Hammer",
@@ -100,6 +120,18 @@
   "item.fracturepoint.kevlar_plate_level_iiia": "Kevlar Plate (Level IIIA)",
   "item.fracturepoint.composite_plate_level_iv": "Composite Plate (Level IV)",
   "item.fracturepoint.polyethylene_plate_level_iii": "Polyethylene Plate (Level III)",
+
+  "item.fracturepoint.propital": "Propital",
+  "item.fracturepoint.cure": "Cure",
+
+  "item.fracturepoint.backpack_upgrade_tier2": "Backpack Tier 2 Upgrade",
+  "item.fracturepoint.backpack_upgrade_tier3": "Backpack Tier 3 Upgrade",
+
+  "item.fracturepoint.nvg_battery": "NVG Battery",
+  "item.fracturepoint.nvg_goggles": "NVG Goggles",
+  "item.fracturepoint.simple_nvg_goggles": "Simple NVG Goggles",
+  "item.fracturepoint.thermal_goggles": "Thermal Goggles",
+  "item.fracturepoint.digital_goggles": "Digital Goggles",
 
   "material.warborn.default": "Default Material",
   "material.warborn.soft_kevlar": "Soft Kevlar",
@@ -126,6 +158,10 @@
   "message.fracturepoint.plate.front_installed": "Front plate installed!",
   "message.fracturepoint.plate.back_installed": "Back plate installed!",
   "message.fracturepoint.plate.slots_full": "All plate slots are full!",
+  "message.fracturepoint.syringe.propital.used": "Propital Used",
+  "message.fracturepoint.syringe.propital.cannot_use": "Propital Injection Failed",
+  "message.fracturepoint.syringe.cure.used": "Cure Used",
+  "message.fracturepoint.syringe.cure.cannot_use": "Cure Injection Failed",
 
   "tooltip.warborn.plate.rating": "Rating: %s",
   "tooltip.warborn.plate.material": "Material: %s",
@@ -143,5 +179,8 @@
   "curios.identifier.backpack": "Backpack",
   "curios.identifier.uniform": "Uniform",
 
-  "menu.warborn.backpack": "Backpack"
+  "effect.fracturepoint.propital": "Propital",
+  "effect.fracturepoint.cure": "Cure",
+
+  "menu.fracturepoint.backpack": "Backpack"
 }

@@ -1,20 +1,40 @@
 package com.raiiiden.warborn.client.network;
 
+import com.raiiiden.warborn.client.event.ClientKeyEvents;
+import com.raiiiden.warborn.client.renderer.PhantomNVGRenderManager;
 import com.raiiiden.warborn.client.renderer.PhantomPlateRenderManager;
 import com.raiiiden.warborn.client.sound.WarbornClientSounds;
+import com.raiiiden.warborn.common.item.WBArmorItem;
+import com.raiiiden.warborn.common.network.ClientboundNVGArmAnimationPacket;
 import com.raiiiden.warborn.common.network.ClientboundPhantomPlatePacket;
 import com.raiiiden.warborn.common.object.plate.MaterialType;
 import com.raiiiden.warborn.common.object.plate.Plate;
 import com.raiiiden.warborn.common.object.plate.ProtectionTier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Handles client-side packet processing.
- * This class must only be loaded on the client to avoid server crashes.
- */
+// Handles client-side packet processing.
+
 public class ClientPacketHandler {
+
+    public static void handleNVGArmAnimation(ClientboundNVGArmAnimationPacket packet) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.player.getId() != packet.entityId) return;
+        if (!packet.start) return;
+
+        // Only trigger for helmets that have NVG
+        ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
+        if (!helmet.is(ClientKeyEvents.HAS_NVG_TAG)) return;
+
+        // Determine animation direction based on current NVG state before toggle
+        boolean currentlyOpen = helmet.getItem() instanceof WBArmorItem helmetItem && helmetItem.isTopOpen(helmet);
+        String animName = currentlyOpen ? "use" : "remove";
+
+        int durationTicks = animName.equals("use") ? 36 : 41;
+        PhantomNVGRenderManager.getInstance().startPhantomRender(animName, durationTicks, mc.player.getUUID());
+    }
 
     public static void handlePhantomPlate(ClientboundPhantomPlatePacket packet) {
         Minecraft mc = Minecraft.getInstance();
@@ -61,7 +81,6 @@ public class ClientPacketHandler {
 
                 // Trigger the remove animation client-side
                 plateItem.triggerAnim(mc.player, geckoId, com.raiiiden.warborn.common.item.ArmorPlateItem.CONTROLLER, "remove");
-                WarbornClientSounds.playArmorRemoveSound(mc.player, plateItem);
             }
 
         } catch (IllegalArgumentException e) {

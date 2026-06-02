@@ -2,11 +2,9 @@ package com.raiiiden.warborn.common.util;
 
 import com.raiiiden.warborn.client.shader.ClientVisionState;
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
+import com.raiiiden.warborn.common.item.GogglesItem;
 import com.raiiiden.warborn.common.item.WBArmorItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -52,30 +50,10 @@ public class HelmetVisionHandler {
     }
 
     public static boolean hasVisionType(ItemStack helmet, String visionType) {
-        if (!isAllowedHelmet(helmet)) {
-            if (DEBUG_MODE) {
-                LOGGER.info("Helmet {} doesn't have basic vision capability", helmet.getDisplayName().getString());
-            }
-            return false;
-        }
-
-        if (helmet.getTag() != null && helmet.getTag().contains(visionType)) {
-            if (DEBUG_MODE) {
-                LOGGER.info("Found {} capability in NBT for {}", visionType, helmet.getDisplayName().getString());
-            }
-            return true;
-        }
-
-        if (helmet.isEmpty() || !(helmet.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
-
-        ResourceLocation tagId = new ResourceLocation("fracturepoint", "has_" + visionType);
-        boolean hasTag = helmet.is(TagKey.create(Registries.ITEM, tagId));
-
-        if (DEBUG_MODE && hasTag) {
-            LOGGER.info("Found {} capability in item tag for {}", visionType, helmet.getDisplayName().getString());
-        }
-
-        return hasTag;
+        if (!isAllowedHelmet(helmet)) return false;
+        ItemStack goggles = WBArmorItem.getInsertedGoggles(helmet);
+        if (goggles.isEmpty()) return false;
+        return goggles.getItem() instanceof GogglesItem g && g.getVisionType().equals(visionType);
     }
 
     public static boolean toggleVision(Player player) {
@@ -142,28 +120,13 @@ public class HelmetVisionHandler {
     }
 
     private static String getPrimaryVisionType(ItemStack helmet) {
-        if (hasVisionType(helmet, WBArmorItem.TAG_DIGITAL)) {
-            LOGGER.info("Helmet has digital vision capability");
-            return WBArmorItem.TAG_DIGITAL;
+        ItemStack goggles = WBArmorItem.getInsertedGoggles(helmet);
+        if (goggles.isEmpty() || !(goggles.getItem() instanceof GogglesItem g)) {
+            LOGGER.warn("Helmet has no goggles installed");
+            return "";
         }
-
-        if (hasVisionType(helmet, WBArmorItem.TAG_THERMAL)) {
-            LOGGER.info("Helmet has thermal vision capability");
-            return WBArmorItem.TAG_THERMAL;
-        }
-
-        if (hasVisionType(helmet, WBArmorItem.TAG_NVG)) {
-            LOGGER.info("Helmet has standard NVG capability");
-            return WBArmorItem.TAG_NVG;
-        }
-
-        if (hasVisionType(helmet, WBArmorItem.TAG_SIMPLE_NVG)) {
-            LOGGER.info("Helmet has simple NVG capability");
-            return WBArmorItem.TAG_SIMPLE_NVG;
-        }
-
-        LOGGER.warn("Helmet has no vision capabilities");
-        return "";
+        LOGGER.info("Helmet has goggles with vision type: {}", g.getVisionType());
+        return g.getVisionType();
     }
 
     private static String visionTypeToShaderId(String visionType) {

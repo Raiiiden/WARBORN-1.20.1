@@ -1,101 +1,142 @@
 package com.raiiiden.warborn.common.object;
 
 import com.raiiiden.warborn.common.init.MenuTypeInit;
-import net.minecraft.nbt.CompoundTag;
+import com.raiiiden.warborn.common.item.BackpackItem;
+import com.raiiiden.warborn.common.object.capability.BackpackItemStackHandler;
+import com.raiiiden.warborn.common.object.slot.DynamicBackpackSlot;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import top.theillusivec4.curios.api.CuriosApi;
 
 public class BackpackMenu extends AbstractContainerMenu {
-    private final ItemStack itemStack;
 
-    public BackpackMenu(int containerId, Inventory inventory, FriendlyByteBuf buf) {
-        this(containerId, inventory, buf.readItem());
+    public static final int COLUMNS = 9;
+
+    private final BackpackItemStackHandler handler;
+    private final ItemStack backpackStack;
+    private final int visibleRows;
+    private final int totalRows;
+    private int scrollRow = 0;
+
+    public BackpackMenu(int id, Inventory inv, FriendlyByteBuf buf) {
+        this(id, inv, buf.readItem());
     }
 
-    public BackpackMenu(int containerId, Inventory inventory, ItemStack itemStack) {
-        super(MenuTypeInit.BACKPACK_MENU.get(), containerId);
-        this.itemStack = itemStack;
+    public BackpackMenu(int id, Inventory inv, ItemStack stack) {
+        super(MenuTypeInit.BACKPACK_MENU.get(), id);
 
-        IItemHandler handler = itemStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
-        if (handler == null) return;
+        this.backpackStack = stack;
+
+        this.handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
+                .map(h -> (BackpackItemStackHandler) h)
+                .orElse(null);
+
+        if (this.handler == null) {
+            throw new IllegalStateException("Backpack has no item handler");
+        }
+
+        int tier = BackpackItem.getTier(stack);
+        this.visibleRows = BackpackItem.getVisibleRowsForTier(tier);
+        this.totalRows   = BackpackItem.getSlotsForTier(tier) / COLUMNS;
 
         int startX = 8;
-        int backpackStartY = 18;
+        int startY = 18;
 
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 9; ++col) {
-                int index = col + row * 9;
-                this.addSlot(new SlotItemHandler(handler, index, startX + col * 18, backpackStartY + row * 18));
+        // Visible backpack slots (scroll remaps to real handler indices)
+        for (int r = 0; r < visibleRows; r++) {
+            for (int c = 0; c < COLUMNS; c++) {
+                final int row = r;
+                final int col = c;
+                // FIX: pass a unique slotIndex (r*COLUMNS+c) so that Minecraft's hover
+                // detection treats each DynamicBackpackSlot as a distinct slot identity.
+                // Previously all slots shared index 0 on DummyContainer, which caused
+                // the tooltip system to fail to resolve the correct hovered slot.
+                final int slotNum = r * COLUMNS + c;
+                addSlot(new DynamicBackpackSlot(
+                        handler,
+                        () -> getSlotIndex(row, col),
+                        startX + col * 18,
+                        startY + row * 18,
+                        slotNum
+                ));
             }
         }
 
-        int inventoryStartY = backpackStartY + 66;
+        // Player inventory
+        int invY = visibleRows * 18 + 31;
 
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 9; ++col) {
-                this.addSlot(new Slot(inventory, col + row * 9 + 9, 8 + col * 18, inventoryStartY + row * 18));
-            }
-        }
+        for (int r = 0; r < 3; r++)
+            for (int c = 0; c < 9; c++)
+                addSlot(new Slot(inv, c + r * 9 + 9, startX + c * 18, invY + r * 18));
 
-        for (int col = 0; col < 9; ++col) {
-            this.addSlot(new Slot(inventory, col, 8 + col * 18, inventoryStartY + 58));
-        }
+        for (int c = 0; c < 9; c++)
+            addSlot(new Slot(inv, c, startX + c * 18, invY + 58));
     }
 
-    @Override
-    public void removed(Player player) {
-        super.removed(player);
-        if (!player.level().isClientSide) {
-            itemStack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(cap -> {
-                if (cap instanceof INBTSerializable<?> serializable) {
-                    CompoundTag tag = itemStack.getOrCreateTag();
-                    tag.put("BackpackCap", serializable.serializeNBT());
-                    itemStack.setTag(tag);
-                }
-            });
-        }
+    private int getSlotIndex(int row, int col) {
+        return (scrollRow + row) * COLUMNS + col;
     }
+
+    public void setScrollRow(int row) {
+        this.scrollRow = Math.max(0, Math.min(row, getMaxScrollRow()));
+    }
+
+    public void setScrollRowServer(int row) {
+        this.scrollRow = Math.max(0, Math.min(row, getMaxScrollRow()));
+    }
+
+    public int getScrollRow()    { return scrollRow; }
+    public int getVisibleRows()  { return visibleRows; }
+    public int getMaxScrollRow() { return Math.max(0, totalRows - visibleRows); }
 
     @Override
     public boolean stillValid(Player player) {
-        return true;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            if (player.getInventory().getItem(i) == backpackStack) return true;
+        }
+        if (player.getItemBySlot(EquipmentSlot.CHEST) == backpackStack) return true;
+
+        var curiosOpt = CuriosApi.getCuriosInventory(player);
+        if (curiosOpt.isPresent()) {
+            var curios = curiosOpt.resolve().get();
+            for (var entry : curios.getCurios().values()) {
+                var stacks = entry.getStacks();
+                for (int i = 0; i < stacks.getSlots(); i++) {
+                    if (stacks.getStackInSlot(i) == backpackStack) return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        IItemHandler handler = this.itemStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
-        if (handler == null) return ItemStack.EMPTY;
+        ItemStack empty = ItemStack.EMPTY;
+        Slot slot = slots.get(index);
+        if (slot == null || !slot.hasItem()) return empty;
 
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
+        ItemStack stack = slot.getItem();
+        ItemStack copy  = stack.copy();
 
-        if (slot != null && slot.hasItem()) {
-            ItemStack current = slot.getItem();
-            itemstack = current.copy();
+        int backpackSlots = visibleRows * COLUMNS;
 
-            if (index < handler.getSlots()) {
-                if (!this.moveItemStackTo(current, handler.getSlots(), this.slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(current, 0, handler.getSlots(), false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (current.isEmpty()) {
-                slot.setByPlayer(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
+        if (index < backpackSlots) {
+            if (!moveItemStackTo(stack, backpackSlots, slots.size(), true))
+                return empty;
+        } else {
+            if (!moveItemStackTo(stack, 0, backpackSlots, false))
+                return empty;
         }
 
-        return itemstack;
+        if (stack.isEmpty()) slot.set(ItemStack.EMPTY);
+        else slot.setChanged();
+
+        return copy;
     }
 }

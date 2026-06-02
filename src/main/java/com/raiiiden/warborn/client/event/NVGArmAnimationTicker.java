@@ -1,5 +1,7 @@
 package com.raiiiden.warborn.client.event;
 
+import com.raiiiden.warborn.client.gui.NVGScreenFadeOverlay;
+import com.raiiiden.warborn.client.renderer.PhantomNVGRenderManager;
 import com.raiiiden.warborn.common.item.WBArmorItem;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import net.minecraft.ChatFormatting;
@@ -23,14 +25,17 @@ public class NVGArmAnimationTicker {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;
 
+        PhantomNVGRenderManager.getInstance().tick();
+        NVGScreenFadeOverlay.tick();
+
         Player player = mc.player;
 
         int animTick = player.getPersistentData().getInt("NVG_ANIM_TICK");
         if (animTick > 0) {
             player.getPersistentData().putInt("NVG_ANIM_TICK", animTick + 1);
 
-            int maxTicks = 10;
-            int triggerTick = 8;
+            int maxTicks = 20;   // slightly longer than the remove animation (2.0333s = ~41 ticks)
+            int triggerTick = 15; // nvg bone reaches/leaves helmet at ~0.83s = ~17 ticks
 
             if (animTick >= triggerTick && !player.getPersistentData().getBoolean("NVG_ANIM_HELMET_READY")) {
                 player.getPersistentData().putBoolean("NVG_ANIM_HELMET_READY", true);

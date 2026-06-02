@@ -9,12 +9,14 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import javax.annotation.Nullable;
 
 @Mixin(GameRenderer.class)
 public abstract class ShaderProtectionMixin {
 
     @Shadow
-    public PostChain postEffect;
+    @Nullable
+    PostChain postEffect;
 
     @Inject(method = "checkEntityPostEffect", at = @At("HEAD"), cancellable = true)
     private void protectWarbornShaderCheckEntity(Entity pEntity, CallbackInfo ci) {

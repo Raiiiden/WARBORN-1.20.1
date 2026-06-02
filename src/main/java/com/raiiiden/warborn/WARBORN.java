@@ -2,6 +2,8 @@ package com.raiiiden.warborn;
 
 import com.raiiiden.warborn.common.config.WarbornArmorConfig;
 import com.raiiiden.warborn.common.config.WarbornCommonConfig;
+import com.raiiiden.warborn.common.effect.WarbornEffects;
+import com.raiiiden.warborn.common.event.HelmetBatteryTickHandler;
 import com.raiiiden.warborn.common.init.MenuTypeInit;
 import com.raiiiden.warborn.common.init.ModItemRegistry;
 import com.raiiiden.warborn.common.init.ModSoundEvents;
@@ -34,7 +36,10 @@ public class WARBORN {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WarbornCommonConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WarbornArmorConfig.SPEC, "warborn-armor.toml");
 
+        WarbornEffects.register(modEventBus);
+
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new HelmetBatteryTickHandler());
     }
 
     private void setup(final FMLCommonSetupEvent event) {

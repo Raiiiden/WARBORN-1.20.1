@@ -1,4 +1,3 @@
-// TOUCHED: UPDATED
 package com.raiiiden.warborn.mixin;
 
 import com.raiiiden.warborn.common.item.WBArmorItem;
@@ -18,32 +17,38 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Purpose: only gate starting reload when the chestplate has ammo but player inventory is empty.
- * Removed ThreadLocal and any interception of AbstractGunItem.findAndExtractInventoryAmmo.
- */
 @Mixin(AbstractGunItem.class)
-public class ChestplateGunMixin {
+public class ChestplateGunItemMixin {
 
     @Inject(method = "canReload", at = @At("RETURN"), cancellable = true, remap = false)
     private void warborn$enableReloadIfChestplateHasAmmo(LivingEntity shooter, ItemStack gunItem, CallbackInfoReturnable<Boolean> cir) {
+        // If already can reload, no need to check chestplate
         if (cir.getReturnValue()) return;
         if (!(shooter instanceof Player player)) return;
 
         AbstractGunItem self = (AbstractGunItem)(Object)this;
 
-        // magazine not full
+        // Check if magazine is not full
         CommonGunIndex idx = TimelessAPI.getCommonGunIndex(self.getGunId(gunItem)).orElse(null);
         if (idx == null) return;
         int current = self.getCurrentAmmoCount(gunItem);
         int max = AttachmentDataUtils.getAmmoCountWithAttachment(gunItem, idx.getGunData());
         if (current >= max) return;
 
+        // Check chestplate for ammo
+        if (hasChestplateAmmo(player, gunItem)) {
+            cir.setReturnValue(true);
+        }
+    }
+
+    private static boolean hasChestplateAmmo(Player player, ItemStack gunItem) {
         ItemStack chest = player.getInventory().getArmor(2);
         Item item = chest.getItem();
-        if (!(item instanceof WBArmorItem) || !WBArmorItem.isChestplateItem(chest)) return;
+        if (!(item instanceof WBArmorItem) || !WBArmorItem.isChestplateItem(chest)) {
+            return false;
+        }
 
-        boolean hasAmmo = chest.getCapability(ForgeCapabilities.ITEM_HANDLER).map(h -> {
+        return chest.getCapability(ForgeCapabilities.ITEM_HANDLER).map(h -> {
             for (int i = 0; i < h.getSlots(); i++) {
                 ItemStack s = h.getStackInSlot(i);
                 if (s.isEmpty()) continue;
@@ -53,7 +58,5 @@ public class ChestplateGunMixin {
             }
             return false;
         }).orElse(false);
-
-        if (hasAmmo) cir.setReturnValue(true);
     }
 }

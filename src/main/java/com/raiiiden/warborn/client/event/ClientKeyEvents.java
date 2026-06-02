@@ -1,6 +1,7 @@
 package com.raiiiden.warborn.client.event;
 
 import com.raiiiden.warborn.WARBORN;
+import com.raiiiden.warborn.client.network.ClientBatteryUpdateHandler;
 import com.raiiiden.warborn.client.screen.RemovePlateScreen;
 import com.raiiiden.warborn.client.shader.ClientVisionState;
 import com.raiiiden.warborn.client.shader.ShaderRegistry;
@@ -9,6 +10,8 @@ import com.raiiiden.warborn.common.item.WBArmorItem;
 import com.raiiiden.warborn.common.item.BackpackItem;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.network.ServerboundNVGArmAnimationPacket;
+import com.raiiiden.warborn.common.network.ServerboundNVGTogglePacket;
+import com.raiiiden.warborn.common.object.capability.NVGBatteryStorage;
 import com.raiiiden.warborn.common.util.HelmetVisionHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -38,6 +41,9 @@ public class ClientKeyEvents {
 
     public static final TagKey<Item> HAS_TOGGLE_TAG =
             TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "has_toggle"));
+
+    public static final TagKey<Item> HAS_NVG_TAG =
+            TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "has_nvg"));
 
     private static final TagKey<Item> BETA_7 =
             TagKey.create(Registries.ITEM, new ResourceLocation(WARBORN.MODID, "is_beta7"));
@@ -74,9 +80,34 @@ public class ClientKeyEvents {
         }
 
         if (ModKeybindings.TOGGLE_SPECIAL_VISION.consumeClick()) {
+            ItemStack helmetCheck = player.getItemBySlot(EquipmentSlot.HEAD);
+            String currentVision = HelmetVisionHandler.getActiveVisionType(helmetCheck);
+
+            // Block activation if goggles/battery missing or battery is dead
+            if (currentVision.isEmpty() && WBArmorItem.canHaveGoggles(helmetCheck)) {
+                if (!WBArmorItem.hasInsertedGoggles(helmetCheck)) {
+                    player.displayClientMessage(
+                            Component.literal("No goggles installed!").withStyle(ChatFormatting.RED), true);
+                    return;
+                }
+                ItemStack battery = WBArmorItem.getInsertedBattery(helmetCheck);
+                if (battery.isEmpty()) {
+                    player.displayClientMessage(
+                            Component.literal("No battery installed!").withStyle(ChatFormatting.RED), true);
+                    return;
+                }
+                if (NVGBatteryStorage.readEnergy(battery) <= 0) {
+                    player.displayClientMessage(
+                            Component.literal("Battery depleted!").withStyle(ChatFormatting.RED), true);
+                    return;
+                }
+            }
+
             if (HelmetVisionHandler.toggleVision(player)) {
                 ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
                 String activeVision = HelmetVisionHandler.getActiveVisionType(helmet);
+                // Notify server of new NVG state so it can manage battery drain
+                ModNetworking.sendToServer(new ServerboundNVGTogglePacket(activeVision));
                 player.playSound(ModSoundEvents.WARBORN_NVG_TOGGLE.get(), 1.0F, 1.0F);
 
                 if (!activeVision.isEmpty()) {
@@ -106,6 +137,7 @@ public class ClientKeyEvents {
 
                     player.displayClientMessage(Component.literal(message + " Activated").withStyle(color), true);
                 } else {
+                    ClientBatteryUpdateHandler.clear();
                     player.displayClientMessage(Component.literal("Vision Mode Disabled").withStyle(ChatFormatting.YELLOW), true);
                 }
             } else {

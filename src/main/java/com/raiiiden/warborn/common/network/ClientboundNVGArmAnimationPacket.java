@@ -32,6 +32,8 @@ public class ClientboundNVGArmAnimationPacket {
                     entity.getPersistentData().putInt("NVG_ANIM_TICK", 0);
                 }
             }
+            // Trigger first-person NVG hand animation for the local player
+            com.raiiiden.warborn.client.network.ClientPacketHandler.handleNVGArmAnimation(msg);
         });
         ctx.get().setPacketHandled(true);
     }

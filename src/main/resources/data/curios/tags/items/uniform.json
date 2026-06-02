@@ -1,7 +1,10 @@
 {
   "replace": false,
   "values": [
+    "fracturepoint:beta7_uniform",
     "fracturepoint:fsb_uniform",
-    "fracturepoint:soviet_uniform"
+    "fracturepoint:soviet_uniform",
+    "fracturepoint:ratnik_uniform",
+    "fracturepoint:ratnik_uniform_variant"
   ]
 }

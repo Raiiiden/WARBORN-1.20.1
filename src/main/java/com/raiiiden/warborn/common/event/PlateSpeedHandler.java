@@ -4,6 +4,7 @@ import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.common.object.capability.PlateHolderProvider;
 import com.raiiiden.warborn.common.object.plate.Plate;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -62,23 +63,30 @@ public class PlateSpeedHandler {
     }
 
     private static void applySpeedModifier(Player player, float speedModifier) {
-        removeSpeedModifier(player);
+        AttributeInstance attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (attribute == null) return;
 
-        AttributeModifier modifier = new AttributeModifier(
-                PLATE_SPEED_MODIFIER_UUID,
-                PLATE_SPEED_MODIFIER_NAME,
-                speedModifier,
-                AttributeModifier.Operation.MULTIPLY_TOTAL);
+        AttributeModifier existingModifier = attribute.getModifier(PLATE_SPEED_MODIFIER_UUID);
 
-        player.getAttribute(Attributes.MOVEMENT_SPEED)
-                .addTransientModifier(modifier);
+        if (existingModifier == null || Math.abs(existingModifier.getAmount() - speedModifier) > 0.001f) {
+            if (existingModifier != null) {
+                attribute.removeModifier(PLATE_SPEED_MODIFIER_UUID);
+            }
+
+            AttributeModifier modifier = new AttributeModifier(
+                    PLATE_SPEED_MODIFIER_UUID,
+                    PLATE_SPEED_MODIFIER_NAME,
+                    speedModifier,
+                    AttributeModifier.Operation.MULTIPLY_TOTAL);
+
+            attribute.addTransientModifier(modifier);
+        }
     }
 
     private static void removeSpeedModifier(Player player) {
-        if (player.getAttribute(Attributes.MOVEMENT_SPEED)
-                .getModifier(PLATE_SPEED_MODIFIER_UUID) != null) {
-            player.getAttribute(Attributes.MOVEMENT_SPEED)
-                    .removeModifier(PLATE_SPEED_MODIFIER_UUID);
+        AttributeInstance attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (attribute != null && attribute.getModifier(PLATE_SPEED_MODIFIER_UUID) != null) {
+            attribute.removeModifier(PLATE_SPEED_MODIFIER_UUID);
         }
     }
 }

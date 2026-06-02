@@ -1,6 +1,4 @@
-#version 120
-
-// not mine from viks, trust that you will be chill.
+#version 150
 
 uniform float NightVisionEnabled;
 uniform float VignetteEnabled;
@@ -10,9 +8,6 @@ uniform float SepiaRatio;
 uniform sampler2D DiffuseSampler;
 uniform sampler2D NoiseSampler;
 uniform float Time;
-varying vec2 texCoord;
-varying vec2 oneTexel;
-varying vec4 outPos;
 uniform vec2 InSize;
 uniform float NoiseAmplification;
 uniform float IntensityAdjust;
@@ -20,22 +15,43 @@ uniform float RedValue;
 uniform float GreenValue;
 uniform float BlueValue;
 
+in vec2 texCoord;
+in vec2 oneTexel;
+in vec4 outPos;
+
+out vec4 fragColor;
+
 const float SOFTNESS = 0.25;
 const float contrast = 0.8;
 const vec3 SEPIA = vec3(1.2, 1.0, 0.8);
 
 void main() {
-    vec4 texColor = texture2D(DiffuseSampler, texCoord.xy);
+    vec4 texColor = texture(DiffuseSampler, texCoord.xy);
 
     // Gamma correction to lift shadows
     texColor.rgb = pow(texColor.rgb, vec3(0.5)) * Brightness;
 
     if (NightVisionEnabled > 0) {
+        // Calculate scene brightness
+        float sceneBrightness = dot(texColor.rgb, vec3(0.299, 0.587, 0.114));
+
+        // Simulate overexposure in bright areas
+        float overexposure = smoothstep(0.6, 0.9, sceneBrightness);
+        texColor.rgb = mix(texColor.rgb, vec3(1.0), overexposure * 0.8);
+
+        // More noise in dark areas, less in bright
+        float noiseIntensity = pow(1.0 - sceneBrightness, 2.0) * NoiseAmplification;
+
         vec2 uv;
-        uv.x = 0.35 * sin(Time * 10);
-        uv.y = 0.35 * cos(Time * 10);
-        vec3 noise = texture2D(NoiseSampler, texCoord.xy + uv).rgb * NoiseAmplification;
-        texColor.xy += noise.xy * 0.05;
+        uv.x = sin(Time * 50.0) * 0.5;
+        uv.y = cos(Time * 73.0) * 0.5;
+        vec3 noise = texture(NoiseSampler, texCoord.xy + uv).rgb * noiseIntensity;  // ← Use noiseIntensity here!
+        texColor.rgb += noise.rgb * 0.10;  // ← Apply to all RGB channels
+
+        // Add bloom/glow around bright light sources
+        if (sceneBrightness > 0.8) {
+            texColor.rgb += vec3(0.3) * (sceneBrightness - 0.8) * 5.0;
+        }
     }
 
     if (VignetteEnabled > 0) {
@@ -68,5 +84,5 @@ void main() {
         texColor = mix(texColor, sepiaColor, SepiaRatio);
     }
 
-    gl_FragColor = vec4(texColor.rgb, 1.0);
+    fragColor = vec4(texColor.rgb, 1.0);
 }
