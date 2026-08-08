@@ -4,10 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
 
-/**
- * I don't like having all the colors scattered we will just reference them here radien
- * color stuff
- */
+// One place for the mod's colors instead of having them scattered.
 public class Color {
 
 //    public static final Color WHITE = new Color(255, 255, 255);
@@ -121,9 +118,7 @@ public class Color {
         return new Color(newR, newG, newB);
     }
 
-    /**
-     * Creates a text component with this color
-     */
+    // Creates a text component with this color.
     public Component colorize(String text) {
         return Component.literal(text)
                 .withStyle(Style.EMPTY.withColor(getRGB()));

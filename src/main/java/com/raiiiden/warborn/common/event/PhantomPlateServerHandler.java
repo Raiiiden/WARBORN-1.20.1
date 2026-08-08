@@ -15,10 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * Handles server-side ticking for phantom plate removal animations
- * when the player isn't holding a plate item
- */
+// Server-side ticking for phantom plate removal animations when the player isn't holding a plate.
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PhantomPlateServerHandler {
 

@@ -15,6 +15,9 @@
     },
     {
       "name": "NoiseSampler"
+    },
+    {
+      "name": "BrightnessSampler"
     }
   ],
   "uniforms": [

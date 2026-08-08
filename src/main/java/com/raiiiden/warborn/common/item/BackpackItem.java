@@ -1,6 +1,8 @@
 package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.client.renderer.armor.WarbornBackpackRenderer;
+import com.raiiiden.warborn.client.renderer.item.WarbornArmorItemRenderer;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import com.raiiiden.warborn.common.object.BackpackMenu;
 import com.raiiiden.warborn.common.object.capability.BackpackCapabilityProvider;
 import net.minecraft.ChatFormatting;
@@ -38,6 +40,15 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurio;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+
+import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +56,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 
-public class BackpackItem extends ArmorItem implements GeoItem {
+public class BackpackItem extends ArmorItem implements GeoItem, ICurioItem {
 
     public static final String TAG_UPGRADE = "backpack_upgrade";
 
@@ -71,22 +82,29 @@ public class BackpackItem extends ArmorItem implements GeoItem {
         return 1;
     }
 
-    /** Number of storage slots accessible at this tier (9 / 27 / 54). */
+    // Number of storage slots accessible at this tier (9 / 27 / 54).
     public static int getSlotsForTier(int tier) {
         return switch (tier) { case 2 -> 27; case 3 -> 54; default -> 9; };
     }
 
-    /** Number of visible rows shown in the GUI at this tier (1 / 3 / 3+scroll). */
+    // Number of visible rows shown in the GUI at this tier (1 / 3 / 3+scroll).
     public static int getVisibleRowsForTier(int tier) {
         return tier == 1 ? 1 : 3;
     }
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final String armorType;
+    private final String armorTexture;
 
     public BackpackItem(ArmorMaterial material, Type type, Properties properties, String armorType) {
+        this(material, type, properties, armorType, armorType);
+    }
+
+    public BackpackItem(ArmorMaterial material, Type type, Properties properties, String armorType,
+                        String armorTexture) {
         super(material, type, properties);
         this.armorType = armorType;
+        this.armorTexture = armorTexture;
     }
 
     public static boolean isBackpackItem(ItemStack stack) {
@@ -205,7 +223,7 @@ public class BackpackItem extends ArmorItem implements GeoItem {
         return true;
     }
 
-    /** Returns true if any slot at index >= {@code fromSlot} in this backpack's handler has an item. */
+    // Returns true if any slot at index >= {@code fromSlot} in this backpack's handler has an item.
     private static boolean hasItemsInRange(ItemStack backpack, int fromSlot) {
         var capOpt = backpack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
         if (capOpt.isEmpty()) return false;
@@ -267,6 +285,7 @@ public class BackpackItem extends ArmorItem implements GeoItem {
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private GeoArmorRenderer<?> renderer;
+            private WarbornArmorItemRenderer itemRenderer;
 
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack,
@@ -277,11 +296,42 @@ public class BackpackItem extends ArmorItem implements GeoItem {
                 this.renderer.prepForRender(entity, stack, slot, original);
                 return this.renderer;
             }
+
+            // Only reached by items whose model json is builtin/entity; the rest keep their flat sprite.
+            @Override
+            public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (this.itemRenderer == null) {
+                    this.itemRenderer = new WarbornArmorItemRenderer();
+                }
+                return this.itemRenderer;
+            }
         });
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid,
+                                                                        ItemStack stack) {
+        return CurioArmorAttributes.forSlot(this, uuid, slotContext.identifier());
+    }
+
+    // Curios gear pays out through its curios slot only, so it doesn't stack with the vanilla armor slot.
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        if (CurioArmorAttributes.isCuriosGear(stack)) return ImmutableMultimap.of();
+        return super.getAttributeModifiers(slot, stack);
+    }
+
+    @Override
+    public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
+        return new ICurio.SoundInfo(getMaterial().getEquipSound(), 1.0F, 1.0F);
     }
 
     public String getArmorType() {
         return this.armorType;
+    }
+
+    public String getArmorTexture() {
+        return this.armorTexture;
     }
 
     // Sound effects

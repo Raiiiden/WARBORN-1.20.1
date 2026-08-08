@@ -11,6 +11,7 @@
   ],
   "client": [
     "client.ChestplateClientStateMachineMixin",
+    "client.GuiGraphicsMixin",
     "client.GunHudOverlayAccessor",
     "client.GunHudOverlayMixin",
     "client.PlayerModelMixin",

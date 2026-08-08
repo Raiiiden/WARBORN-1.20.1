@@ -12,6 +12,6 @@ public class WarbornGenericArmorModel extends DefaultedItemGeoModel<WBArmorItem>
 
     @Override
     public ResourceLocation getTextureResource(WBArmorItem item) {
-        return new ResourceLocation(WARBORN.MODID, "textures/item/armor/" + (item != null ? item.getArmorType() : "default") + ".png");
+        return new ResourceLocation(WARBORN.MODID, "textures/item/armor/" + (item != null ? item.getArmorTexture() : "default") + ".png");
     }
 }

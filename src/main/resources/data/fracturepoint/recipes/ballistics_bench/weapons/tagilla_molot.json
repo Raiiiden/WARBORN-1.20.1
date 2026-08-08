@@ -1,0 +1,29 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_block",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:steel_blend",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:resin",
+      "count": 2
+    },
+    {
+      "item": "minecraft:stick",
+      "count": 2
+    },
+    {
+      "item": "minecraft:leather",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:tagilla_molot"
+  },
+  "processTime": 300
+}

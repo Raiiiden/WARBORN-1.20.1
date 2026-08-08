@@ -1,0 +1,23 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:raw_fiber",
+      "count": 3
+    },
+    {
+      "item": "minecraft:gray_dye"
+    },
+    {
+      "item": "minecraft:green_dye"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:insurgency_commander_uniform"
+  },
+  "processTime": 120
+}

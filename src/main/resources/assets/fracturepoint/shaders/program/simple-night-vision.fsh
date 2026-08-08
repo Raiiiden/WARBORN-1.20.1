@@ -1,44 +1,65 @@
-#version 120
+#version 150
+// Simple (analogue tube) night vision.
+//
+// Night vision from 4rknova, adjusted for my purposes.
+//
+// Was a single circle pushed to the right of the screen with the raw, un-intensified
+// scene still visible around it. Now the intensified image covers the whole frame and
+// the mask is four overlapping tubes in a row, centred - a GPNVG-18 style quad array.
+//
+// Also moved from #version 120 to 150: the old file declared `varying`/gl_FragColor
+// against vanilla's #version 150 blit.vsh, which only links on lenient drivers.
 
-// Night vision from 4rknova adjusted for my purposes.
+in vec2 texCoord;
+in vec2 oneTexel;
+
+out vec4 fragColor;
 
 uniform sampler2D DiffuseSampler;
+uniform sampler2D NoiseSampler;
 uniform float Time;
 uniform vec2 InSize;
-uniform float CenterOffsetX;
+uniform float CenterOffsetX;   // nudges the whole tube cluster sideways; 0 = centred
 
-varying vec2 texCoord;
+const vec3 LUM = vec3(0.2126, 0.7152, 0.0722);
+const vec3 TUBE_GREEN = vec3(0.2, 1.0, 0.2);
+
+// Spacing is well under 2*radius, so neighbouring tubes overlap and the union reads
+// as one wide panoramic field with the scalloped edge the real optic has.
+const float TUBE_RADIUS  = 0.82;
+const float TUBE_SPACING = 0.70;
+const float TUBE_FEATHER = 0.08;
 
 float hash(in float n) { return fract(sin(n) * 43758.5453123); }
 
 void main() {
     vec2 p = texCoord;
 
-    vec3 originalColor = texture2D(DiffuseSampler, p).xyz;
-    vec3 nvBase = originalColor;
-    nvBase += sin(hash(Time)) * 0.01;
-    nvBase += hash((hash(p.x) + p.y) * Time) * 0.1;
-    float gray = dot(nvBase, vec3(0.2126, 0.7152, 0.0722));
-    vec3 nightVisionColor = vec3(gray * 0.2, gray * 1.0, gray * 0.2); // Green tint
-    nightVisionColor *= 2.5;
+    vec3 scene = texture(DiffuseSampler, p).rgb;
 
-    vec3 blackColor = vec3(0.0);
+    vec3 nv = scene;
+    nv += sin(hash(Time)) * 0.01;
+    nv += hash((hash(p.x) + p.y) * Time) * 0.1;
 
-    vec2 u = p * 2.0 - 1.0;
-    float aspectRatio = InSize.x / InSize.y;
-    vec2 n = u * vec2(aspectRatio, 1.0);
-    vec2 effectCenter = vec2(CenterOffsetX, 0.0);
+    float gray = dot(nv, LUM);
+    vec3 nightVision = TUBE_GREEN * gray * 2.5;
 
-    float r = length(n - effectCenter);
-    float r1 = 0.45; // end of full NV / Start fade NV->Black
-    float r2 = 0.75; // end fade NV->Black / Start fade Black->Normal
-    float r3 = 1.2; // end fade Black->Normal (fully Normal beyond this)
+    // aspect-corrected screen space: y in [-1,1], x scaled by the aspect ratio
+    vec2 n = (p * 2.0 - 1.0) * vec2(InSize.x / max(InSize.y, 1.0), 1.0);
 
-    float factorNV = 1.0 - smoothstep(r1, r2, r);
-    float factorNormal = smoothstep(r2, r3, r);
+    // one pass over the four tubes, collecting both the union mask and the distance
+    // to the nearest tube centre (used for the per-tube falloff)
+    float mask = 0.0;
+    float nearest = 1e9;
+    for (int i = 0; i < 4; i++) {
+        float offset = (float(i) - 1.5) * TUBE_SPACING + CenterOffsetX;
+        float d = length(n - vec2(offset, 0.0));
+        nearest = min(nearest, d);
+        mask = max(mask, 1.0 - smoothstep(TUBE_RADIUS - TUBE_FEATHER, TUBE_RADIUS, d));
+    }
 
-    vec3 finalColor = mix(blackColor, nightVisionColor, factorNV);
-    finalColor = mix(finalColor, originalColor, factorNormal);
+    // real tubes dim toward their own rim rather than staying flat to the edge
+    float falloff = 1.0 - 0.3 * smoothstep(0.25, TUBE_RADIUS, nearest);
 
-    gl_FragColor = vec4(finalColor, 1.0);
+    fragColor = vec4(nightVision * mask * falloff, 1.0);
 }

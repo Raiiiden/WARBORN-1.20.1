@@ -79,19 +79,12 @@ public class ProtectionTier {
         return tier;
     }
 
-    /**
-     * Gets the internal registry name (e.g., "level_iia").
-     * Use getDisplayName() for user-facing text.
-     * @return The internal name.
-     */
+    // Internal registry name, e.g. level_iia; use getDisplayName() for user-facing text.
     public String getInternalName() {
         return internalName;
     }
 
-    /**
-     * Deprecated for external use if display name is needed. Use getInternalName() for logic/serialization.
-     * @deprecated Use {@link #getDisplayName()} for display or {@link #getInternalName()} for registry key.
-     */
+    // Deprecated: use getDisplayName() for display or getInternalName() for the registry key.
     @Deprecated
     public String name() {
         return internalName.toUpperCase();

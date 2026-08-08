@@ -20,6 +20,8 @@ public class WarbornShaders {
     private static final String SIMPLE_NVG_SHADER_ID = "snvg";
     private static final String DVG_SHADER_ID = "dvg";
     private static final String TVG_SHADER_ID = "tvg";
+    private static final String TVGW_SHADER_ID = "twvg";
+    private static final String TVGB_SHADER_ID = "tbvg";
     private static final String GDVG_SHADER_ID = "dnvg";
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -45,6 +47,22 @@ public class WarbornShaders {
         boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_THERMAL);
         if (active && DEBUG) {
             LOGGER.info("Thermal shader activation requested");
+        }
+        return active;
+    }
+
+    private static boolean isThermalWhiteEnabled(Minecraft mc) {
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_THERMAL_WHITE);
+        if (active && DEBUG) {
+            LOGGER.info("White-hot thermal shader activation requested");
+        }
+        return active;
+    }
+
+    private static boolean isThermalBlackEnabled(Minecraft mc) {
+        boolean active = HelmetVisionHandler.isVisionActive(mc, WBArmorItem.TAG_THERMAL_BLACK);
+        if (active && DEBUG) {
+            LOGGER.info("Black-hot thermal shader activation requested");
         }
         return active;
     }
@@ -79,6 +97,7 @@ public class WarbornShaders {
                 LOGGER.info("  SIMPLE_NVG_SHADER_ID: {}", SIMPLE_NVG_SHADER_ID);
                 LOGGER.info("  DVG_SHADER_ID: {}", DVG_SHADER_ID);
                 LOGGER.info("  TVG_SHADER_ID: {}", TVG_SHADER_ID);
+                LOGGER.info("  TVGW_SHADER_ID: {}", TVGW_SHADER_ID);
                 LOGGER.info("  GDVG_SHADER_ID: {}", GDVG_SHADER_ID);
 
                 boolean nvgRegistered = ShaderRegistry.getInstance().registerShader(
@@ -102,7 +121,7 @@ public class WarbornShaders {
                         DVG_SHADER_ID,
                         ShaderPresets.DIGITAL_WHITE_VISION,
                         WarbornShaders::isDigitalEnabled,
-                        ShaderPresets.whitePhosphorVision(0.7f)
+                        ShaderPresets.whitePhosphorVision(1.0f)
                 );
                 LOGGER.info("Digital shader registered: {}", dvgRegistered);
 
@@ -121,6 +140,22 @@ public class WarbornShaders {
                         ShaderPresets.thermalVision(0.7f)
                 );
                 LOGGER.info("Thermal shader registered: {}", tvgRegistered);
+
+                boolean tvgwRegistered = ShaderRegistry.getInstance().registerShader(
+                        TVGW_SHADER_ID,
+                        ShaderPresets.THERMAL_WHITE_VISION,
+                        WarbornShaders::isThermalWhiteEnabled,
+                        ShaderPresets.thermalVision(0.7f)
+                );
+                LOGGER.info("White-hot thermal shader registered: {}", tvgwRegistered);
+
+                boolean tvgbRegistered = ShaderRegistry.getInstance().registerShader(
+                        TVGB_SHADER_ID,
+                        ShaderPresets.THERMAL_BLACK_VISION,
+                        WarbornShaders::isThermalBlackEnabled,
+                        ShaderPresets.thermalVision(0.7f)
+                );
+                LOGGER.info("Black-hot thermal shader registered: {}", tvgbRegistered);
 
                 Set<String> registeredShaders = ShaderRegistry.getInstance().getRegisteredShaderIds();
                 LOGGER.info("Total registered shaders: {}", registeredShaders.size());

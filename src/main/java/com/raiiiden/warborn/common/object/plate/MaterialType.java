@@ -110,29 +110,19 @@ public class MaterialType {
     }
 
 
-    /**
-     * Gets the internal registry name (e.g., "soft_kevlar").
-     * Use getDisplayName() for user-facing text.
-     * @return The internal name.
-     */
+    // Internal registry name, e.g. soft_kevlar; use getDisplayName() for user-facing text.
     public String getInternalName() {
         return internalName;
     }
 
-    /**
-     * Gets the translatable component representing the user-facing name of this material.
-     * @return A translatable component.
-     */
+    // Translatable component for the user-facing name of this material.
     public Component getDisplayName() {
         Component textComponent = Component.translatable(this.translationKey);
         int rgbColor = this.color.getRGB();
         return textComponent.copy().withStyle(style -> style.withColor(TextColor.fromRgb(rgbColor)));
     }
 
-    /**
-     * Deprecated for external use if display name is needed. Use getInternalName() for logic/serialization.
-     * @deprecated Use {@link #getDisplayName()} for display or {@link #getInternalName()} for registry key.
-     */
+    // Deprecated: use getDisplayName() for display or getInternalName() for the registry key.
     @Deprecated
     public String name() {
         return internalName.toUpperCase();

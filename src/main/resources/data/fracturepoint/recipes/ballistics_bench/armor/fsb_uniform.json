@@ -1,0 +1,23 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:raw_fiber",
+      "count": 3
+    },
+    {
+      "item": "minecraft:brown_dye"
+    },
+    {
+      "item": "minecraft:light_gray_dye"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:fsb_uniform"
+  },
+  "processTime": 120
+}

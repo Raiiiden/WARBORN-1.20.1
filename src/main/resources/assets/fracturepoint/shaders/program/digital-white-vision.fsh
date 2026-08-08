@@ -1,9 +1,10 @@
 #version 150
-// White Phosphor Vision Shader
-
-// All most all of it is from https://www.shadertoy.com/view/4XtSR4
-// Created by curiouspers in 2024-06-18
-// Thanks so much for this amazing shader.
+// Digital (white phosphor) night vision.
+//
+// The previous version stacked a 3%-of-screen blur, 10x10 pixel blocking and three
+// unclamped noise terms on top of a halved luminance vector, which left the image a
+// dark sparkling mush. This one models the device instead - fixed sensor grid, auto
+// gain, tube response, phosphor tint - and keeps every effect bounded.
 
 in vec2 texCoord;
 in vec2 oneTexel;
@@ -12,6 +13,8 @@ out vec4 fragColor;
 
 uniform sampler2D DiffuseSampler;
 uniform sampler2D NoiseSampler;
+// 1x1 target written by the scene-brightness pass; b holds the average this shader meters against.
+uniform sampler2D BrightnessSampler;
 uniform float Time;
 uniform vec2 InSize;
 
@@ -20,179 +23,95 @@ uniform float VignetteRadius;        // Default: 0.65
 uniform float Brightness;            // Overall brightness multiplier
 uniform float NoiseAmplification;    // Strength of noise effect
 
-const vec3 lum = vec3(0.2125, 0.4154, 0.0721) * 0.5;
+const vec3 LUM = vec3(0.2126, 0.7152, 0.0722);
 
-const vec3 phosphor_color = vec3(0.95, 1.0, 0.98);
+// slightly cool white, the way a real white phosphor tube reads
+const vec3 PHOSPHOR = vec3(0.87, 0.94, 1.0);
 
-const float minBlur = 0.0;
-const float blurIterations = 4.0;
-const float blurDistance = 0.03;
-const float pixels = 0.1;
+// the sensor is a fixed grid, so the look doesn't change with window size
+const float SENSOR_LINES = 540.0;
 
-const float MAX_BRIGHTNESS_THRESHOLD = 10.0;
-const float MIN_BRIGHTNESS_THRESHOLD = 0.05;
+// How far the tube is allowed to amplify a dark scene, and what average it aims for.
+//
+// These used to be 20x onto a target of 0.30, which blew the image out: 0.30 is the mean
+// the gain drives the scene to *before* the tube curve, and the curve then lifted it again
+// to around 0.46. A moonlit surface sitting at 0.10 luma came out at 0.97 - effectively
+// white - so night looked like an overexposed day. The target is now set so the finished
+// image averages roughly a quarter brightness, which leaves headroom for torches and fire
+// to actually read as bright against it.
+const float MIN_GAIN = 1.0;
+const float MAX_GAIN = 14.0;
+const float TARGET_LUMA = 0.22;
+// Only a divide-by-zero guard now; MAX_GAIN is what actually limits a pitch black scene.
+const float DARKEST_METERED = 0.004;
 
-//TODO actually make this good still wtf its ugly as shit
-float random(in vec2 st) {
-    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+// a real tube never reads pure black
+const float BLACK_LEVEL = 0.03;
+
+float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
-vec4 blurTex(in sampler2D tex, in vec2 uv, float off, float it) {
-    float subpx = 8.0 * it;
-    vec4 fullRes = texture(tex, uv + vec2(0, 0)) / max(1.0, subpx + 1.0);
-
-    for (float i = 0.0; i < it; i++) {
-        float o = off * i;
-        fullRes += texture(tex, uv + vec2(0, o)) / subpx;
-        fullRes += texture(tex, uv + vec2(o, o)) / subpx;
-        fullRes += texture(tex, uv + vec2(o, 0)) / subpx;
-        fullRes += texture(tex, uv + vec2(o, -o)) / subpx;
-        fullRes += texture(tex, uv + vec2(0, -o)) / subpx;
-        fullRes += texture(tex, uv + vec2(-o, -o)) / subpx;
-        fullRes += texture(tex, uv + vec2(-o, 0)) / subpx;
-        fullRes += texture(tex, uv + vec2(-o, o)) / subpx;
-    }
-    return fullRes;
-}
-
-float getAverageSceneBrightness(sampler2D tex) {
-    const int SAMPLE_COUNT_X = 7;
-    const int SAMPLE_COUNT_Y = 7;
-
-    vec3 totalBrightness = vec3(0.0);
-    float weightSum = 0.0;
-    float maxBrightnessSample = 0.0;
-
-    for (int y = 0; y < SAMPLE_COUNT_Y; y++) {
-        float yPos = 0.1 + 0.8 * (float(y) / float(SAMPLE_COUNT_Y - 1));
-
-        for (int x = 0; x < SAMPLE_COUNT_X; x++) {
-            float xPos = 0.1 + 0.8 * (float(x) / float(SAMPLE_COUNT_X - 1));
-
-            float weight = 1.0 - (distance(vec2(xPos, yPos), vec2(0.5, 0.5)) * 1.2);
-            weight = max(0.2, weight * weight);
-
-            vec3 sampleColor = textureLod(tex, vec2(xPos, yPos), 4.0).rgb;
-
-            float sampleBrightness = dot(sampleColor, lum);
-
-            maxBrightnessSample = max(maxBrightnessSample, sampleBrightness);
-
-            if (sampleBrightness > 1.0) {
-                sampleBrightness = 1.0 + log(sampleBrightness);
-            }
-
-            totalBrightness += sampleColor * weight;
-            weightSum += weight;
-        }
-    }
-
-    vec3 averageBrightness = totalBrightness / max(0.001, weightSum);
-    float brightness = dot(averageBrightness, lum);
-
-    if (maxBrightnessSample > MAX_BRIGHTNESS_THRESHOLD) {
-        float dampFactor = 1.0 / (1.0 + log(maxBrightnessSample / MAX_BRIGHTNESS_THRESHOLD));
-        brightness *= dampFactor;
-    }
-
-    float remappedBrightness = 0.5 + 0.45 * tanh((brightness - 0.5) * 2.0);
-
-    remappedBrightness = max(MIN_BRIGHTNESS_THRESHOLD, remappedBrightness);
-
-    return remappedBrightness;
-}
-
-vec4 whitePhosphorVision(sampler2D tex, vec2 uv, vec2 fragCoord) {
-    float resScale = 1440.0 / InSize.y;
-    float noisePixels = (pixels < 1.0 ? pixels : pixels * 0.2) * resScale;
-
-    vec4 fullRes = texture(tex, uv);
-
-    float vignette = (VignetteEnabled > 0.5) ?
-    pow(1.0 - dot(uv - 0.5, uv - 0.5), 2.2) * 1.2 : 1.0;
-
-    float blurVignette = clamp(1.0 - pow(vignette, 1.4), 0.0, 1.0) + minBlur;
-    vignette = pow(vignette, 3.0);
-
-    vec4 fullResBlur = blurTex(tex, uv, blurDistance / blurIterations * blurVignette, blurIterations);
-    fullRes = fullResBlur;
-
-    vec2 pixelCoord = floor(fragCoord * pixels) / pixels;
-    vec4 pixelRes = textureLod(tex, pixelCoord / InSize, 0.0);
-
-    vec4 fragResult = mix(pixelRes, fullRes, 0.5);
-
-    float sceneBrightness = getAverageSceneBrightness(tex);
-
-    if (uv.y > 0.98 && uv.x > 0.49 && uv.x < 0.51)
-    return vec4(sceneBrightness, sceneBrightness, sceneBrightness, 1.0);
-
-    float mul = 1.2;
-    float brightnessFactor = smoothstep(0.0, 0.5, sceneBrightness);
-
-    float adjustedSceneBrightness = max(0.2, sceneBrightness);
-    mul = mix(pow(adjustedSceneBrightness, -0.8), mul, brightnessFactor);
-
-    mul = max(0.5, mul);
-
-    fragResult *= mul * Brightness;
-
-    float grey = dot(fragResult.rgb, lum);
-
-    grey = pow(grey, 1.2);
-    grey = smoothstep(0.12, 0.8, grey);
-    grey = max(MIN_BRIGHTNESS_THRESHOLD, grey);
-
-    float bloom = pow(grey, 3.0) * 0.8;
-
-    bloom = max(0.02, bloom);
-
-    float pulseFactor = 0.03 * sin(Time * 2.5);
-
-    vec3 color = phosphor_color * (grey + bloom + pulseFactor);
-
-    float scanLine = sin(fragCoord.y * 2.0 + Time * 10.0) * 0.02 + 0.98;
-    color *= scanLine;
-
-    vec4 neighbors[4];
-    neighbors[0] = texture(tex, uv + vec2(0.01, 0.0));
-    neighbors[1] = texture(tex, uv + vec2(-0.01, 0.0));
-    neighbors[2] = texture(tex, uv + vec2(0.0, 0.01));
-    neighbors[3] = texture(tex, uv + vec2(0.0, -0.01));
-
-    float edgeContrast = 0.0;
-    for (int i = 0; i < 4; i++) {
-        float neighborGrey = dot(neighbors[i].rgb, lum);
-        edgeContrast += abs(grey - neighborGrey);
-    }
-
-    if (edgeContrast > 0.12) {
-        color = mix(color, vec3(1.0), 0.35 * grey * grey);
-    }
-
-    float noiseTime = mod(Time * 0.1, 10.0);
-    float noise = random(uv / resScale + noiseTime);
-
-    vec2 noiseUv = floor(fragCoord * noisePixels) / InSize / noisePixels;
-    float grainNoise = random(noiseUv + noiseTime) * 0.1;
-
-    float brightnessDampener = 1.0 - min(1.0, pow(sceneBrightness, 2.0) * 2.0);
-
-    float highNoise = pow(random(noiseUv + noiseTime * 0.5), 30.0) * 0.5;
-    float staticNoise = (noise * 0.07 + grainNoise) * (1.0 - grey * 0.7) * brightnessDampener + highNoise * vignette;
-
-    float hotspotIntensity = pow(random(uv + Time * 0.05), 40.0) * grey * 0.7 * brightnessDampener;
-
-    vec3 finalColor = color * vignette + staticNoise + hotspotIntensity;
-    float finalBrightness = dot(finalColor, lum);
-
-    if (finalBrightness < MIN_BRIGHTNESS_THRESHOLD) {
-        finalColor = mix(vec3(MIN_BRIGHTNESS_THRESHOLD), finalColor, finalBrightness / MIN_BRIGHTNESS_THRESHOLD);
-    }
-
-    return vec4(finalColor, 1.0);
+// Coarse average of the frame, used to drive the gain. The 5x5 grid this used to walk per pixel is now
+// metered once per frame by the scene-brightness pass, which leaves a single fetch of a 1x1 texture.
+// The channel is gamma encoded on the way in - see scene-brightness.fsh for why - so undo that here.
+float sceneLuma() {
+    float encoded = texture(BrightnessSampler, vec2(0.5, 0.5)).b;
+    return encoded * encoded * encoded * encoded;
 }
 
 void main() {
-    fragColor = whitePhosphorVision(DiffuseSampler, texCoord, texCoord * InSize);
+    vec2 uv = texCoord;
+    float aspect = InSize.x / max(InSize.y, 1.0);
+
+    vec2 sensor = vec2(floor(SENSOR_LINES * aspect), SENSOR_LINES);
+    vec2 sensorUv = (floor(uv * sensor) + 0.5) / sensor;
+    vec2 texel = 1.0 / sensor;
+
+    // one sensor pixel plus its four neighbours: enough softness to read as a
+    // sensor rather than a raw framebuffer, nowhere near enough to blur the scene
+    vec3 c = texture(DiffuseSampler, sensorUv).rgb * 0.5;
+    c += texture(DiffuseSampler, sensorUv + vec2(texel.x, 0.0)).rgb * 0.125;
+    c += texture(DiffuseSampler, sensorUv + vec2(-texel.x, 0.0)).rgb * 0.125;
+    c += texture(DiffuseSampler, sensorUv + vec2(0.0, texel.y)).rgb * 0.125;
+    c += texture(DiffuseSampler, sensorUv + vec2(0.0, -texel.y)).rgb * 0.125;
+
+    float luma = dot(c, LUM);
+
+    // auto gain, clamped both ways so a dark room doesn't blow out and a lit one
+    // doesn't wash flat
+    float gain = clamp(TARGET_LUMA / max(sceneLuma(), DARKEST_METERED), MIN_GAIN, MAX_GAIN);
+    luma *= gain * max(Brightness, 0.05);
+
+    // Tube response - soft shoulder, so highlights roll off instead of clipping. The
+    // shoulder is gentler than it was (1.35 rather than 1.7) so mid tones climb toward
+    // white more slowly, and the gamma now sits above 1.0 instead of below it. At 0.85 it
+    // was pulling mid tones *up*, compounding the auto gain rather than shaping it.
+    float signal = 1.0 - exp(-luma * 1.35);
+    signal = pow(signal, 1.05);
+
+    // bloom only on genuinely bright sources (torches, fire, the sky)
+    float bloom = smoothstep(0.7, 1.0, signal) * 0.3;
+
+    float vignette = 1.0;
+    if (VignetteEnabled > 0.5) {
+        float r = length(uv - vec2(0.5, 0.5)) * 1.4;
+        vignette = mix(0.5, 1.0, 1.0 - smoothstep(VignetteRadius - 0.3, VignetteRadius + 0.3, r));
+    }
+
+    // sensor grain: strongest in the shadows, gone in the highlights, and scaled by
+    // NoiseAmplification so it can be dialled out entirely
+    float frame = floor(Time * 20.0);
+    float grain = hash(floor(uv * sensor) + frame) - 0.5;
+    float grainAmount = mix(0.09, 0.015, smoothstep(0.0, 0.55, signal)) * NoiseAmplification;
+
+    float value = (signal + bloom) * vignette + grain * grainAmount;
+
+    // faint readout lines, locked to the sensor grid so they never alias into moire
+    float scan = 1.0 - 0.05 * (0.5 + 0.5 * sin((uv.y * sensor.y * 0.5 - Time * 12.0) * 3.14159265));
+    value *= scan;
+
+    value = max(value, BLACK_LEVEL * vignette);
+
+    fragColor = vec4(PHOSPHOR * clamp(value, 0.0, 1.15), 1.0);
 }

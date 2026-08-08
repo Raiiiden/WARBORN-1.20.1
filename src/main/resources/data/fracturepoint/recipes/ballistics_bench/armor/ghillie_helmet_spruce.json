@@ -1,0 +1,24 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:polymer_compound"
+    },
+    {
+      "item": "minecraft:spruce_leaves",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ghillie_helmet_spruce"
+  },
+  "processTime": 160
+}

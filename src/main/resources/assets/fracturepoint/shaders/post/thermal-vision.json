@@ -1,6 +1,18 @@
 {
-  "targets": ["swap"],
+  "targets": [
+    "swap",
+    {
+      "name": "brightness",
+      "width": 1,
+      "height": 1
+    }
+  ],
   "passes": [
+    {
+      "name": "fracturepoint:scene-brightness",
+      "intarget": "minecraft:main",
+      "outtarget": "brightness"
+    },
     {
       "name": "fracturepoint:thermal-vision",
       "intarget": "minecraft:main",
@@ -12,9 +24,12 @@
           "width": 512,
           "height": 512,
           "bilinear": false
+        },
+        {
+          "name": "BrightnessSampler",
+          "id": "brightness"
         }
-      ],
-      "uniforms": []
+      ]
     },
     {
       "name": "blit",

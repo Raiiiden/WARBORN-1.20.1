@@ -1,6 +1,18 @@
 {
   "replace": false,
   "values": [
-    "fracturepoint:ratnik_pmk-4"
+    "fracturepoint:ratnik_pmk-4",
+    "fracturepoint:iz_balaclava",
+    "fracturepoint:ghillie_balaclava_acacia",
+    "fracturepoint:ghillie_balaclava_birch",
+    "fracturepoint:ghillie_balaclava_dark_oak",
+    "fracturepoint:ghillie_balaclava_jungle",
+    "fracturepoint:ghillie_balaclava_mangrove",
+    "fracturepoint:ghillie_balaclava_oak",
+    "fracturepoint:ghillie_balaclava_snow",
+    "fracturepoint:ghillie_balaclava_spruce",
+    "fracturepoint:balaclava_eyes_mouth",
+    "fracturepoint:balaclava_open_face",
+    "fracturepoint:balaclava_eye_slit"
   ]
 }

@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "minecraft:netherite_chestplate",
+    "fracturepoint:ratnik_chestplate",
+    "fracturepoint:ratnik_chestplate_variant",
     "fracturepoint:shturmovik_ru_chestplate",
     "fracturepoint:shturmovikv2_chestplate",
     "fracturepoint:razvetchik_chestplate",
@@ -32,7 +34,23 @@
     "fracturepoint:fsb_soldier_chestplate",
     "fracturepoint:fsb_squad_leader_chestplate",
     "fracturepoint:fsb_machine_gunner_chestplate",
-    "fracturepoint:ratnik_chestplate",
-    "fracturepoint:ratnik_chestplate_variant"
+    "fracturepoint:iz_chestplate_desert",
+    "fracturepoint:iz_machine_gunner_chestplate_desert",
+    "fracturepoint:iz_chestplate_forest",
+    "fracturepoint:iz_machine_gunner_chestplate_forest",
+    "fracturepoint:iz_chestplate_ops",
+    "fracturepoint:iz_machine_gunner_chestplate_ops",
+    "fracturepoint:iz_chestplate_snow",
+    "fracturepoint:iz_machine_gunner_chestplate_snow",
+    "fracturepoint:iz_chestplate_urban",
+    "fracturepoint:iz_machine_gunner_chestplate_urban",
+    "fracturepoint:ghillie_chestplate_acacia",
+    "fracturepoint:ghillie_chestplate_birch",
+    "fracturepoint:ghillie_chestplate_dark_oak",
+    "fracturepoint:ghillie_chestplate_jungle",
+    "fracturepoint:ghillie_chestplate_mangrove",
+    "fracturepoint:ghillie_chestplate_oak",
+    "fracturepoint:ghillie_chestplate_snow",
+    "fracturepoint:ghillie_chestplate_spruce"
   ]
-} 
+}

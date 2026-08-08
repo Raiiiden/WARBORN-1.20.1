@@ -34,19 +34,20 @@ public class NVGArmAnimationTicker {
         if (animTick > 0) {
             player.getPersistentData().putInt("NVG_ANIM_TICK", animTick + 1);
 
-            int maxTicks = 20;   // slightly longer than the remove animation (2.0333s = ~41 ticks)
-            int triggerTick = 15; // nvg bone reaches/leaves helmet at ~0.83s = ~17 ticks
-
-            if (animTick >= triggerTick && !player.getPersistentData().getBoolean("NVG_ANIM_HELMET_READY")) {
+            int triggerTick = Math.max(1, player.getPersistentData().getInt("NVG_ANIM_TRIGGER_TICK"));
+            if (animTick >= triggerTick
+                    && !player.getPersistentData().getBoolean("NVG_ANIM_HELMET_READY")) {
                 player.getPersistentData().putBoolean("NVG_ANIM_HELMET_READY", true);
 
                 ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-                if (helmet.getItem() instanceof WBArmorItem helmetItem && helmet.is(ClientKeyEvents.HAS_TOGGLE_TAG)) {
-                    boolean newState = !helmetItem.isTopOpen(helmet);
+                if (helmet.getItem() instanceof WBArmorItem helmetItem
+                        && helmet.is(ClientKeyEvents.HAS_TOGGLE_TAG)) {
+                    boolean newState = player.getPersistentData().getBoolean("NVG_ANIM_TARGET_OPEN");
+                    helmetItem.setTopOpen(helmet, newState);
                     ModNetworking.sendToggleHelmetTop(newState);
-                    player.playSound(newState ?
-                            SoundEvents.IRON_TRAPDOOR_OPEN : SoundEvents.IRON_TRAPDOOR_CLOSE, 1.0F, 1.0F);
-
+                    player.playSound(newState
+                            ? SoundEvents.IRON_TRAPDOOR_OPEN
+                            : SoundEvents.IRON_TRAPDOOR_CLOSE, 1.0F, 1.0F);
                     player.displayClientMessage(
                             Component.literal("Helmet Top " + (newState ? "Opened" : "Closed"))
                                     .withStyle(ChatFormatting.GRAY),
@@ -55,9 +56,12 @@ public class NVGArmAnimationTicker {
                 }
             }
 
-            if (animTick >= maxTicks) {
+            if (animTick >= 45) {
                 player.getPersistentData().putInt("NVG_ANIM_TICK", 0);
                 player.getPersistentData().putBoolean("NVG_ANIM_HELMET_READY", false);
+                player.getPersistentData().remove("NVG_ANIM_TRIGGER_TICK");
+                player.getPersistentData().remove("NVG_ARM_TRIGGER_TICK");
+                player.getPersistentData().remove("NVG_ANIM_TARGET_OPEN");
             }
         }
     }

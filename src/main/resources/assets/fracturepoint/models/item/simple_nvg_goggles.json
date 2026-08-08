@@ -1,0 +1,39 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "builtin/entity"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "fracturepoint:item/icon/simple_nvg_goggles"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "fracturepoint:item/icon/simple_nvg_goggles"
+      }
+    },
+    "fixed": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "fracturepoint:item/icon/simple_nvg_goggles"
+      }
+    },
+    "thirdperson_righthand": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "fracturepoint:item/icon/simple_nvg_goggles"
+      }
+    },
+    "thirdperson_lefthand": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "fracturepoint:item/icon/simple_nvg_goggles"
+      }
+    }
+  }
+}

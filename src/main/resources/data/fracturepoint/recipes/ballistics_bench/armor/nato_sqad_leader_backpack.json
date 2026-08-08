@@ -1,0 +1,27 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:leather",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:resin"
+    },
+    {
+      "item": "minecraft:brown_dye"
+    },
+    {
+      "item": "minecraft:light_gray_dye",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:nato_sqad_leader_backpack"
+  },
+  "processTime": 140
+}

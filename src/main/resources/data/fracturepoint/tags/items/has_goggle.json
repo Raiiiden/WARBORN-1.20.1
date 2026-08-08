@@ -4,6 +4,8 @@
     "#fracturepoint:has_nvg",
     "#fracturepoint:has_simple_nvg",
     "#fracturepoint:has_thermal",
+    "#fracturepoint:has_thermal_white",
+    "#fracturepoint:has_thermal_black",
     "#fracturepoint:has_digital"
   ]
-} 
+}

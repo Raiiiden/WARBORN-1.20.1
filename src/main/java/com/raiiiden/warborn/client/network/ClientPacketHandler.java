@@ -24,12 +24,15 @@ public class ClientPacketHandler {
         if (mc.player == null || mc.player.getId() != packet.entityId) return;
         if (!packet.start) return;
 
-        // Only trigger for helmets that have NVG
         ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
+        if (!(helmet.getItem() instanceof WBArmorItem helmetItem)
+                || !helmet.is(ClientKeyEvents.HAS_TOGGLE_TAG)) return;
+
+        boolean currentlyOpen = helmetItem.isTopOpen(helmet);
+        // First person begins immediately. Third-person arm timing and the later
+        // helmet/sound trigger are coordinated by NVGArmAnimationTicker.
         if (!helmet.is(ClientKeyEvents.HAS_NVG_TAG)) return;
 
-        // Determine animation direction based on current NVG state before toggle
-        boolean currentlyOpen = helmet.getItem() instanceof WBArmorItem helmetItem && helmetItem.isTopOpen(helmet);
         String animName = currentlyOpen ? "use" : "remove";
 
         int durationTicks = animName.equals("use") ? 36 : 41;

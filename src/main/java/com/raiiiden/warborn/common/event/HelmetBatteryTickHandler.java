@@ -21,45 +21,30 @@ import java.util.UUID;
 
 public class HelmetBatteryTickHandler {
 
-    /**
-     * FE drained every 5 seconds (every 100 ticks) for each vision type.
-     * Drain is applied at 20% of the tick rate (once per 100 ticks instead of
-     * once per tick), giving 20x longer battery life for the same capacity.
-     */
+    // FE drained per vision type, applied once every DRAIN_INTERVAL ticks rather than every tick.
     private static final Map<String, Integer> DRAIN_RATES = new HashMap<>();
     static {
         DRAIN_RATES.put("simple_nvg", 1);
         DRAIN_RATES.put("nvg",        2);
         DRAIN_RATES.put("digital",    3);
         DRAIN_RATES.put("thermal",    5);
+        DRAIN_RATES.put("thermal_white", 5);
+        DRAIN_RATES.put("thermal_black", 5);
     }
 
-    /** How often (in ticks) to drain the battery. 100 = once every 5 seconds. */
+    // How often (in ticks) to drain the battery. 100 = once every 5 seconds.
     private static final int DRAIN_INTERVAL = 20;
 
-    /** Server-side map of player UUID → currently active vision type. */
+    // Server-side map of player UUID → currently active vision type.
     private static final Map<UUID, String> nvgActiveMap = new HashMap<>();
 
-    /**
-     * In-memory battery energy while NVG is active.
-     * We intentionally do NOT write to the item's NBT every tick because doing so
-     * triggers Minecraft's equipment-change detection, which plays the armor equip
-     * sound on every tick. The cached value is flushed to item NBT only when NVG
-     * is deactivated, the battery runs empty, or the player logs out.
-     */
+    // In-memory battery energy while NVG is active; writing NBT every tick retriggers equipment-change detection and replays the equip sound.
     private static final Map<UUID, Integer> batteryEnergyCache = new HashMap<>();
 
-    /**
-     * Stores the actual live ItemStack reference of the helmet when NVG first activates.
-     * Used to flush battery energy to the correct item when the helmet is removed,
-     * because LivingEquipmentChangeEvent.getFrom() is a snapshot copy, not the live reference.
-     */
+    // The live helmet ItemStack from when NVG activated; LivingEquipmentChangeEvent.getFrom() is a snapshot copy, not the live reference.
     private static final Map<UUID, ItemStack> helmetReference = new HashMap<>();
 
-    /**
-     * Called from ServerboundNVGTogglePacket when the client toggles vision.
-     * When turning off (empty visionType), flushes cached energy back to the item.
-     */
+    // Called from ServerboundNVGTogglePacket; an empty visionType turns NVG off and flushes cached energy back to the item.
     public static void setNVGActive(UUID playerUUID, String visionType, ServerPlayer player) {
         if (visionType == null || visionType.isEmpty()) {
             nvgActiveMap.remove(playerUUID);
@@ -139,11 +124,7 @@ public class HelmetBatteryTickHandler {
         }
     }
 
-    /**
-     * Fires when equipment in any slot changes, including helmet removal.
-     * Flushes the cached battery energy to the item being removed so the
-     * consumed charge isn't lost when the player takes off their helmet.
-     */
+    // Flushes cached battery energy when equipment changes so charge isn't lost on helmet removal; it also fires for NBT edits on a helmet that is still worn.
     @SubscribeEvent
     public void onEquipmentChange(LivingEquipmentChangeEvent event) {
         if (event.getSlot() != EquipmentSlot.HEAD) return;
@@ -162,7 +143,8 @@ public class HelmetBatteryTickHandler {
                 WBArmorItem.setInsertedBattery(liveHelmet, battery);
             }
         }
-        nvgActiveMap.remove(uuid);
+        // Dropping the cache makes the next tick re-read charge from whatever is in the
+        // helmet now; nvgActiveMap is deliberately left alone.
         batteryEnergyCache.remove(uuid);
     }
 
@@ -179,13 +161,13 @@ public class HelmetBatteryTickHandler {
 
     // ── Helpers ──────────────────────────────────────────────────────────────
 
-    /** Writes the cached energy value for {@code uuid} into the player's helmet item. */
+    // Writes the cached energy value for {@code uuid} into the player's helmet item.
     private static void flushCacheToItem(ServerPlayer player, UUID uuid) {
         int energy = batteryEnergyCache.getOrDefault(uuid, 0);
         writeEnergyToItem(player, energy);
     }
 
-    /** Directly sets the battery energy stored in the equipped helmet's NBT. */
+    // Directly sets the battery energy stored in the equipped helmet's NBT.
     private static void writeEnergyToItem(ServerPlayer player, int energy) {
         ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
         if (helmet.isEmpty()) return;

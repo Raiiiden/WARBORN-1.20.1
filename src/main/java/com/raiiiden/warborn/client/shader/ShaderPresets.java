@@ -8,16 +8,15 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Preset configurations for commonly used shaders
- * All do better docs later...
- */
+// Preset configurations for commonly used shaders. All do better docs later...
 public class ShaderPresets {
     public static final ResourceLocation NIGHT_VISION = new ResourceLocation(WARBORN.MODID, "shaders/post/night-vision.json");
     public static final ResourceLocation SIMPLE_NIGHT_VISION = new ResourceLocation(WARBORN.MODID, "shaders/post/simple-night-vision.json");
     public static final ResourceLocation DIGITAL_GREEN_VISION = new ResourceLocation(WARBORN.MODID, "shaders/post/digital-green-vision.json");
     public static final ResourceLocation DIGITAL_WHITE_VISION = new ResourceLocation(WARBORN.MODID, "shaders/post/digital-white-vision.json");
     public static final ResourceLocation THERMAL_VISION = new ResourceLocation(WARBORN.MODID, "shaders/post/thermal-vision.json");
+    public static final ResourceLocation THERMAL_WHITE_VISION = new ResourceLocation(WARBORN.MODID, "shaders/post/thermal-white-vision.json");
+    public static final ResourceLocation THERMAL_BLACK_VISION = new ResourceLocation(WARBORN.MODID, "shaders/post/thermal-black-vision.json");
 
     public static Consumer<PostChain> nightVision(float brightness, float redTint, float greenTint, float blueTint) {
         return shader -> {

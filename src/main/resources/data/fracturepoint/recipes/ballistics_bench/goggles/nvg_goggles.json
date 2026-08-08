@@ -1,0 +1,32 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:glass",
+      "count": 2
+    },
+    {
+      "item": "minecraft:quartz",
+      "count": 2
+    },
+    {
+      "item": "minecraft:copper_ingot",
+      "count": 2
+    },
+    {
+      "item": "minecraft:redstone",
+      "count": 2
+    },
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:resin"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:nvg_goggles"
+  },
+  "processTime": 200
+}

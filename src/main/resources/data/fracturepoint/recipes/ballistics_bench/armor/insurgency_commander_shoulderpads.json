@@ -1,0 +1,21 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:kevlar_fiber",
+      "count": 2
+    },
+    {
+      "item": "minecraft:black_dye",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:insurgency_commander_shoulderpads"
+  },
+  "processTime": 100
+}

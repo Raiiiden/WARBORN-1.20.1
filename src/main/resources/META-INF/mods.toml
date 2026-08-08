@@ -51,6 +51,15 @@ Fracture Point by ${mod_authors}
 [[dependencies.fracturepoint]]
     modId="geckolib"
     mandatory=true
-    versionRange="[4.0.0,)"
+    # Must be at least what the mod is built against. The icon renderer drives
+    # GeckoLib's protected internals, so an older 4.x is not safe to accept.
+    versionRange="[4.8,)"
     ordering="NONE"
     side="BOTH"
+# Optional: only used to show the workstation recipes in JEI's recipe browser.
+[[dependencies.fracturepoint]]
+    modId="jei"
+    mandatory=false
+    versionRange="[15,)"
+    ordering="AFTER"
+    side="CLIENT"

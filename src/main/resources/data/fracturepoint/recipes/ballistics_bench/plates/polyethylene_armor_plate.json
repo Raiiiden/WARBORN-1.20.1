@@ -1,0 +1,16 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:polyethylene_sheet",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:resin"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:polyethylene_plate_level_iii"
+  },
+  "processTime": 160
+}

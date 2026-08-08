@@ -3,8 +3,8 @@ package com.raiiiden.warborn.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.common.config.WarbornCommonConfig;
-import com.raiiiden.warborn.common.init.ModItemRegistry;
 import com.raiiiden.warborn.common.item.WBArmorItem;
+import com.raiiiden.warborn.common.pack.ArmorPackRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.Registries;
@@ -76,15 +76,15 @@ public class FaceplateOverlay {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         GuiGraphics guiGraphics = event.getGuiGraphics();
-        if (helmet.getItem().equals(ModItemRegistry.KILLA_HELMET.get())) {
+        if (ArmorPackRegistry.is(helmet, "killa_helmet")) {
             guiGraphics.blit(FACEPLATE_KILLA, 0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
-        } else if (helmet.getItem().equals(ModItemRegistry.TAGILLA_HELMET.get())) {
+        } else if (ArmorPackRegistry.is(helmet, "tagilla_helmet")) {
             guiGraphics.blit(FACEPLATE_TAGILLA, 0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
-        } else if (helmet.getItem().equals(ModItemRegistry.INSURGENCY_COMMANDER_HELMET.get())) {
+        } else if (ArmorPackRegistry.is(helmet, "insurgency_commander_helmet")) {
             guiGraphics.blit(FACEPLATE_COMMANDERS, 0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
         } else {
             guiGraphics.blit(FACEPLATE_DEFAULT, 0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
         }
         RenderSystem.disableBlend();
     }
-} 
+}

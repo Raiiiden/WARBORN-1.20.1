@@ -1,0 +1,16 @@
+{
+  "type": "fracturepoint:industrial_press",
+  "ingredients": [
+    {
+      "item": "minecraft:sand",
+      "count": 2
+    },
+    {
+      "item": "minecraft:quartz"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ceramic_compound"
+  },
+  "processTime": 140
+}

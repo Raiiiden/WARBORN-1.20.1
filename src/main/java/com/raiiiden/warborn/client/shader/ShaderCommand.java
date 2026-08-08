@@ -16,9 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Set;
 
-/**
- * Commands for testing and controlling shaders
- */
+// Commands for testing and controlling shaders.
 public class ShaderCommand {
     private static final String TEMP_SHADER_PREFIX = "temp_";
 
@@ -28,9 +26,7 @@ public class ShaderCommand {
                 return SharedSuggestionProvider.suggest(shaderIds, builder);
             };
 
-    /**
-     * Registers all shader-related commands
-     */
+    // Registers all shader-related commands.
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralArgumentBuilder<CommandSourceStack> shaderCommand =
                 Commands.literal("shader")
@@ -59,9 +55,7 @@ public class ShaderCommand {
         dispatcher.register(shaderCommand);
     }
 
-    /**
-     * Lists all registered shaders
-     */
+    // Lists all registered shaders.
     private static int listShaders(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
 
@@ -82,9 +76,7 @@ public class ShaderCommand {
         return shaderIds.size();
     }
 
-    /**
-     * Enables a specific shader
-     */
+    // Enables a specific shader.
     private static int enableShader(CommandContext<CommandSourceStack> ctx) {
         String shaderId = StringArgumentType.getString(ctx, "shaderId");
         CommandSourceStack source = ctx.getSource();
@@ -98,9 +90,7 @@ public class ShaderCommand {
         }
     }
 
-    /**
-     * Disables a specific shader
-     */
+    // Disables a specific shader.
     private static int disableShader(CommandContext<CommandSourceStack> ctx) {
         String shaderId = StringArgumentType.getString(ctx, "shaderId");
         CommandSourceStack source = ctx.getSource();
@@ -114,9 +104,7 @@ public class ShaderCommand {
         }
     }
 
-    /**
-     * Tests a night vision shader with specified parameters
-     */
+    // Tests a night vision shader with specified parameters.
     private static int testNightVision(CommandContext<CommandSourceStack> ctx, String preset) {
         float intensity = FloatArgumentType.getFloat(ctx, "intensity");
         CommandSourceStack source = ctx.getSource();
@@ -146,9 +134,7 @@ public class ShaderCommand {
         return 1;
     }
 
-    /**
-     * Tests an arbitrary shader file
-     */
+    // Tests an arbitrary shader file.
     private static int testShader(CommandContext<CommandSourceStack> ctx) {
         ResourceLocation shaderLocation = ResourceLocationArgument.getId(ctx, "shaderLocation");
         CommandSourceStack source = ctx.getSource();
@@ -166,9 +152,7 @@ public class ShaderCommand {
         return 1;
     }
 
-    /**
-     * Clears all temporary test shaders
-     */
+    // Clears all temporary test shaders.
     private static int clearTempShaders(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
         int count = ShaderRegistry.getInstance().removeShadersByPrefix(TEMP_SHADER_PREFIX);
@@ -184,9 +168,7 @@ public class ShaderCommand {
         return count;
     }
 
-    /**
-     * Registers a temporary test shader
-     */
+    // Registers a temporary test shader.
     private static void registerTempShader(String id, ResourceLocation location, java.util.function.Consumer<net.minecraft.client.renderer.PostChain> configurer) {
 
         ShaderRegistry.getInstance().unregisterShader(id);

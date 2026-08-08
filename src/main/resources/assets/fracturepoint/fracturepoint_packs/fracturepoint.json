@@ -1,0 +1,22 @@
+{
+  "format_version": 1,
+  "id": "fracturepoint",
+  "tab_id": "warborn_tab",
+  "translation_key": "itemGroup.warborn_tab",
+  "icon": "ratnik_helmet",
+  "include_general_items": true,
+  "items": [
+    { "id": "ratnik_helmet", "slot": "helmet", "model": "ratnik" },
+    { "id": "ratnik_pmk-4", "material": "headgear", "slot": "helmet", "model": "ratnik_pmk-4" },
+    { "id": "balaclava_eyes_mouth", "material": "headgear", "slot": "helmet", "model": "balaclava_eyes_mouth", "texture": "balaclavas" },
+    { "id": "balaclava_open_face", "material": "headgear", "slot": "helmet", "model": "balaclava_open_face", "texture": "balaclavas" },
+    { "id": "balaclava_eye_slit", "material": "headgear", "slot": "helmet", "model": "balaclava_eye_slit", "texture": "balaclavas" },
+    { "id": "ratnik_chestplate", "model": "ratnik" },
+    { "id": "ratnik_chestplate_variant", "model": "ratnik_variant" },
+    { "id": "ratnik_uniform", "material": "uniform", "model": "ratnik_uniform" },
+    { "id": "ratnik_uniform_variant", "material": "uniform", "model": "ratnik_uniform_variant" },
+    { "id": "ratnik_backpack", "kind": "backpack", "model": "ratnik_backpack" },
+    { "id": "ratnik_leggings", "slot": "leggings", "model": "ratnik_uniform" },
+    { "id": "ratnik_boots", "slot": "boots", "model": "ratnik_uniform" }
+  ]
+}

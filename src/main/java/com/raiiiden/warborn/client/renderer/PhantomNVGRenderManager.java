@@ -4,31 +4,24 @@ import com.raiiiden.warborn.client.gui.NVGScreenFadeOverlay;
 import com.raiiiden.warborn.common.init.ModItemRegistry;
 import com.raiiiden.warborn.common.item.NVGHandItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib.animatable.GeoItem;
 
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
-public class PhantomNVGRenderManager {
+public class PhantomNVGRenderManager extends AbstractPhantomRenderManager {
     private static PhantomNVGRenderManager INSTANCE;
 
-    private ItemStack phantomStack = ItemStack.EMPTY;
-    private int remainingTicks = 0;
-    private boolean isActive = false;
-    private UUID playerUUID = null;
     private int elapsedTicks = 0;
     private String currentAnimName = "";
     private boolean fadeTriggerred = false;
 
-    // Trigger the screen fade so its peak coincides with the helmet toggle (triggerTick=15 in NVGArmAnimationTicker).
-    // Pre-offset by FADE_IN_TICKS (3) so fade peaks at tick 15.
+    // Trigger the screen fade during the first-person motion. Helmet state now changes
+    // immediately when that animation starts instead of waiting for the fade midpoint.
     private static final int FADE_IN_TICKS = 3; // must match NVGScreenFadeOverlay.FADE_IN_TICKS
     private static final int FADE_TRIGGER_TICK = 20 - FADE_IN_TICKS; // = 12
 
@@ -42,10 +35,8 @@ public class PhantomNVGRenderManager {
     }
 
     public void startPhantomRender(String animName, int durationTicks, UUID playerUUID) {
-        this.phantomStack = ModItemRegistry.NVG_HAND_ITEM.get().getDefaultInstance();
-        this.remainingTicks = durationTicks;
-        this.isActive = true;
-        this.playerUUID = playerUUID;
+        ItemStack stack = ModItemRegistry.NVG_HAND_ITEM.get().getDefaultInstance();
+        activate(stack, durationTicks, playerUUID);
         this.elapsedTicks = 0;
         this.currentAnimName = animName;
         this.fadeTriggerred = false;
@@ -75,17 +66,9 @@ public class PhantomNVGRenderManager {
         nvgItem.triggerAnim(mc.player, geckoId, NVGHandItem.CONTROLLER, animName);
     }
 
-    public void tick() {
-        if (!isActive) return;
-
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null || !player.getUUID().equals(playerUUID)) {
-            clear();
-            return;
-        }
-
+    @Override
+    protected void tickActive() {
         elapsedTicks++;
-        remainingTicks--;
 
         if (!fadeTriggerred) {
             int triggerTick = FADE_TRIGGER_TICK;
@@ -94,34 +77,12 @@ public class PhantomNVGRenderManager {
                 fadeTriggerred = true;
             }
         }
-
-        if (remainingTicks <= 0) {
-            clear();
-        }
     }
 
-    public boolean shouldRenderPhantom(InteractionHand hand) {
-        if (!isActive || phantomStack.isEmpty()) return false;
-        if (Minecraft.getInstance().player == null) return false;
-        return hand == InteractionHand.MAIN_HAND;
-    }
-
-    @Nullable
-    public ItemStack getPhantomStack() {
-        return isActive ? phantomStack : ItemStack.EMPTY;
-    }
-
-    public void clear() {
-        this.phantomStack = ItemStack.EMPTY;
-        this.remainingTicks = 0;
-        this.isActive = false;
-        this.playerUUID = null;
+    @Override
+    protected void resetExtraState() {
         this.elapsedTicks = 0;
         this.currentAnimName = "";
         this.fadeTriggerred = false;
-    }
-
-    public boolean isActive() {
-        return isActive;
     }
 }

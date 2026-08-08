@@ -9,11 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.IItemDecorator;
 
-/**
- * Renders a green→red battery-level bar just above the vanilla durability bar
- * for NVG helmets that have a battery item inserted.
- * Returns false so the vanilla durability bar still renders below it.
- */
+// Draws a green-to-red battery bar above the durability bar for helmets with a battery; returns false so vanilla still draws below it.
 public class HelmetBatteryDecorator implements IItemDecorator {
 
     @Override
@@ -41,7 +37,7 @@ public class HelmetBatteryDecorator implements IItemDecorator {
         return false; // do not suppress the vanilla durability bar
     }
 
-    /** Maps fraction [0,1] to RGB int: green → yellow → orange → red. */
+    // Maps fraction [0,1] to RGB int: green → yellow → orange → red.
     private static int batteryColor(float f) {
         f = Math.max(0f, Math.min(1f, f));
         int r = (int) (255f * Math.min(1f, 2f * (1f - f)));

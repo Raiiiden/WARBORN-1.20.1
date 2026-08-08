@@ -1,0 +1,28 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:resin"
+    },
+    {
+      "item": "minecraft:brown_dye",
+      "count": 2
+    },
+    {
+      "item": "minecraft:gray_dye",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:sso_soldier_leggings"
+  },
+  "processTime": 160
+}

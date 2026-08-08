@@ -10,10 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/**
- * A goggle device that can be inserted into a helmet with the can_have_goggles tag.
- * The goggle's visionType drives which shader is activated (nvg, simple_nvg, thermal, digital).
- */
+// A goggle device insertable into a helmet tagged can_have_goggles; its visionType picks the shader.
 public class GogglesItem extends Item {
 
     private final String visionType;
@@ -27,7 +24,7 @@ public class GogglesItem extends Item {
         return visionType;
     }
 
-    /** Goggles cannot go into chestplate bundles or vanilla bundles. */
+    // Goggles cannot go into chestplate bundles or vanilla bundles.
     @Override
     public boolean canFitInsideContainerItems() {
         return false;
@@ -40,6 +37,8 @@ public class GogglesItem extends Item {
             case WBArmorItem.TAG_NVG         -> "Night Vision";
             case WBArmorItem.TAG_SIMPLE_NVG  -> "Simple Night Vision";
             case WBArmorItem.TAG_THERMAL     -> "Thermal Vision";
+            case WBArmorItem.TAG_THERMAL_WHITE -> "Thermal Vision (White Hot)";
+            case WBArmorItem.TAG_THERMAL_BLACK -> "Thermal Vision (Black Hot)";
             case WBArmorItem.TAG_DIGITAL     -> "Digital Vision";
             default                          -> visionType;
         };

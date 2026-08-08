@@ -1,0 +1,31 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:steel_plate",
+      "count": 5
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:composite_material"
+    },
+    {
+      "item": "minecraft:brown_dye",
+      "count": 2
+    },
+    {
+      "item": "minecraft:light_gray_dye",
+      "count": 2
+    },
+    {
+      "item": "minecraft:glass"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:iz_machine_gunner_chestplate_desert"
+  },
+  "processTime": 220
+}

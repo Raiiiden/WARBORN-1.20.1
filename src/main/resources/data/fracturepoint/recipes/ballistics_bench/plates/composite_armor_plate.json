@@ -1,0 +1,19 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:composite_material",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:woven_kevlar"
+    },
+    {
+      "item": "fracturepoint:resin"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:composite_plate_level_iv"
+  },
+  "processTime": 240
+}

@@ -9,10 +9,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Handles the ClientboundNVGBatteryEmptyPacket on the client side.
- * Kept in a separate class to avoid classloading the Minecraft client on the server.
- */
+// Handles ClientboundNVGBatteryEmptyPacket; kept separate so the server never classloads the Minecraft client.
 public class ClientNVGBatteryEmptyHandler {
 
     public static void handle() {

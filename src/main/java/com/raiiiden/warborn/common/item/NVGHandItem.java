@@ -1,6 +1,7 @@
 package com.raiiiden.warborn.common.item;
 
-import com.raiiiden.warborn.client.renderer.item.WarbornNVGHandRenderer;
+import com.raiiiden.warborn.client.model.WarbornNVGHandModel;
+import com.raiiiden.warborn.client.renderer.item.WarbornFirstPersonHandRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -16,6 +17,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class NVGHandItem extends Item implements GeoItem {
@@ -37,11 +39,17 @@ public class NVGHandItem extends Item implements GeoItem {
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> cons) {
         cons.accept(new IClientItemExtensions() {
-            private WarbornNVGHandRenderer renderer;
+            private WarbornFirstPersonHandRenderer<NVGHandItem> renderer;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderer == null) renderer = new WarbornNVGHandRenderer();
+                if (renderer == null) {
+                    renderer = new WarbornFirstPersonHandRenderer<>(
+                            new WarbornNVGHandModel(),
+                            Set.of("left_hand"),
+                            null
+                    );
+                }
                 return renderer;
             }
         });

@@ -40,12 +40,12 @@ public class NVGScreenFadeOverlay {
         RenderSystem.disableBlend();
     };
 
-    /** Call this to start a fade-to-black flash. */
+    // Call this to start a fade-to-black flash.
     public static void triggerFade() {
         fadeTicksElapsed = 0;
     }
 
-    /** Must be called every client tick. */
+    // Must be called every client tick.
     public static void tick() {
         if (fadeTicksElapsed < 0) return;
         fadeTicksElapsed++;

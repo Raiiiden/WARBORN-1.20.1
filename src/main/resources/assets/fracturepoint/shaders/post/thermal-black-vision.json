@@ -1,0 +1,40 @@
+{
+  "targets": [
+    "swap",
+    {
+      "name": "brightness",
+      "width": 1,
+      "height": 1
+    }
+  ],
+  "passes": [
+    {
+      "name": "fracturepoint:scene-brightness",
+      "intarget": "minecraft:main",
+      "outtarget": "brightness"
+    },
+    {
+      "name": "fracturepoint:thermal-black-vision",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [
+        {
+          "name": "NoiseSampler",
+          "id": "fracturepoint:noise",
+          "width": 512,
+          "height": 512,
+          "bilinear": false
+        },
+        {
+          "name": "BrightnessSampler",
+          "id": "brightness"
+        }
+      ]
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

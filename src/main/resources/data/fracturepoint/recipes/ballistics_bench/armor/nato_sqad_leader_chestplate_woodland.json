@@ -1,0 +1,28 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:steel_plate",
+      "count": 5
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:composite_material"
+    },
+    {
+      "item": "minecraft:brown_dye",
+      "count": 2
+    },
+    {
+      "item": "minecraft:gray_dye",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:nato_sqad_leader_chestplate_woodland"
+  },
+  "processTime": 220
+}

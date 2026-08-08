@@ -1,0 +1,27 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:steel_plate",
+      "count": 5
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:composite_material"
+    },
+    {
+      "item": "minecraft:gray_dye"
+    },
+    {
+      "item": "minecraft:green_dye",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ratnik_chestplate"
+  },
+  "processTime": 220
+}

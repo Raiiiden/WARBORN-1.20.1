@@ -1,0 +1,21 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:leather",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:polyethylene_sheet",
+      "count": 2
+    },
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:backpack_upgrade_tier2"
+  },
+  "processTime": 160
+}

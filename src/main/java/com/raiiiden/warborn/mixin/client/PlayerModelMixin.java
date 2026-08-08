@@ -31,10 +31,14 @@ public abstract class PlayerModelMixin<T extends LivingEntity> {
         int animTick = player.getPersistentData().getInt("NVG_ANIM_TICK");
         if (animTick <= 0) return;
 
+        int triggerTick = Math.max(1, player.getPersistentData().getInt("NVG_ARM_TRIGGER_TICK"));
+        int armTick = animTick - triggerTick + 1;
+        if (armTick <= 0) return;
+
         PlayerModel<?> model = (PlayerModel<?>) (Object) this;
 
         // Save starting pose
-        if (animTick == 1) {
+        if (armTick == 1) {
             player.getPersistentData().putFloat("NVG_ANIM_START_X", model.leftArm.xRot);
             player.getPersistentData().putFloat("NVG_ANIM_START_Y", model.leftArm.yRot);
         }
@@ -44,14 +48,15 @@ public abstract class PlayerModelMixin<T extends LivingEntity> {
 
         // Animation duration (full out-and-back)
         final float duration = 16f;
+        if (armTick > duration) return;
         float half = duration / 2f;
         float progress;
 
         // Progress goes from 0->1->0
-        if (animTick <= half) {
-            progress = animTick / half;
+        if (armTick <= half) {
+            progress = armTick / half;
         } else {
-            progress = (duration - animTick) / half;
+            progress = (duration - armTick) / half;
         }
         progress = cubicEase(progress);
 

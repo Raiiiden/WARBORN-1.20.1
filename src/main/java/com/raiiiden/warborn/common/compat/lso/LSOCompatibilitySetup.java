@@ -7,10 +7,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * Setup handler for LSO (Legendary Survival Overhaul) compatibility
- * This class ensures LSO reflection is initialized during mod setup
- */
+// Setup handler for Legendary Survival Overhaul compat; initialises LSO reflection during mod setup.
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LSOCompatibilitySetup {
     private static final Logger LOGGER = LogManager.getLogger();

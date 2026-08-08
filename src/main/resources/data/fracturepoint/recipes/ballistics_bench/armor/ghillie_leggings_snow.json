@@ -1,0 +1,24 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:resin"
+    },
+    {
+      "item": "minecraft:snow_block",
+      "count": 3
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ghillie_leggings_snow"
+  },
+  "processTime": 160
+}

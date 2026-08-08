@@ -1,0 +1,15 @@
+{
+  "type": "fracturepoint:industrial_press",
+  "ingredients": [
+    {
+      "item": "fracturepoint:resin"
+    },
+    {
+      "item": "minecraft:coal"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:polymer_compound"
+  },
+  "processTime": 160
+}

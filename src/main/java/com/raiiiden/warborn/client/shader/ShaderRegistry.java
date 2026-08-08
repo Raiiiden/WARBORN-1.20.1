@@ -137,9 +137,7 @@ public class ShaderRegistry {
         }
     }
 
-    /**
-     * Called by the mixin when an external mod tries to shut down our shader
-     */
+    // Called by the mixin when an external mod tries to shut down our shader.
     public void onExternalShutdownAttempt() {
         long now = System.currentTimeMillis();
 
@@ -186,13 +184,7 @@ public class ShaderRegistry {
         }
     }
 
-    /*
-     * Optimized hot path:
-     * - Only reload shader when it actually needs to change
-     * - Mixin blocks external shutdowns, so no need to check currentEffect()
-     * - Minimal rebinds when switching
-     * - No logging
-     */
+    // Hot path: only reloads when the shader actually changes, with minimal rebinds and no logging.
     private void processShaders_Internal() {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;

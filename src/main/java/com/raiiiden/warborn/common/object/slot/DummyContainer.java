@@ -9,16 +9,13 @@ public class DummyContainer implements Container {
     private final ItemStackHandler handler;
     private final int fixedSize;
 
-    /** Use for slots backed by a real handler (e.g. DynamicBackpackSlot). */
+    // Use for slots backed by a real handler (e.g. DynamicBackpackSlot).
     public DummyContainer(ItemStackHandler handler) {
         this.handler   = handler;
         this.fixedSize = -1;
     }
 
-    /**
-     * Use for read-only display slots with no backing handler (e.g. BackpackUpgradeSlot).
-     * size should be >= 1 so vanilla tooltip dispatch doesn't skip the slot.
-     */
+    // Backing for read-only display slots with no real handler; size must be >= 1 or vanilla tooltip dispatch skips the slot.
     public DummyContainer(int size) {
         this.handler   = null;
         this.fixedSize = size;

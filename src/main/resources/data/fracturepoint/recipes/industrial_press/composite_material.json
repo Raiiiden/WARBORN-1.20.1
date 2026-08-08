@@ -1,0 +1,18 @@
+{
+  "type": "fracturepoint:industrial_press",
+  "ingredients": [
+    {
+      "item": "fracturepoint:ceramic_tile"
+    },
+    {
+      "item": "fracturepoint:polyethylene_sheet"
+    },
+    {
+      "item": "fracturepoint:woven_kevlar"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:composite_material"
+  },
+  "processTime": 300
+}

@@ -1,0 +1,27 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:steel_plate",
+      "count": 5
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:composite_material"
+    },
+    {
+      "item": "minecraft:brown_dye"
+    },
+    {
+      "item": "minecraft:light_gray_dye",
+      "count": 4
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:sso_machine_gunner_chestplate"
+  },
+  "processTime": 220
+}

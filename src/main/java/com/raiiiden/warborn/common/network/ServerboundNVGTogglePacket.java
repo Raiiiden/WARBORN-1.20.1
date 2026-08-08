@@ -7,11 +7,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/**
- * Sent client → server when the player toggles NVG on or off.
- * visionType is the active vision type ("nvg", "simple_nvg", "thermal", "digital"),
- * or an empty string when NVG is turned off.
- */
+// Client to server on NVG toggle; visionType is the active type, or an empty string when NVG is turned off.
 public class ServerboundNVGTogglePacket {
 
     private final String visionType;

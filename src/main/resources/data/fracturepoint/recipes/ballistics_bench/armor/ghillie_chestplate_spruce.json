@@ -1,0 +1,24 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:steel_plate",
+      "count": 5
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:composite_material"
+    },
+    {
+      "item": "minecraft:spruce_leaves",
+      "count": 4
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ghillie_chestplate_spruce"
+  },
+  "processTime": 220
+}

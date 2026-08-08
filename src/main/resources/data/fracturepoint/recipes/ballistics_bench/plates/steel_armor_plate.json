@@ -1,0 +1,13 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:steel_plate",
+      "count": 4
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:steel_plate_level_iii"
+  },
+  "processTime": 120
+}

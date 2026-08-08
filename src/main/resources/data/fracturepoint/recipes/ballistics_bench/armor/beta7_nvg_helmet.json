@@ -1,0 +1,27 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:polymer_compound"
+    },
+    {
+      "item": "minecraft:black_dye"
+    },
+    {
+      "item": "minecraft:glass",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:beta7_nvg_helmet"
+  },
+  "processTime": 160
+}

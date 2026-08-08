@@ -1,6 +1,3 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "fracturepoint:item/soviet_officer_chestplate"
-  }
+  "parent": "fracturepoint:item/warborn_gear"
 }

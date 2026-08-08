@@ -120,6 +120,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
     config "${mod_id}.mixins.json"
+    // JEI mixins live in their own config so a JeiMixinPlugin can switch them off when JEI is absent
+    config "${mod_id}.jei.mixins.json"
     debug.export = true
 }
 
@@ -150,14 +152,12 @@ maven {
 
 dependencies {
     minecraft "net.neoforged:forge:${mc_version}-${neo_version}"
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}")
+    implementation fg.deobf("curse.maven:geckolib-388172:${geckolib_curse_file}")
     implementation("com.eliotlash.mclib:mclib:20")
     implementation fg.deobf("curse.maven:curios-309927:6238756")
+    compileOnly fg.deobf("curse.maven:jei-238222:8576376")
+    runtimeOnly fg.deobf("curse.maven:jei-238222:8576376")
 //    implementation fg.deobf("curse.maven:legendary-survival-overhaul-840254:7037397")
-//    implementation fg.deobf("curse.maven:embeddium-908741:5681725")
-//    implementation fg.deobf("curse.maven:oculus-581495:6020952")
-//    implementation fg.deobf("curse.maven:parcool-482378:6612358")
-//    implementation fg.deobf("curse.maven:playeranimator-658587:4587214")
 //    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6654541")
 //    implementation fg.deobf("curse.maven:superb-warfare-1218165:6702058")
 

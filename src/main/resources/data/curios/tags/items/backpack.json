@@ -9,6 +9,11 @@
     "fracturepoint:soviet_soldier_backpack",
     "fracturepoint:sso_soldier_backpack",
     "fracturepoint:sso_machine_gunner_backpack",
-    "fracturepoint:ratnik_backpack"
+    "fracturepoint:ratnik_backpack",
+    "fracturepoint:iz_backpack_desert",
+    "fracturepoint:iz_backpack_forest",
+    "fracturepoint:iz_backpack_ops",
+    "fracturepoint:iz_backpack_snow",
+    "fracturepoint:iz_backpack_urban"
   ]
 }

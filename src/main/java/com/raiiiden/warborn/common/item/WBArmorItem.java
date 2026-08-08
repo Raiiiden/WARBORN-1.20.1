@@ -1,6 +1,9 @@
 package com.raiiiden.warborn.common.item;
 
+import com.raiiiden.warborn.WARBORN;
 import com.raiiiden.warborn.client.renderer.armor.WarbornGenericArmorRenderer;
+import com.raiiiden.warborn.client.renderer.item.WarbornArmorItemRenderer;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleCapabilityProvider;
 import com.raiiiden.warborn.common.object.capability.ChestplateBundleHandler;
 import com.raiiiden.warborn.common.object.capability.NVGBatteryStorage;
@@ -23,7 +26,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -47,7 +49,12 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,8 +71,11 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public static final String TAG_NVG = "nvg";
     public static final String TAG_SIMPLE_NVG = "simple_nvg";
     public static final String TAG_THERMAL = "thermal";
+    public static final String TAG_THERMAL_WHITE = "thermal_white";
+    public static final String TAG_THERMAL_BLACK = "thermal_black";
     public static final String TAG_DIGITAL = "digital";
-    public static final TagKey<Item> PLATE_COMPATIBLE = ItemTags.create(new ResourceLocation("warborn", "plate_compatible"));
+    // Additive opt-in for chestplates that aren't ours, e.g. vanilla netherite.
+    public static final TagKey<Item> PLATE_COMPATIBLE = ItemTags.create(new ResourceLocation(WARBORN.MODID, "plate_compatible"));
     // Helmets with this tag have goggle mounting points and can accept goggle + battery items
     public static final TagKey<Item> CAN_HAVE_GOGGLES = TagKey.create(Registries.ITEM, new ResourceLocation("fracturepoint", "can_have_goggles"));
     private static final int MAX_STACK_SIZE = 100;
@@ -74,10 +84,17 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public static final String TAG_INSERTED_GOGGLES  = "InsertedGoggles";
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final String armorType;
+    private final String armorTexture;
 
     public WBArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType) {
+        this(armorMaterial, type, properties, armorType, armorType);
+    }
+
+    public WBArmorItem(ArmorMaterial armorMaterial, Type type, Item.Properties properties, String armorType,
+                       String armorTexture) {
         super(armorMaterial, type, properties.defaultDurability(armorMaterial.getDurabilityForType(type)));
         this.armorType = armorType;
+        this.armorTexture = armorTexture;
     }
 
     public static boolean isChestplateItem(ItemStack stack) {
@@ -131,30 +148,32 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         return stack.getItem() instanceof net.minecraft.world.item.ArmorItem;
     }
 
-    /** Returns true if this helmet currently has goggles installed in the goggle slot. */
+    // Returns true if this helmet currently has goggles installed in the goggle slot.
     public static boolean hasVisionCapability(ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
         if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.HELMET) return false;
         return hasInsertedGoggles(stack);
     }
 
-    /** Returns true if goggles are installed and their visionType matches the given tag. */
+    // Returns true if goggles are installed and their visionType matches the given tag.
     public static boolean hasVisionMode(ItemStack stack, String visionTag) {
         ItemStack goggles = getInsertedGoggles(stack);
         if (goggles.isEmpty()) return false;
         return goggles.getItem() instanceof GogglesItem g && g.getVisionType().equals(visionTag);
     }
 
+    // Every Warborn plate carrier takes plates; the tag is only consulted for chestplates that aren't ours.
     public static boolean isPlateCompatible(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem)) return false;
-        if (((net.minecraft.world.item.ArmorItem) stack.getItem()).getType() != Type.CHESTPLATE) return false;
+        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.world.item.ArmorItem armor)) return false;
+        if (armor.getType() != Type.CHESTPLATE) return false;
 
+        if (stack.getItem() instanceof WBArmorItem warbornArmor) return warbornArmor.isPlateCarrier();
         return stack.is(PLATE_COMPATIBLE);
     }
 
     // ── Goggle Slot Helpers ──────────────────────────────────────────────────────
 
-    /** Returns true if this helmet has goggle mount points (static tag). */
+    // Returns true if this helmet has goggle mount points (static tag).
     public static boolean canHaveGoggles(ItemStack stack) {
         if (stack.isEmpty()) return false;
         return stack.is(CAN_HAVE_GOGGLES);
@@ -376,6 +395,8 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                     case TAG_NVG -> "Night Vision";
                     case TAG_SIMPLE_NVG -> "Simple Night Vision";
                     case TAG_THERMAL -> "Thermal Vision";
+                    case TAG_THERMAL_WHITE -> "Thermal Vision (White Hot)";
+                    case TAG_THERMAL_BLACK -> "Thermal Vision (Black Hot)";
                     case TAG_DIGITAL -> "Digital Vision";
                     default -> g.getVisionType();
                 };
@@ -420,8 +441,54 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
         entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid,
+                                                                        ItemStack stack) {
+        return CurioArmorAttributes.forSlot(this, uuid, slotContext.identifier());
+    }
+
+    // Curios gear pays out through its curios slot only, so it doesn't stack with the vanilla armor slot.
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        if (CurioArmorAttributes.isCuriosGear(stack)) return ImmutableMultimap.of();
+        return super.getAttributeModifiers(slot, stack);
+    }
+
+    @Override
+    public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
+        return new ICurio.SoundInfo(getMaterial().getEquipSound(), 1.0F, 1.0F);
+    }
+
     public String getArmorType() {
         return this.armorType;
+    }
+
+    public String getArmorTexture() {
+        return this.armorTexture;
+    }
+
+    // Uniforms render as CHEST but cover the whole body, so their leg and boot bones stay visible; keyed off material since ratnik_leggings shares the uniform model.
+    public boolean isUniform() {
+        return isMaterial(Materials.WARBORN_UNIFORM);
+    }
+
+    public boolean isShoulderpads() {
+        return isMaterial(Materials.WARBORN_SHOULDERPADS);
+    }
+
+    // Balaclavas are headgear that also occupy the curios mask slot.
+    public boolean isBalaclava() {
+        return this.armorType.contains("balaclava");
+    }
+
+    private boolean isMaterial(ArmorMaterial material) {
+        // Compared by name because armor_modifier wraps the material in a delegating decorator.
+        return getMaterial().getName().equals(material.getName());
+    }
+
+    // A chestplate-slot piece that is real body armour rather than a uniform or shoulderpads, and so accepts plates.
+    public boolean isPlateCarrier() {
+        return getType() == Type.CHESTPLATE && !isUniform() && !isShoulderpads();
     }
 
     @Override
@@ -447,6 +514,7 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private WarbornGenericArmorRenderer renderer;
+            private WarbornArmorItemRenderer itemRenderer;
 
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack,
@@ -455,8 +523,16 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
                     this.renderer = new WarbornGenericArmorRenderer(WBArmorItem.this);
                 }
                 this.renderer.prepForRender(entity, stack, slot, original);
-                this.renderer.applySlimArmScaleIfNeeded(entity); // <-- slim arm fix
                 return this.renderer;
+            }
+
+            // Only reached by items whose model json is builtin/entity; the rest keep their flat sprite.
+            @Override
+            public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (this.itemRenderer == null) {
+                    this.itemRenderer = new WarbornArmorItemRenderer();
+                }
+                return this.itemRenderer;
             }
         });
     }
@@ -490,37 +566,6 @@ public class WBArmorItem extends ArmorItem implements GeoItem, ICurioItem {
     public boolean isTopOpen(ItemStack stack) {
         return stack.getOrCreateTag().getBoolean("helmet_top_open");
     }
-
-    @Override
-    public void curioTick(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
-        if (!this.getArmorType().contains("shoulderpads")) return;
-
-        var armorAttr = livingEntity.getAttributes().getInstance(Attributes.ARMOR);
-        if (armorAttr == null) return;
-
-        UUID modifierId = UUID.nameUUIDFromBytes(("fracturepoint:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
-
-        // Make sure no duplicate modifier exists
-        if (armorAttr.getModifier(modifierId) == null) {
-            int defense = this.getMaterial().getDefenseForType(this.getType());
-            armorAttr.addTransientModifier(new AttributeModifier(
-                    modifierId, "fracturepoint:shoulderpads", defense, AttributeModifier.Operation.ADDITION));
-        }
-    }
-    @Override
-    public void onUnequip(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
-        if (!this.getArmorType().contains("shoulderpads")) return;
-
-        var armorAttr = livingEntity.getAttributes().getInstance(Attributes.ARMOR);
-        if (armorAttr == null) return;
-
-        UUID modifierId = UUID.nameUUIDFromBytes(("fracturepoint:shoulderpads_" + livingEntity.getUUID() + index).getBytes());
-
-        if (armorAttr.getModifier(modifierId) != null) {
-            armorAttr.removeModifier(modifierId);
-        }
-    }
-
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

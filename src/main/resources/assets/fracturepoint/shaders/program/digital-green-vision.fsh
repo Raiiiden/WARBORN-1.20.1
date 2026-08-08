@@ -89,9 +89,6 @@ vec4 greenNightVision(sampler2D tex, vec2 uv, vec2 fragCoord) {
     float brightness = dot(averageBrightness.rgb, lum);
     brightness = clamp(brightness, 0.05, 0.95); // prevent extreme values
 
-    if (uv.y > 0.98 && uv.x > 0.49 && uv.x < 0.51)
-    return vec4(brightness, brightness, brightness, 1.0);
-
     float brightnessFactor = smoothstep(0.0, 0.5, brightness);
     mul = mix(pow(max(0.1, brightness), -1.0), mul, brightnessFactor);
     fragResult *= mul * Brightness;

@@ -1,0 +1,28 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:polymer_compound"
+    },
+    {
+      "item": "minecraft:brown_dye",
+      "count": 3
+    },
+    {
+      "item": "minecraft:gray_dye",
+      "count": 3
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:soviet_officer_helmet"
+  },
+  "processTime": 160
+}

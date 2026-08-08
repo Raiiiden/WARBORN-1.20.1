@@ -17,13 +17,14 @@ public class ModBlockRegistry {
 
     public static final RegistryObject<Block> INDUSTRIAL_PRESS = registerWorkstation("industrial_press", WorkstationBlock.WorkstationKind.INDUSTRIAL_PRESS);
     public static final RegistryObject<Block> BALLISTICS_BENCH = registerWorkstation("ballistics_bench", WorkstationBlock.WorkstationKind.BALLISTICS_BENCH);
-    public static final RegistryObject<Block> COMPOSITE_FABRICATOR = registerWorkstation("composite_fabricator", WorkstationBlock.WorkstationKind.COMPOSITE_FABRICATOR);
 
     private static RegistryObject<Block> registerWorkstation(String name, WorkstationBlock.WorkstationKind kind) {
         RegistryObject<Block> block = BLOCKS.register(name, () -> new WorkstationBlock(kind, BlockBehaviour.Properties.of()
                 .mapColor(MapColor.METAL)
                 .strength(3.5F)
                 .requiresCorrectToolForDrops()
+                // A faint glow while the station is running, so a working machine reads at a distance.
+                .lightLevel(state -> state.getValue(WorkstationBlock.LIT) ? 8 : 0)
                 .sound(SoundType.METAL)));
         ModItemRegistry.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
         return block;

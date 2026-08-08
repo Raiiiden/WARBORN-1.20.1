@@ -30,9 +30,7 @@ public final class PlateTooltip {
     private static final String KEY_VEST_BACK = KEY_PREFIX_TOOLTIP + "vest.back";         // "Back: %s %s" (Material, Tier)
     private static final String KEY_VEST_SPEED = KEY_PREFIX_TOOLTIP + "vest.speed";        // "Speed Effect: %s"
 
-    /**
-     * Adds tooltip information for a Plate item stack.
-     */
+    // Adds tooltip information for a Plate item stack.
     public static void addPlate(List<Component> tip,
                                 ProtectionTier tier,
                                 MaterialType material,
@@ -67,9 +65,7 @@ public final class PlateTooltip {
                 .withStyle(ChatFormatting.RED));
     }
 
-    /**
-     * Adds tooltip information to a Plate Carrier item stack.
-     */
+    // Adds tooltip information to a Plate Carrier item stack.
     public static void addChestplate(List<Component> list, ItemStack stack) {
         list.add(Component.translatable(KEY_VEST_COMPATIBLE)
                 .withStyle(style -> style.withColor(0xFFAA00))); // STAY WOKE o.O (no not htat woke dummy)

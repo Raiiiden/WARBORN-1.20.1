@@ -1,0 +1,28 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "count": 4
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    },
+    {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "fracturepoint:resin"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:propital"
+  },
+  "processTime": 240
+}

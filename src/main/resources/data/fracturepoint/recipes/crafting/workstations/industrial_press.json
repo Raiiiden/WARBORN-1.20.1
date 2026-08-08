@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["IPI", "SFS", "IRI"],
+  "key": {
+    "I": {"item": "minecraft:iron_ingot"},
+    "P": {"item": "minecraft:piston"},
+    "S": {"item": "minecraft:smooth_stone"},
+    "F": {"item": "minecraft:furnace"},
+    "R": {"item": "minecraft:redstone"}
+  },
+  "result": {"item": "fracturepoint:industrial_press"}
+}

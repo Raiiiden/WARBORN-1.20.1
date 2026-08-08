@@ -9,8 +9,11 @@ import com.raiiiden.warborn.client.renderer.item.HelmetBatteryDecorator;
 import com.raiiiden.warborn.common.item.BackpackTooltipData;
 import com.raiiiden.warborn.common.item.HelmetSlotTooltip;
 import com.raiiiden.warborn.common.item.WBArmorItem;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -21,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import com.raiiiden.warborn.client.renderer.layer.WarbornBackpackLayer;
+import com.raiiiden.warborn.client.renderer.layer.WarbornGoggleMountLayer;
 import com.raiiiden.warborn.client.renderer.layer.WarbornMaskLayer;
 import com.raiiiden.warborn.client.renderer.layer.WarbornShoulderpadsLayer;
 import com.raiiiden.warborn.client.renderer.layer.WarbornUniformLayer;
@@ -56,6 +60,7 @@ public class ClientModEvents {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unchecked")
     public static void registerEntityLayers(EntityRenderersEvent.AddLayers event) {
         if (event == null) {
             return;
@@ -67,7 +72,28 @@ public class ClientModEvents {
                 playerRenderer.addLayer(new WarbornShoulderpadsLayer<>(playerRenderer));
                 playerRenderer.addLayer(new WarbornUniformLayer<>(playerRenderer));
                 playerRenderer.addLayer((new WarbornMaskLayer<>(playerRenderer)));
+                addGoggleMountLayer(playerRenderer);
             }
         }
+
+        // The goggle mount hangs off a helmet in the vanilla head slot, so anything humanoid that can
+        // wear one has to get the layer - armor stands above all, but zombies and skeletons too. The
+        // curios layers above stay player-only because the slots they read only exist on players.
+        // AddLayers exposes no entity-type listing on this Forge version, so walk the registry and
+        // ask for each renderer; getRenderer returns null for anything that isn't a LivingEntity.
+        for (EntityType<?> type : ForgeRegistries.ENTITY_TYPES) {
+            LivingEntityRenderer<?, ?> renderer = event.getRenderer((EntityType<? extends LivingEntity>) type);
+            if (renderer != null && !(renderer instanceof PlayerRenderer)) {
+                addGoggleMountLayer(renderer);
+            }
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void addGoggleMountLayer(LivingEntityRenderer<?, ?> renderer) {
+        if (!(renderer.getModel() instanceof HumanoidModel)) return;
+
+        LivingEntityRenderer raw = renderer;
+        raw.addLayer(new WarbornGoggleMountLayer<>(raw));
     }
 }

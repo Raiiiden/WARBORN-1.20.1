@@ -6,7 +6,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/** Sent server → client when the helmet battery runs out while NVG is active. */
+// Sent server → client when the helmet battery runs out while NVG is active.
 public class ClientboundNVGBatteryEmptyPacket {
 
     public ClientboundNVGBatteryEmptyPacket() {}

@@ -1,0 +1,22 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:copper_ingot",
+      "count": 2
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:coal"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:nvg_battery",
+    "nbt": {
+      "BatteryEnergy": 0
+    }
+  },
+  "processTime": 80
+}

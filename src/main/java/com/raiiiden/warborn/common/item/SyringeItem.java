@@ -1,7 +1,8 @@
 package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.WARBORN;
-import com.raiiiden.warborn.client.renderer.item.WarbornSyringeRenderer;
+import com.raiiiden.warborn.client.model.WarbornSyringeModel;
+import com.raiiiden.warborn.client.renderer.item.WarbornFirstPersonHandRenderer;
 import com.raiiiden.warborn.client.sound.WarbornClientSounds;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import com.raiiiden.warborn.common.network.PlayWarbornSoundPacket;
@@ -34,6 +35,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class SyringeItem extends Item implements GeoItem {
@@ -156,11 +158,17 @@ public class SyringeItem extends Item implements GeoItem {
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> cons) {
         cons.accept(new IClientItemExtensions() {
-            private WarbornSyringeRenderer renderer;
+            private WarbornFirstPersonHandRenderer<SyringeItem> renderer;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderer == null) renderer = new WarbornSyringeRenderer();
+                if (renderer == null) {
+                    renderer = new WarbornFirstPersonHandRenderer<>(
+                            new WarbornSyringeModel(),
+                            Set.of("left_hand", "right_hand"),
+                            "using"
+                    );
+                }
                 return renderer;
             }
         });

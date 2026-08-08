@@ -1,0 +1,12 @@
+{
+  "type": "fracturepoint:industrial_press",
+  "ingredients": [
+    {
+      "item": "fracturepoint:ceramic_compound"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ceramic_tile"
+  },
+  "processTime": 200
+}

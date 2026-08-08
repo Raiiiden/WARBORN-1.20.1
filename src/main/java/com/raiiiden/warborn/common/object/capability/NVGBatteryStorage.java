@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.IEnergyStorage;
 
-/** IEnergyStorage backed by the NVG battery item's own NBT. */
+// IEnergyStorage backed by the NVG battery item's own NBT.
 public class NVGBatteryStorage implements IEnergyStorage {
 
     public static final int MAX_CAPACITY = 50_000;
@@ -31,7 +31,7 @@ public class NVGBatteryStorage implements IEnergyStorage {
         return 0; // external extraction not allowed; drain via forceDrain
     }
 
-    /** Called by the tick handler to drain energy each tick while NVG is active. */
+    // Called by the tick handler to drain energy each tick while NVG is active.
     public void forceDrain(int amount) {
         int current = getEnergyStored();
         batteryStack.getOrCreateTag().putInt(NBT_KEY, Math.max(0, current - amount));
@@ -61,7 +61,7 @@ public class NVGBatteryStorage implements IEnergyStorage {
         return true;
     }
 
-    /** Reads the stored energy directly from an ItemStack's NBT without going through the capability system. */
+    // Reads the stored energy directly from an ItemStack's NBT without going through the capability system.
     public static int readEnergy(ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag == null || !tag.contains(NBT_KEY)) return MAX_CAPACITY;

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.raiiiden.warborn.mixin.jei",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.raiiiden.warborn.mixin.jei.JeiMixinPlugin",
+  "refmap": "fracturepoint.refmap.json",
+  "client": [
+    "RecipeCategoryOrderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

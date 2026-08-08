@@ -5,10 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Read-only display slot for the backpack upgrade inside the backpack GUI.
- * Insertion and ejection are handled via the bundle right-click mechanic in BackpackItem.
- */
+// Read-only display slot for the backpack upgrade; insertion and ejection go through BackpackItem's right-click mechanic.
 public class BackpackUpgradeSlot extends Slot {
 
     private final ItemStack backpackStack;
@@ -21,10 +18,10 @@ public class BackpackUpgradeSlot extends Slot {
 
     @Override public ItemStack getItem()              { return BackpackItem.getInsertedUpgrade(backpackStack); }
     @Override public boolean hasItem()                { return !BackpackItem.getInsertedUpgrade(backpackStack).isEmpty(); }
-    @Override public void set(ItemStack stack)        { /* read-only */ }
+    @Override public void set(ItemStack stack)        { }
     @Override public ItemStack remove(int amount)     { return ItemStack.EMPTY; }
     @Override public boolean mayPlace(ItemStack stack){ return false; }
     @Override public boolean mayPickup(Player player) { return false; }
     @Override public int getMaxStackSize()            { return 1; }
-    @Override public void setChanged()               { /* read-only */ }
+    @Override public void setChanged()               { }
 }

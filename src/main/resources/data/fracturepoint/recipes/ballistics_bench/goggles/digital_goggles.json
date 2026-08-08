@@ -1,0 +1,36 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:glass",
+      "count": 2
+    },
+    {
+      "item": "minecraft:quartz",
+      "count": 3
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "count": 2
+    },
+    {
+      "item": "minecraft:redstone",
+      "count": 4
+    },
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 2
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "fracturepoint:polymer_compound",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:digital_goggles"
+  },
+  "processTime": 320
+}

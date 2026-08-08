@@ -1,0 +1,21 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:raw_fiber",
+      "count": 2
+    },
+    {
+      "item": "minecraft:acacia_leaves",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ghillie_balaclava_acacia"
+  },
+  "processTime": 80
+}

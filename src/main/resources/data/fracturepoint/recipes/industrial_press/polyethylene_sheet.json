@@ -1,0 +1,13 @@
+{
+  "type": "fracturepoint:industrial_press",
+  "ingredients": [
+    {
+      "item": "fracturepoint:polymer_compound",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:polyethylene_sheet"
+  },
+  "processTime": 220
+}

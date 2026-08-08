@@ -5,7 +5,10 @@ import com.raiiiden.warborn.common.config.WarbornCommonConfig;
 import com.raiiiden.warborn.common.effect.WarbornEffects;
 import com.raiiiden.warborn.common.event.HelmetBatteryTickHandler;
 import com.raiiiden.warborn.common.init.MenuTypeInit;
+import com.raiiiden.warborn.common.init.ModBlockEntityRegistry;
+import com.raiiiden.warborn.common.init.ModBlockRegistry;
 import com.raiiiden.warborn.common.init.ModItemRegistry;
+import com.raiiiden.warborn.common.init.ModRecipeRegistry;
 import com.raiiiden.warborn.common.init.ModSoundEvents;
 import com.raiiiden.warborn.common.network.ModNetworking;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,8 +30,13 @@ public class WARBORN {
     public WARBORN() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        ModItemRegistry.registerArmorPacks();
+        ModBlockRegistry.BLOCKS.register(modEventBus);
         ModItemRegistry.ITEMS.register(modEventBus);
         ModItemRegistry.CREATIVE_MODE_TABS.register(modEventBus);
+        ModBlockEntityRegistry.BLOCK_ENTITIES.register(modEventBus);
+        ModRecipeRegistry.RECIPE_TYPES.register(modEventBus);
+        ModRecipeRegistry.RECIPE_SERIALIZERS.register(modEventBus);
         ModSoundEvents.SOUND_EVENTS.register(modEventBus);
 
         modEventBus.addListener(this::setup);

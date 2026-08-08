@@ -7,10 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Renders exactly 2 fixed item slots for the helmet goggle + battery display.
- * Replaces the vanilla BundleTooltip which adds extra empty slots to fill a grid.
- */
+// Renders exactly 2 fixed slots for the helmet goggle + battery; vanilla BundleTooltip pads out to a grid.
 public class HelmetSlotTooltipComponent implements ClientTooltipComponent {
 
     // Each slot is SLOT_SIZE×SLOT_SIZE; item renders at a 2px inset (16×16 item fits inside).

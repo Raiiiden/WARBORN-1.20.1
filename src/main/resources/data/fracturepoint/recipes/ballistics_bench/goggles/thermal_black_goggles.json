@@ -1,0 +1,39 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:glass",
+      "count": 2
+    },
+    {
+      "item": "minecraft:quartz",
+      "count": 2
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 2
+    },
+    {
+      "item": "minecraft:obsidian",
+      "count": 4
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "count": 2
+    },
+    {
+      "item": "minecraft:redstone",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:composite_material"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:thermal_black_goggles"
+  },
+  "processTime": 400
+}

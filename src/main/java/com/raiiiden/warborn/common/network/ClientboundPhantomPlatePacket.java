@@ -9,10 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-/**
- * Sent from server to client to trigger phantom plate rendering
- * for removal animations when the player isn't holding a plate.
- */
+// Server to client: triggers phantom plate rendering for removal animations when the player isn't holding a plate.
 public class ClientboundPhantomPlatePacket {
     private final String tierName;
     private final String materialName;

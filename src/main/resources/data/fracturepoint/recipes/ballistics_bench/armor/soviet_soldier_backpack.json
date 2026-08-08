@@ -1,0 +1,27 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:leather",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:resin"
+    },
+    {
+      "item": "minecraft:brown_dye"
+    },
+    {
+      "item": "minecraft:gray_dye",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:soviet_soldier_backpack"
+  },
+  "processTime": 140
+}

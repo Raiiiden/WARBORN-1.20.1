@@ -1,10 +1,6 @@
 package com.raiiiden.warborn.common.util;
 
-/**
- * Lightweight client-side cache for the live battery energy while NVG is active.
- * Populated by ClientboundBatteryUpdatePacket; -1 means NVG is inactive, fall back to item NBT.
- * Safe to reference from common code — contains no client-only imports.
- */
+// Client-side cache of live battery energy while NVG is active; -1 means inactive, fall back to item NBT. No client-only imports.
 public class BatteryDisplayCache {
 
     private static int energy = -1;

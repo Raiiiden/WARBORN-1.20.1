@@ -1,0 +1,28 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:leather",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:steel_blend",
+      "count": 2
+    },
+    {
+      "item": "minecraft:black_dye",
+      "count": 2
+    },
+    {
+      "item": "minecraft:green_dye"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ratnik_boots"
+  },
+  "processTime": 120
+}

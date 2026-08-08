@@ -19,6 +19,8 @@ public class HelmetVisionHandler {
     private static final String NVG_SHADER_ID = "nvg";
     private static final String SIMPLE_NVG_SHADER_ID = "snvg";
     private static final String THERMAL_SHADER_ID = "tvg";
+    private static final String THERMAL_WHITE_SHADER_ID = "twvg";
+    private static final String THERMAL_BLACK_SHADER_ID = "tbvg";
     private static final String DIGITAL_SHADER_ID = "dvg";
 
     private static final boolean DEBUG_MODE = false;
@@ -32,6 +34,8 @@ public class HelmetVisionHandler {
             case WBArmorItem.TAG_NVG -> "nvg";
             case WBArmorItem.TAG_SIMPLE_NVG -> "snvg";
             case WBArmorItem.TAG_THERMAL -> "tvg";
+            case WBArmorItem.TAG_THERMAL_WHITE -> "twvg";
+            case WBArmorItem.TAG_THERMAL_BLACK -> "tbvg";
             case WBArmorItem.TAG_DIGITAL -> "dvg";
             default -> "";
         };
@@ -70,6 +74,8 @@ public class HelmetVisionHandler {
                 LOGGER.info("  Has NVG: {}", hasVisionType(helmet, WBArmorItem.TAG_NVG));
                 LOGGER.info("  Has Simple NVG: {}", hasVisionType(helmet, WBArmorItem.TAG_SIMPLE_NVG));
                 LOGGER.info("  Has Thermal: {}", hasVisionType(helmet, WBArmorItem.TAG_THERMAL));
+                LOGGER.info("  Has White-Hot Thermal: {}", hasVisionType(helmet, WBArmorItem.TAG_THERMAL_WHITE));
+                LOGGER.info("  Has Black-Hot Thermal: {}", hasVisionType(helmet, WBArmorItem.TAG_THERMAL_BLACK));
                 LOGGER.info("  Has Digital: {}", hasVisionType(helmet, WBArmorItem.TAG_DIGITAL));
                 if (helmet.getTag() != null) {
                     LOGGER.info("  NBT: {}", helmet.getTag().toString());
@@ -134,6 +140,8 @@ public class HelmetVisionHandler {
             case WBArmorItem.TAG_NVG -> NVG_SHADER_ID;
             case WBArmorItem.TAG_SIMPLE_NVG -> SIMPLE_NVG_SHADER_ID;
             case WBArmorItem.TAG_THERMAL -> THERMAL_SHADER_ID;
+            case WBArmorItem.TAG_THERMAL_WHITE -> THERMAL_WHITE_SHADER_ID;
+            case WBArmorItem.TAG_THERMAL_BLACK -> THERMAL_BLACK_SHADER_ID;
             case WBArmorItem.TAG_DIGITAL -> DIGITAL_SHADER_ID;
             default -> "";
         };
@@ -171,6 +179,8 @@ public class HelmetVisionHandler {
         ShaderRegistry.getInstance().setShaderEnabled(NVG_SHADER_ID, false);
         ShaderRegistry.getInstance().setShaderEnabled(SIMPLE_NVG_SHADER_ID, false);
         ShaderRegistry.getInstance().setShaderEnabled(THERMAL_SHADER_ID, false);
+        ShaderRegistry.getInstance().setShaderEnabled(THERMAL_WHITE_SHADER_ID, false);
+        ShaderRegistry.getInstance().setShaderEnabled(THERMAL_BLACK_SHADER_ID, false);
         ShaderRegistry.getInstance().setShaderEnabled(DIGITAL_SHADER_ID, false);
     }
 
@@ -191,6 +201,8 @@ public class HelmetVisionHandler {
             info.append("Has NVG: ").append(hasVisionType(helmet, WBArmorItem.TAG_NVG)).append("\n");
             info.append("Has Simple NVG: ").append(hasVisionType(helmet, WBArmorItem.TAG_SIMPLE_NVG)).append("\n");
             info.append("Has Thermal: ").append(hasVisionType(helmet, WBArmorItem.TAG_THERMAL)).append("\n");
+            info.append("Has White-Hot Thermal: ").append(hasVisionType(helmet, WBArmorItem.TAG_THERMAL_WHITE)).append("\n");
+            info.append("Has Black-Hot Thermal: ").append(hasVisionType(helmet, WBArmorItem.TAG_THERMAL_BLACK)).append("\n");
             info.append("Has Digital: ").append(hasVisionType(helmet, WBArmorItem.TAG_DIGITAL)).append("\n");
 
             String activeType = getActiveVisionType(helmet);

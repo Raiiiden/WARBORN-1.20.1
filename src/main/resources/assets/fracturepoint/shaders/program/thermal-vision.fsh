@@ -10,6 +10,8 @@ out vec4 fragColor;
 
 uniform sampler2D DiffuseSampler;
 uniform sampler2D NoiseSampler;
+// 1x1 target written by the scene-brightness pass: r = weighted frame average, g = brightest sample.
+uniform sampler2D BrightnessSampler;
 uniform float Time;
 uniform vec2 InSize;
 
@@ -41,9 +43,13 @@ float random(in vec2 st) {
 
 vec4 blurTex(in sampler2D tex, in vec2 uv, float off, float it) {
     float subpx = 8.0 * it;
-    vec4 fullRes = texture(tex, uv + vec2(0, 0)) / max(1.0, subpx + 1.0);
 
-    for (float i = 0.0; i < it; i++) {
+    // The old loop started at i = 0, where the offset is zero - so eight of its taps re-sampled the exact
+    // centre that was already fetched. Folding that weight into the centre fetch gives the same result for
+    // eight fewer lookups per pixel.
+    vec4 fullRes = texture(tex, uv) * (1.0 / max(1.0, subpx + 1.0) + 8.0 / subpx);
+
+    for (float i = 1.0; i < it; i++) {
         float o = off * i;
         fullRes += texture(tex, uv + vec2(0, o)) / subpx;
         fullRes += texture(tex, uv + vec2(o, o)) / subpx;
@@ -57,41 +63,12 @@ vec4 blurTex(in sampler2D tex, in vec2 uv, float off, float it) {
     return fullRes;
 }
 
-float getAverageSceneBrightness(sampler2D tex) {
-    const int SAMPLE_COUNT_X = 7;
-    const int SAMPLE_COUNT_Y = 7;
-
-    vec3 totalBrightness = vec3(0.0);
-    float weightSum = 0.0;
-    float maxBrightnessSample = 0.0;
-    float minBrightnessSample = 1.0;
-
-    for (int y = 0; y < SAMPLE_COUNT_Y; y++) {
-        float yPos = 0.1 + 0.8 * (float(y) / float(SAMPLE_COUNT_Y - 1));
-
-        for (int x = 0; x < SAMPLE_COUNT_X; x++) {
-            float xPos = 0.1 + 0.8 * (float(x) / float(SAMPLE_COUNT_X - 1));
-
-            float weight = 1.0 - (distance(vec2(xPos, yPos), vec2(0.5, 0.5)) * 1.2);
-            weight = max(0.2, weight * weight);
-            vec3 sampleColor = textureLod(tex, vec2(xPos, yPos), 4.0).rgb;
-
-            float sampleBrightness = dot(sampleColor, lum);
-
-            minBrightnessSample = min(minBrightnessSample, sampleBrightness);
-            maxBrightnessSample = max(maxBrightnessSample, sampleBrightness);
-
-            if (sampleBrightness > 1.0) {
-                sampleBrightness = 1.0 + log(sampleBrightness);
-            }
-
-            totalBrightness += sampleColor * weight;
-            weightSum += weight;
-        }
-    }
-
-    vec3 averageBrightness = totalBrightness / max(0.001, weightSum);
-    float brightness = dot(averageBrightness, lum);
+// The 7x7 grid sample this used to do per pixel now happens once per frame in the scene-brightness pass;
+// only the remap is left, which is pure arithmetic on two numbers.
+float getAverageSceneBrightness() {
+    vec2 metered = texture(BrightnessSampler, vec2(0.5, 0.5)).rg;
+    float brightness = metered.r;
+    float maxBrightnessSample = metered.g;
 
     if (maxBrightnessSample > MAX_BRIGHTNESS_THRESHOLD) {
         float dampFactor = 1.0 / (1.0 + log(maxBrightnessSample / MAX_BRIGHTNESS_THRESHOLD));
@@ -135,10 +112,7 @@ vec4 thermalVision(sampler2D tex, vec2 uv, vec2 fragCoord) {
         fragResult = mix(pixelRes, fullRes, 0.5);
     }
 
-    float sceneBrightness = getAverageSceneBrightness(tex);
-
-    if (uv.y > 0.98 && uv.x > 0.49 && uv.x < 0.51)
-    return vec4(sceneBrightness, sceneBrightness, sceneBrightness, 1.0);
+    float sceneBrightness = getAverageSceneBrightness();
 
     float mul = 1.2;
     float brightnessFactor = smoothstep(0.0, 0.5, sceneBrightness);
@@ -187,14 +161,19 @@ vec4 thermalVision(sampler2D tex, vec2 uv, vec2 fragCoord) {
     }
 
     float noiseTime = mod(Time * 0.15, 10.0);
-    float noise = random(uv / resScale + noiseTime);
 
+    // Sensor grain, centred on zero. The old term was strictly additive at 0.3
+    // amplitude, so besides being coarse it lifted the whole image by ~0.15.
+    float grain = (random(uv / resScale + noiseTime) - 0.5) * 0.05;
+
+    // Occasional hot pixel. The old exponent fired on roughly 1 in 1400 pixels and
+    // was then scaled by up to 11x, which is what read as constant static.
     vec2 noiseUv = floor(fragCoord * noisePixels) / InSize / noisePixels;
-    float highNoise = pow(random(noiseUv + noiseTime), 1000.0) * 1.0;
-    highNoise += highNoise * vignette * 10.0;
+    float sparkle = pow(random(noiseUv + noiseTime), 3000.0) * 0.25;
 
-    float noiseDarknessFactor = smoothstep(0.0, 0.3, grey);
-    float thermalNoise = (noise * 0.3 + highNoise * 1.0) * noiseDarknessFactor;
+    // noise belongs in the cold, low-signal part of the image, not on hot targets
+    float noiseDarknessFactor = 1.0 - smoothstep(0.0, 0.6, grey);
+    float thermalNoise = (grain + sparkle) * noiseDarknessFactor * NoiseAmplification;
 
     vec3 finalColor = (fragResult.rgb + thermalNoise) * color * vignette;
     float finalBrightness = dot(finalColor, lum);

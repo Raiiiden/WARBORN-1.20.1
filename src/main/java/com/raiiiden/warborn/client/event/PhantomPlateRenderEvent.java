@@ -8,9 +8,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/**
- * Handles client-side ticking for phantom plate rendering
- */
+// Handles client-side ticking for phantom plate rendering.
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = WARBORN.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class PhantomPlateRenderEvent {

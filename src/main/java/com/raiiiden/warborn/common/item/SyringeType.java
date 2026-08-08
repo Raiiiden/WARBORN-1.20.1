@@ -9,19 +9,7 @@ import net.minecraft.world.level.Level;
 
 public enum SyringeType {
 
-    /**
-     * Propital - Tarkov regenerative stimulant
-     * Effects in Tarkov:
-     * - Removes pain for 240 seconds
-     * - Removes contusion for 240 seconds
-     * - Health regeneration +1 HP/second for 300 seconds (total: 300 HP healed)
-     * - Increases Metabolism skill by +20 for 300 seconds
-     * - Increases Health skill by +20 for 300 seconds
-     * - Increases Vitality skill by +20 for 300 seconds
-     * Side effects (after 270 seconds):
-     * - Hands tremor for 30 seconds
-     * - Tunnel vision effect
-     */
+    // Propital, a Tarkov regenerative stimulant: removes pain and contusion, regenerates health with skill bonuses, and causes tremor as a late side effect.
     PROPITAL("propital") {
         @Override
         public void applyEffect(Player player, Level level) {
@@ -59,29 +47,21 @@ public enum SyringeType {
         this.name = name;
     }
 
-    /**
-     * Apply the effect when the syringe is used
-     */
+    // Apply the effect when the syringe is used.
     public abstract void applyEffect(Player player, Level level);
 
-    /**
-     * Check if this syringe can be used (override if needed)
-     */
+    // Check if this syringe can be used; override if needed.
     public boolean canUse(Player player, Level level) {
         return true;
     }
 
-    /**
-     * Get the success message when used
-     */
+    // Get the success message when used.
     public Component getSuccessMessage() {
         return Component.translatable("message.fracturepoint.syringe." + name + ".used")
                 .withStyle(ChatFormatting.GREEN);
     }
 
-    /**
-     * Get the failure message when it can't be used
-     */
+    // Get the failure message when it can't be used.
     public Component getFailureMessage() {
         return Component.translatable("message.fracturepoint.syringe." + name + ".cannot_use")
                 .withStyle(ChatFormatting.RED);

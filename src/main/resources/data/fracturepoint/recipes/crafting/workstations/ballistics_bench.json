@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["SCS", "WRW", "SIS"],
+  "key": {
+    "S": {"item": "fracturepoint:steel_plate"},
+    "C": {"item": "minecraft:crafting_table"},
+    "W": {"item": "fracturepoint:woven_kevlar"},
+    "R": {"item": "minecraft:redstone"},
+    "I": {"item": "minecraft:iron_ingot"}
+  },
+  "result": {"item": "fracturepoint:ballistics_bench"}
+}

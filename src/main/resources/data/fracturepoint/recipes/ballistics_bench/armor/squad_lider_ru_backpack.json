@@ -1,0 +1,28 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:leather",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:resin"
+    },
+    {
+      "item": "minecraft:gray_dye",
+      "count": 2
+    },
+    {
+      "item": "minecraft:green_dye",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:squad_lider_ru_backpack"
+  },
+  "processTime": 140
+}

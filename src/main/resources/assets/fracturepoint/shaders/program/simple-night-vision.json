@@ -12,6 +12,9 @@
   "samplers": [
     {
       "name": "DiffuseSampler"
+    },
+    {
+      "name": "NoiseSampler"
     }
   ],
   "uniforms": [
@@ -89,7 +92,7 @@
       "type": "float",
         "count": 1,
         "values": [
-          0.6
+          0.0
         ]
     }
   ]

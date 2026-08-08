@@ -7,15 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Propital Effect - mimics Escape from Tarkov's Propital stimulant
- *
- * In Tarkov, Propital provides health regeneration and pain removal.
- *
- * This implementation:
- * - LSO: Heals all 8 body parts by 1 HP every 6 seconds, applies Painkiller effect, prevents Headache
- * - Vanilla: Heals 1 HP every 6 seconds
- */
+// Propital stimulant: heals 1 HP every 6 seconds, and under LSO heals all 8 body parts plus painkiller and headache prevention.
 public class PropitalEffect extends MobEffect {
 
     public PropitalEffect() {

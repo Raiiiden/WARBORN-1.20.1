@@ -1,0 +1,21 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 4
+    },
+    {
+      "item": "fracturepoint:raw_fiber",
+      "count": 3
+    },
+    {
+      "item": "minecraft:oak_leaves",
+      "count": 4
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ghillie_uniform_oak"
+  },
+  "processTime": 120
+}

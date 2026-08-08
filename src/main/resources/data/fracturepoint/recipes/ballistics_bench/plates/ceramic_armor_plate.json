@@ -1,0 +1,16 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:ceramic_tile",
+      "count": 3
+    },
+    {
+      "item": "fracturepoint:woven_kevlar"
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ceramic_plate_level_iv"
+  },
+  "processTime": 180
+}

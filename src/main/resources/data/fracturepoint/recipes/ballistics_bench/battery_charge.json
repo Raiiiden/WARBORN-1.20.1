@@ -1,0 +1,11 @@
+{
+  "type": "fracturepoint:battery_charge",
+  "battery": {
+    "item": "fracturepoint:nvg_battery"
+  },
+  "catalyst": {
+    "item": "minecraft:redstone_block"
+  },
+  "energyPerCatalyst": 500,
+  "processTime": 300
+}

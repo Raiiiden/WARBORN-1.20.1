@@ -6,7 +6,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/** Sent server → client every tick while NVG is active to keep the battery display in sync. */
+// Sent server → client every tick while NVG is active to keep the battery display in sync.
 public class ClientboundBatteryUpdatePacket {
 
     private final int energy;

@@ -1,0 +1,25 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "minecraft:leather",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 2
+    },
+    {
+      "item": "fracturepoint:steel_blend",
+      "count": 2
+    },
+    {
+      "item": "minecraft:snow_block",
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:ghillie_boots_snow"
+  },
+  "processTime": 120
+}

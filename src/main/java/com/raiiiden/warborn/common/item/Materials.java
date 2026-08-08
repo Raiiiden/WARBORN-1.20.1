@@ -50,7 +50,7 @@ public class Materials {
 
     public static final WarbornArmorMaterial WARBORN_SHOULDERPADS = new WarbornArmorMaterial(
             "warborn_shoulderpads",
-            40,
+            34,
             Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, 0);
                 map.put(ArmorItem.Type.LEGGINGS, 0);
@@ -66,7 +66,7 @@ public class Materials {
     );
     public static final WarbornArmorMaterial WARBORN_UNIFORM = new WarbornArmorMaterial(
             "warborn_uniform",
-            10,
+            30,
             Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, 0);
                 map.put(ArmorItem.Type.LEGGINGS, 0);
@@ -80,9 +80,26 @@ public class Materials {
             0.1F,
             () -> Ingredient.of(Items.NETHERITE_INGOT)
     );
+    // Backpacks sit in a curios slot over a full armor set, so they give a token armor point and no toughness or knockback of their own.
+    public static final WarbornArmorMaterial WARBORN_BACKPACK = new WarbornArmorMaterial(
+            "warborn_backpack",
+            32,
+            Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.BOOTS, 0);
+                map.put(ArmorItem.Type.LEGGINGS, 0);
+                map.put(ArmorItem.Type.CHESTPLATE, 1);
+                map.put(ArmorItem.Type.HELMET, 0);
+            }),
+            15,
+            ModSoundEvents.WARBORN_ARMOR_EQUIP,
+            ModSoundEvents.WARBORN_ARMOR_BREAK,
+            0.0F,
+            0.0F,
+            () -> Ingredient.of(Items.NETHERITE_INGOT)
+    );
     public static final WarbornArmorMaterial WARBORN_HEADGEAR = new WarbornArmorMaterial(
             "warborn_headgear",
-            10,
+            28,
             Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, 0);
                 map.put(ArmorItem.Type.LEGGINGS, 0);

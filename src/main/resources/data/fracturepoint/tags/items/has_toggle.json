@@ -15,6 +15,17 @@
     "fracturepoint:sso_squad_leader_helmet",
     "fracturepoint:sso_machine_gunner_helmet",
     "fracturepoint:fsb_squad_leader_helmet",
-    "fracturepoint:fsb_machine_gunner_helmet"
+    "fracturepoint:fsb_machine_gunner_helmet",
+    "fracturepoint:iz_helmet_desert",
+    "fracturepoint:iz_helmet_forest",
+    "fracturepoint:iz_helmet_ops",
+    "fracturepoint:iz_helmet_snow",
+    "fracturepoint:iz_helmet_urban",
+    "fracturepoint:iz_machine_gunner_helmet_desert",
+    "fracturepoint:iz_machine_gunner_helmet_forest",
+    "fracturepoint:iz_machine_gunner_helmet_ops",
+    "fracturepoint:iz_machine_gunner_helmet_snow",
+    "fracturepoint:iz_machine_gunner_helmet_urban",
+    "fracturepoint:ratnik_helmet"
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "type": "fracturepoint:ballistics_bench",
+  "ingredients": [
+    {
+      "item": "fracturepoint:woven_kevlar",
+      "count": 4
+    }
+  ],
+  "result": {
+    "item": "fracturepoint:kevlar_plate_level_iiia"
+  },
+  "processTime": 140
+}

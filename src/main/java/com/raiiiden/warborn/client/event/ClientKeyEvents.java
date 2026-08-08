@@ -129,6 +129,14 @@ public class ClientKeyEvents {
                             message = "Thermal Vision Mode";
                             yield ChatFormatting.RED;
                         }
+                        case WBArmorItem.TAG_THERMAL_WHITE -> {
+                            message = "Thermal Vision Mode (White Hot)";
+                            yield ChatFormatting.WHITE;
+                        }
+                        case WBArmorItem.TAG_THERMAL_BLACK -> {
+                            message = "Thermal Vision Mode (Black Hot)";
+                            yield ChatFormatting.DARK_GRAY;
+                        }
                         default -> {
                             message = "Vision Mode";
                             yield ChatFormatting.YELLOW;
@@ -165,7 +173,7 @@ public class ClientKeyEvents {
         boolean isHelmetValid = HelmetVisionHandler.isAllowedHelmet(helmet);
 
         if (!isHelmetValid) {
-            disableAllShaders(player);
+            disableAllShaders(player, "Vision mode disabled - helmet removed");
             lastHelmetItem = null;
             lastVisionType = "";
             return;
@@ -173,6 +181,19 @@ public class ClientKeyEvents {
 
         Item currentItem = helmet.getItem();
         String currentVision = HelmetVisionHandler.getActiveVisionType(helmet);
+
+        // isAllowedHelmet only checks for goggles, but the vision modes are battery
+        // powered - pulling the battery has to cut power too. Without this the shader
+        // kept running until the helmet itself came off.
+        if (!currentVision.isEmpty() && !hasUsableBattery(helmet)) {
+            disableAllShaders(player, "Vision mode disabled - no battery");
+            ClientBatteryUpdateHandler.clear();
+            // tell the server to stop tracking/draining this session
+            ModNetworking.sendToServer(new ServerboundNVGTogglePacket(""));
+            lastHelmetItem = currentItem;
+            lastVisionType = "";
+            return;
+        }
 
         if (lastHelmetItem != null && currentItem != lastHelmetItem) {
             if (!lastVisionType.isEmpty()) {
@@ -187,8 +208,14 @@ public class ClientKeyEvents {
         lastVisionType = currentVision;
     }
 
-    private static void disableAllShaders(Player player) {
-        String[] shaders = {"nvg", "snvg", "dvg", "dnvg", "tvg"};
+    // A helmet only powers its goggles while a battery with charge left is installed.
+    private static boolean hasUsableBattery(ItemStack helmet) {
+        ItemStack battery = WBArmorItem.getInsertedBattery(helmet);
+        return !battery.isEmpty() && NVGBatteryStorage.readEnergy(battery) > 0;
+    }
+
+    private static void disableAllShaders(Player player, String reason) {
+        String[] shaders = {"nvg", "snvg", "dvg", "dnvg", "tvg", "twvg", "tbvg"};
         boolean wasActive = false;
 
         for (String id : shaders) {
@@ -202,8 +229,7 @@ public class ClientKeyEvents {
         ClientVisionState.clear(player.getUUID());
 
         if (wasActive) {
-            player.displayClientMessage(Component.literal("Vision mode disabled - helmet removed")
-                    .withStyle(ChatFormatting.YELLOW), true);
+            player.displayClientMessage(Component.literal(reason).withStyle(ChatFormatting.YELLOW), true);
         }
     }
 }

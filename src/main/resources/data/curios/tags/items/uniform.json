@@ -2,9 +2,24 @@
   "replace": false,
   "values": [
     "fracturepoint:beta7_uniform",
+    "fracturepoint:insurgency_commander_uniform",
     "fracturepoint:fsb_uniform",
+    "fracturepoint:sso_uniform",
     "fracturepoint:soviet_uniform",
     "fracturepoint:ratnik_uniform",
-    "fracturepoint:ratnik_uniform_variant"
+    "fracturepoint:ratnik_uniform_variant",
+    "fracturepoint:iz_uniform_desert",
+    "fracturepoint:iz_uniform_forest",
+    "fracturepoint:iz_uniform_ops",
+    "fracturepoint:iz_uniform_snow",
+    "fracturepoint:iz_uniform_urban",
+    "fracturepoint:ghillie_uniform_acacia",
+    "fracturepoint:ghillie_uniform_birch",
+    "fracturepoint:ghillie_uniform_dark_oak",
+    "fracturepoint:ghillie_uniform_jungle",
+    "fracturepoint:ghillie_uniform_mangrove",
+    "fracturepoint:ghillie_uniform_oak",
+    "fracturepoint:ghillie_uniform_snow",
+    "fracturepoint:ghillie_uniform_spruce"
   ]
 }

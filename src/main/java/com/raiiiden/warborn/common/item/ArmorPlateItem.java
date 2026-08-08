@@ -1,7 +1,8 @@
 package com.raiiiden.warborn.common.item;
 
 import com.raiiiden.warborn.WARBORN;
-import com.raiiiden.warborn.client.renderer.item.WarbornPlateRenderer;
+import com.raiiiden.warborn.client.model.WarbornPlateModel;
+import com.raiiiden.warborn.client.renderer.item.WarbornFirstPersonHandRenderer;
 import com.raiiiden.warborn.client.sound.WarbornClientSounds;
 import com.raiiiden.warborn.common.init.ModItemRegistry;
 import com.raiiiden.warborn.common.init.ModSoundEvents;
@@ -53,6 +54,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -100,7 +102,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
     }
 
     public static boolean isPlateCompatible(ItemStack chest) {
-        return !chest.isEmpty() && chest.is(PLATE_COMPATIBLE);
+        return WBArmorItem.isPlateCompatible(chest);
     }
 
     public static ItemStack createPlateWithHitsRemaining(ProtectionTier t, MaterialType m, int currentDur) {
@@ -350,11 +352,17 @@ public class ArmorPlateItem extends Item implements GeoItem {
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> cons) {
         cons.accept(new IClientItemExtensions() {
-            private WarbornPlateRenderer renderer;
+            private WarbornFirstPersonHandRenderer<ArmorPlateItem> renderer;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderer == null) renderer = new WarbornPlateRenderer();
+                if (renderer == null) {
+                    renderer = new WarbornFirstPersonHandRenderer<>(
+                            new WarbornPlateModel(),
+                            Set.of("left_hand", "right_hand"),
+                            "inserting"
+                    );
+                }
                 return renderer;
             }
         });
@@ -462,10 +470,7 @@ public class ArmorPlateItem extends Item implements GeoItem {
     }
     // Add this static helper method to ArmorPlateItem class
 
-    /**
-     * Checks if the player has any pending plate operations (insert or remove)
-     * on ANY plate item in their inventory
-     */
+    // Checks whether the player has any pending plate insert or remove on any plate item in their inventory.
     public static boolean hasAnyPendingOperations(Player player) {
         // Check player persistent data flags
         if (player.getPersistentData().getBoolean("warborn_processing_removal") ||
